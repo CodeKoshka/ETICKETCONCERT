@@ -6,18 +6,17 @@ Para sa defence baby
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 # Features 
                   
-1.Admin Controls
-The admin has their own login to manage everything, like changing ticket prices, updating the concert date, and even editing the artist performing.
+1. Admin Controls
+The admin has their own login to manage everything, like changing ticket prices, updating the concert date, and even editing the artist performing,
 They can view all tickets, delete specific ones, or clear all bookings if needed.
 
 
 2. Easy Ticket Booking
-Users can book tickets with a unique seat and ticket number, ensuring there are no duplicates.
-The system also handles payments and gives change if needed.
+Users can book tickets with a unique seat and ticket number, The system also handles payments and gives change if needed.
 
 
 3. Flexible Updates
-Ticket prices, concert dates, the name of the concert, and the performing artist’s name can all be updated in real time by the admin.
+Ticket prices, concert dates, the name of the concert, and the performing artist’s name can all be updated in real-time by the admin.
 
 
 4. Simple Cancellation and Usage
