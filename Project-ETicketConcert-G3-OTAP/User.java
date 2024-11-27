@@ -8,17 +8,22 @@ import java.util.*;
     private double ticketPrice = 10.0;
     private String concertDate = "12/25/2024"; 
     private String ticketNumber = "";
+    private String concertName = "ERE By: Juan Karlos Labajo";
     private int seatNumber = -1;
     String userName,ticketNum;
     int choice, continueChoice;
     double change, payment = 0.0;  
 
 /*this is meant to store multiple variables 
-(totoong reason kung bakit nandito ito ay parad separate yung bookedticket saka usedticket -.-) */   
+(totoong reason kung bakit nandito ito ay parad separate yung bookedticket saka usedticket -.-)*/   
     public static Set<Integer> bookedSeats = new HashSet<>();
     public static Set<String> bookedTicketNumbers = new HashSet<>();
     public static Set<Integer> usedSeats = new HashSet<>();
     public static Set<String> usedTicketNumbers = new HashSet<>();
+
+    public void updateConcertName(String newConcertName) {
+        concertName = newConcertName;
+    }
 
 //this is the ticketing interface    
 public void showUserMenu(){
@@ -26,8 +31,9 @@ public void showUserMenu(){
             OUTER:
 while (true) {
             System.out.println("=====================================");
-            System.out.println("Ticket Price: $" + ticketPrice);
+            System.out.println("Concert Name: " + concertName);
             System.out.println("Concert Date: " + concertDate);
+            System.out.println("Ticket Price: $" + ticketPrice);
             System.out.println("=====================================");
             System.out.println("            [ User Menu ]            ");
             System.out.println("=====================================");
@@ -132,6 +138,7 @@ while (payment < ticketPrice){
     System.out.println("Name:           " + userName);
     System.out.println("Seat:           " + seatNumber);
     System.out.println("Ticket Number:  " + ticketNumber);
+    System.out.println("Concert Name:   " + concertName);
     System.out.println("Concert Date:   " + concertDate);
     System.out.println("Ticket Price:  $" + ticketPrice);
     System.out.println("=====================================");

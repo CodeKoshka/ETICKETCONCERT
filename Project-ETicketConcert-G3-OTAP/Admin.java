@@ -15,7 +15,8 @@ import java.util.*;
     private final String password = "BESTOTAP";//This is the password for the admin login (Paltan ng password kung gusto)
     private double ticketPrice = 10.0;//Default value of price for ticket (Napapaltan yan ng program mismo)
     private String concertDate = "12/25/2024";//Default value of date for ticket (Napapaltan yan ng program mismo)
-    String ticketNum, enteredPassword;
+    private String concertName = "ERE By: Juan Karlos Labajo";
+    String ticketNum, artistName, updateConcert, enteredPassword;
     int confirmation, choice, month, day, year;     
 
 public Admin(User user){
@@ -37,9 +38,11 @@ public void login(){
 private void showAdminMenu(){
             OUTER:
 while (true) {
+        System.out.println("");
         System.out.println("=====================================");
-        System.out.println("Current Ticket Price: $" + ticketPrice);
+        System.out.println("Current Concert Name: " + concertName);
         System.out.println("Current Concert Date: " + concertDate);
+        System.out.println("Current Ticket Price: $" + ticketPrice);
         System.out.println("=====================================");
         System.out.println("");
         System.out.println("=====================================");
@@ -57,20 +60,23 @@ while (true) {
 
         switch (choice) {
             case 1:
-            changeTicketPrice();
-            break;
+                changeTicketPrice();
+                break;
             case 2:
-            changeConcertDate();
-            break;
+                changeConcertDate();
+                break;
             case 3:
-            viewAllTickets();
-            break;
+                changeConcertName();
+                break;
             case 4:
-            System.out.println("[Logging out]");
-            break OUTER;
+                viewAllTickets();
+                break;
+            case 5:
+                System.out.println("[Logging out]");
+                break OUTER;
             default:
-            System.out.println("[Invalid selection, Please try again]");
-            break;
+                System.out.println("[Invalid selection, Please try again]");
+                break;
         }
     }
 }
@@ -103,6 +109,20 @@ concertDate = month + "/" + day + "/" + year;
         
     user.updateConcertDate(concertDate);
     System.out.println("Concert date updated to: " + concertDate);
+}
+private void changeConcertName() {
+    System.out.println("=====================================");
+    System.out.println("Current Concert Name: " + concertName);
+    System.out.println("=====================================");
+    System.out.print("Enter new Concert Name: ");
+    updateConcert = meh.nextLine();
+    System.out.print("Enter new Artist Name: ");
+    artistName = meh.nextLine();
+
+concertName = updateConcert + "By: " + artistName;
+    
+    System.out.println("Artist name updated to: " + concertName);
+    user.updateConcertName(concertName); // Update artist name in User class
 }
 //this is the interface for the tickets 
 private void viewAllTickets() {
