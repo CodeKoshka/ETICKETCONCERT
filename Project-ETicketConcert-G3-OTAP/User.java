@@ -7,13 +7,14 @@ import java.util.*;
     
     private double ticketPrice = 10.0;
     private String concertDate = "12/25/2024"; 
-    private boolean isTicketBooked = false;
     private String ticketNumber = "";
     private int seatNumber = -1;
     String userName,ticketNum;
-    int choice, continueChoice;  
+    int choice, continueChoice;
+    double change, payment = 0.0;  
 
-//this is meant to prevent duplication (hanap ako ng hanap ng sulusyon para di mag duplicate yung mga ticket nakakainis -.-)    
+/*this is meant to store multiple variables 
+(totoong reason kung bakit nandito ito ay parad separate yung bookedticket saka usedticket -.-) */   
     public static Set<Integer> bookedSeats = new HashSet<>();
     public static Set<String> bookedTicketNumbers = new HashSet<>();
     public static Set<Integer> usedSeats = new HashSet<>();
@@ -21,51 +22,59 @@ import java.util.*;
 
 //this is the ticketing interface    
 public void showUserMenu(){
+//outer is so the switch doesnt break (suggested by vscode)
+            OUTER:
 while (true) {
-    System.out.println("=========================");
-    System.out.println("Ticket Price: $" + ticketPrice);
-    System.out.println("Concert Date: " + concertDate);
-    System.out.println("=========================");
+            System.out.println("=====================================");
+            System.out.println("Ticket Price: $" + ticketPrice);
+            System.out.println("Concert Date: " + concertDate);
+            System.out.println("=====================================");
+            System.out.println("            [ User Menu ]            ");
+            System.out.println("=====================================");
+            System.out.println("1. Book a Ticket");
+            System.out.println("2. Cancel a Ticket");
+            System.out.println("3. Use a Ticket");
+            System.out.println("4. Logout");
+            System.out.print("Please select an option: ");
+            choice = meh.nextInt();
+            System.out.println("=====================================");
+            meh.nextLine();
 
-    System.out.println("====== [User Menu] ======");
-    System.out.println("1. Book a Ticket");
-    System.out.println("2. Cancel a Ticket");
-    System.out.println("3. Use a Ticket");
-    System.out.println("4. Logout");
-    System.out.print("Please select an option: ");
-    choice = meh.nextInt();  
+            switch (choice) {
+            case 1:
+            bookTicket();
+            break;
+            case 2:
+            cancelTicket();
+            break;
+            case 3:
+            useTicket();
+            break;
+            case 4:
+            System.out.println("Logging out...");
+            break OUTER;
+            default:
+            System.out.println("[Invalid selection, Please try again]");
+            break;
+            }
 
-        if (choice == 1){
-        bookTicket();
-        }else if (choice == 2){
-        cancelTicket();
-        }else if (choice == 3){
-        useTicket();
-        }else if (choice == 4){
-        System.out.println("Logging out...");
-        break;
-        }else{
-        System.out.println("[Invalid selection, Please try again]");
-        }
-
-//this is to ask the user to continue or to go back to the admin
         System.out.print("Do you want to continue with ticket booking? (1 for Yes, 2 for No):");
         continueChoice = meh.nextInt();
-          
-//this is when the user put the wrong number (pinahirapan ko lang sarili ko dito)
+        meh.nextLine();
         while (continueChoice != 1 && continueChoice != 2){
         System.out.println("Invalid selection, please enter 1 for Yes or 2 for No.");
         System.out.print("Do you want to continue with ticket booking? (1 for Yes, 2 for No): ");
-        continueChoice = meh.nextInt();  
-        }
-        if (continueChoice == 2){
-        break;  
-        }
+        continueChoice = meh.nextInt();
+        meh.nextLine();
+        } if (continueChoice == 2){
+        break;
+        } 
     }
 }
-
 //this is the ticket booking system that i design yay (grabe ko mag design)
 public void bookTicket(){
+    System.out.println("=====================================");
+    System.out.println("       [Ticket Booking System]       ");
     System.out.println("=====================================");
     System.out.println("Welcome to the Ticket Booking System!");
     System.out.println("Current ticket price: $" + ticketPrice);
@@ -76,11 +85,13 @@ public void bookTicket(){
 
     System.out.print("Enter seat number (1-10000): ");
     seatNumber = meh.nextInt();
+    meh.nextLine(); 
 
     while (bookedSeats.contains(seatNumber)){
     System.out.println("Seat " + seatNumber + " is already booked. Please choose another seat.");
     System.out.print("Enter seat number (1-10000): ");
-    seatNumber = meh.nextInt();  
+    seatNumber = meh.nextInt();
+    meh.nextLine(); 
 }
 /* This randomizes the ticket number and adds nh on them %06d is to make sure the code still works if the number that was generated is 0 it wont break instead it will be printed
 nh Stand for National Harmony Company (trip ko lang lagyan ng nh >.<) */
@@ -96,7 +107,6 @@ while (bookedTicketNumbers.contains(ticketNumber)) {
     Admin.updateAdminTicketList(seatNumber, ticketNumber);
 
 //this specific part of code is use for the payment and if is invalid or not if it is it goes back until you pay
-    double payment = 0.0;
 while (payment < ticketPrice){
     System.out.print("Enter payment amount: $");
     payment = meh.nextDouble();
@@ -105,8 +115,8 @@ while (payment < ticketPrice){
     System.out.println("Insufficient payment. Please enter an amount greater than or equal to the ticket price.");
     }
 }
-
-    double change = payment - ticketPrice;
+    change = payment - ticketPrice;
+    
     if (change > 0){
     System.out.println("Payment successful. Your change: $" + change);
     }else{
@@ -114,16 +124,17 @@ while (payment < ticketPrice){
 }
 
 //this is the ticket itself when you finish the booking
+    System.out.println("=====================================");
     System.out.println("");
-    System.out.println("==== [Booking Successful] ====");
+    System.out.println("       [ Booking Successful ]        ");
     System.out.println("");
-    System.out.println("===========[Ticket]===========");
+    System.out.println("=============[ Ticket ]==============");
     System.out.println("Name:           " + userName);
     System.out.println("Seat:           " + seatNumber);
     System.out.println("Ticket Number:  " + ticketNumber);
     System.out.println("Concert Date:   " + concertDate);
     System.out.println("Ticket Price:  $" + ticketPrice);
-    System.out.println("==============================");
+    System.out.println("=====================================");
 }
 
 //this part if you want to cancel your ticket or not if there is no ticket found this also handles that part
@@ -150,7 +161,7 @@ private void useTicket(){
     if (!bookedTicketNumbers.contains(ticketNum)){
     System.out.println("Ticket number not found.");
     return;
-    }
+}
 
 usedTicketNumbers.add(ticketNum);
 usedSeats.add(seatNumber);
@@ -160,14 +171,13 @@ bookedTicketNumbers.remove(ticketNum);
 bookedSeats.remove(seatNumber);
 
     System.out.println("Ticket used successfully.");
-    }
+}
 
 /*this part is so the ticket part can be updated from both the Admin.java file and User.java file
 (dahil dito rami kong logical error grabe 2hours para lang maghanap)*/
     public void updateTicketPrice(double newPrice){
     ticketPrice = newPrice;
     }
-
 
     public void updateConcertDate(String newDate){
     concertDate = newDate;

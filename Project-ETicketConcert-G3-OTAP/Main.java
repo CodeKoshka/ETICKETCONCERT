@@ -9,28 +9,36 @@ import java.util.*;
         Admin admin = new Admin(user);  
         int userChoice;  
 
-/*this where the user can log in 
- (walang special dito pang duktong ko lang to para ma access yung Main.java saka User.java)*/
-while (true){
-    System.out.println("==== Welcome to the Ticket Management System ====");
-    System.out.println("1. Admin Login");
-    System.out.println("2. User Login");
-    System.out.println("3. Exit");
-    System.out.print("Please select an option: ");
-    userChoice = meh.nextInt();  
+        OUTER:
+while (true) {
+            System.out.println("");
+            System.out.println("=====================================");
+            System.out.println("     [ Ticket Management System ]    ");
+            System.out.println("=====================================");
+            System.out.println("1. Admin Login");
+            System.out.println("2. User Login");
+            System.out.println("3. Exit");
+            System.out.print("Please select an option: ");
+            userChoice = meh.nextInt();
+            System.out.println("=====================================");
+            meh.nextLine();
 
-    if (userChoice == 1){
-    admin.login();  
-    }else if (userChoice == 2){
-    user.showUserMenu();  
-    }else if (userChoice == 3){
-    System.out.println("Exiting the system...");
-    break;  
-    }else{
-    System.out.println("[Invalid option. Please try again.]");
-    }
+            switch (userChoice) {
+            case 1:
+            admin.login();
+            break;
+            case 2:
+            user.showUserMenu();
+            break;
+            case 3:
+            System.out.println("Exiting the system...");
+            break OUTER;
+            default:
+            System.out.println("[Invalid option. Please try again.]");
+            break;
+            }
+        }
     }
 }
-}
-/* Salamat Sa CheatSheet Natapos ko to Love You 
+/* Salamat Sa CheatSheet saka VSCODE Natapos ko to Love You 
   (meh signiture ko lang yan sa scanner)  */

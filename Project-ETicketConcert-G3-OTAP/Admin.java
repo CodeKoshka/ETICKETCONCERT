@@ -2,18 +2,20 @@ import java.util.*;
 
     public class Admin {
         Scanner meh = new Scanner(System.in);
-        Random random = new Random();
         private User user;
     /*this is the admin section of the 3 Files that is use for the ETicket to function 
     (Dahil dito gusto ko umiyak)*/
-    private static Set<Integer> bookedSeats = User.bookedSeats;
-    private static Set<String> bookedTicketNumbers = User.bookedTicketNumbers;
-    private static Set<Integer> usedSeats = User.usedSeats;
-    private static Set<String> usedTicketNumbers = User.usedTicketNumbers;
-    private String password = "byeontae";
-    private double ticketPrice = 10.0;
-    private String concertDate = "12/25/2024";
-    String enteredPassword;
+    
+    //this is connected with the user so when the admin so when a user makes a book
+    private static final Set<Integer> bookedSeats = User.bookedSeats;
+    private static final Set<String> bookedTicketNumbers = User.bookedTicketNumbers;
+    private static final Set<Integer> usedSeats = User.usedSeats;
+    private static final Set<String> usedTicketNumbers = User.usedTicketNumbers;
+
+    private final String password = "BESTOTAP";//This is the password for the admin login (Paltan ng password kung gusto)
+    private double ticketPrice = 10.0;//Default value of price for ticket (Napapaltan yan ng program mismo)
+    private String concertDate = "12/25/2024";//Default value of date for ticket (Napapaltan yan ng program mismo)
+    String ticketNum, enteredPassword;
     int confirmation, choice, month, day, year;     
 
 public Admin(User user){
@@ -33,55 +35,68 @@ public void login(){
 }
 //main part ng interface 
 private void showAdminMenu(){
-while (true){
-    System.out.println("");
-    System.out.println("===================================");
-    System.out.println("Current Ticket Price: $" + ticketPrice);
-    System.out.println("Current Concert Date: " + concertDate);
-    System.out.println("===================================");
-    System.out.println("");
-    System.out.println("===================================");
-    System.out.println("          [ Admin Menu ]           ");
-    System.out.println("===================================");
-    System.out.println("");
-    System.out.println("1. Change ticket price");
-    System.out.println("2. Change concert date");
-    System.out.println("3. View all tickets");
-    System.out.println("4. Logout");
-    System.out.print("Please select an option: ");
-    choice = meh.nextInt();  
+            OUTER:
+while (true) {
+        System.out.println("=====================================");
+        System.out.println("Current Ticket Price: $" + ticketPrice);
+        System.out.println("Current Concert Date: " + concertDate);
+        System.out.println("=====================================");
+        System.out.println("");
+        System.out.println("=====================================");
+        System.out.println("           [ Admin Menu ]            ");
+        System.out.println("=====================================");
+        System.out.println("1. Change ticket price");
+        System.out.println("2. Change concert date");
+        System.out.println("3. View all tickets");
+        System.out.println("4. Logout");
+        System.out.print("Please select an option: ");
+        choice = meh.nextInt();
+        System.out.println("=====================================");
+//nextline is to prevent lines being skip
+        meh.nextLine();
 
-    if (choice == 1){
-    changeTicketPrice();
-    }else if (choice == 2){
-    changeConcertDate();
-    }else if (choice == 3){
-    viewAllTickets();
-    }else if (choice == 4){
-    System.out.println("Logging out...");
-    break;
-    }else{
-    System.out.println("[Invalid selection, Please try again]");
+        switch (choice) {
+            case 1:
+            changeTicketPrice();
+            break;
+            case 2:
+            changeConcertDate();
+            break;
+            case 3:
+            viewAllTickets();
+            break;
+            case 4:
+            System.out.println("[Logging out]");
+            break OUTER;
+            default:
+            System.out.println("[Invalid selection, Please try again]");
+            break;
+        }
     }
-}
 }
 //this changes the Price of the ticket also updates the User.java
 private void changeTicketPrice(){
+    System.out.println("=====================================");
     System.out.println("Current Ticket Price: $" + ticketPrice);
+    System.out.println("=====================================");
     System.out.print("Enter new ticket price: $");
-    ticketPrice = meh.nextDouble();  
+    ticketPrice = meh.nextDouble();
+    System.out.println("=====================================");
+    meh.nextLine();  
 
     user.updateTicketPrice(ticketPrice);
     System.out.println("Ticket price updated to $" + ticketPrice);
     }
 //this changes the Date of the ticket also updates the User.java
 private void changeConcertDate(){
+    System.out.println("=====================================");
     System.out.println("Current Concert Date: " + concertDate);
+    System.out.println("=====================================");
     System.out.print("Enter new month (1-12): ");
     month = meh.nextInt();
     System.out.print("Enter new day (1-31): ");
     day = meh.nextInt();
-    System.out.print("Enter new year (e.g., 2024): ");
+    System.out.print("Enter new year (2000-2025): ");
     year = meh.nextInt();
 
 concertDate = month + "/" + day + "/" + year;
@@ -91,8 +106,11 @@ concertDate = month + "/" + day + "/" + year;
 }
 //this is the interface for the tickets 
 private void viewAllTickets() {
-    while (true) {
-        System.out.println("======= [ Ticket Section ] =======");
+            OUTER:
+while (true) {
+        System.out.println("=====================================");
+        System.out.println("         [ Ticket Section ]          ");
+        System.out.println("=====================================");
         System.out.println("1. View all tickets (booked + used)");
         System.out.println("2. View all booked tickets");
         System.out.println("3. View all used tickets");
@@ -101,30 +119,41 @@ private void viewAllTickets() {
         System.out.println("6. Clear all used tickets");
         System.out.println("7. Back to Admin Menu");
         System.out.print("Please select an option: ");
-        choice = meh.nextInt(); 
+        choice = meh.nextInt();
+        System.out.println("=====================================");
 
-        if (choice == 1) {
-        viewAllTicketsLabeled();
-        }else if (choice == 2){
-        viewAllBookedTickets();
-        }else if (choice == 3){
-        viewAllUsedTickets();
-        }else if (choice == 4){
-        deleteSpecificTicket();
-        }else if (choice == 5){
-        clearAllBookedTickets();
-        }else if (choice == 6){
-        clearAllUsedTickets();
-        }else if (choice == 7){
-        break; 
-        }else{
-        System.out.println("[Invalid selection, Please try again]");
+    switch (choice) {
+            case 1:
+            viewAllTicketsLabeled();
+            break;
+            case 2:
+            viewAllBookedTickets();
+            break;
+            case 3:
+            viewAllUsedTickets();
+            break;
+            case 4:
+            deleteSpecificTicket();
+            break;
+            case 5:
+            clearAllBookedTickets();
+            break;
+            case 6:
+            clearAllUsedTickets();
+            break;
+            case 7:
+            break OUTER;
+            default:
+            System.out.println("[Invalid selection, Please try again]");
+            break;
         }
     }
 }
 //this is where the tickets that had been registered is stored 
 private void viewAllTicketsLabeled(){
-        System.out.println("===== [ All Tickets ] =====");
+        System.out.println("=====================================");
+        System.out.println("           [ All Tickets ]           ");
+        System.out.println("=====================================");
         if (bookedTicketNumbers.isEmpty() && usedTicketNumbers.isEmpty()) {
         System.out.println("No tickets available.");
         }else{
@@ -150,7 +179,9 @@ private void viewAllBookedTickets(){
         if (bookedTicketNumbers.isEmpty()){
         System.out.println("No booked tickets available.");
         }else{
-        System.out.println("===== [ Booked Tickets ] =====");
+        System.out.println("=====================================");
+        System.out.println("          [ Booked Tickets ]         ");
+        System.out.println("=====================================");
         for (String ticketNumber : bookedTicketNumbers){
         System.out.println("Ticket Number: " + ticketNumber);
         }
@@ -160,7 +191,9 @@ private void viewAllUsedTickets(){
         if (usedTicketNumbers.isEmpty()){
         System.out.println("No used tickets available.");
         }else{
-        System.out.println("===== [ Used Tickets ] =====");
+        System.out.println("=====================================");
+        System.out.println("           [ Used Tickets ]          ");
+        System.out.println("=====================================");
         for (String ticketNumber : usedTicketNumbers) {
         System.out.println("Ticket Number: " + ticketNumber);
         }
@@ -169,7 +202,8 @@ private void viewAllUsedTickets(){
 //this is to delete tickets if needed
     private void deleteSpecificTicket(){
         System.out.print("Enter the ticket number to delete: ");
-        String ticketNum = meh.nextLine().trim();
+        meh.nextLine();
+        ticketNum = meh.nextLine().trim();
 
         if (bookedTicketNumbers.contains(ticketNum)){
         bookedTicketNumbers.remove(ticketNum);
@@ -207,7 +241,7 @@ private void viewAllUsedTickets(){
         System.out.println("All used tickets have been cleared.");
         }else{
         System.out.println("Action canceled.");
-        }
+    }
 }
 //this is to update the tickets for both the Admin.java and User.java
     public static void updateAdminTicketList(int seat, String ticketNumber){
