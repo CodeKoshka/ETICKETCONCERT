@@ -24,7 +24,7 @@ Both the admin and user interfaces are straightforward, making it easy to naviga
 
 # 6. Real-Time Ticket Management
 Booked and used tickets are tracked separately, ensuring accurate data management for both users and the admin.
-------------------------------------------------------------------------------------------------------------------------------------------------------
+
 # Limitations
 
 # 1. No Data Storage
