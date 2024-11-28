@@ -1,7 +1,7 @@
 import java.util.*;
 
     public class Main {
-    //this is the Main section of the 3 Files that is use for the ETicket to function
+    //this is the Main interface section of the 3 Files that is use for the ETicket to function
         public static void main(String[] args) {
         Scanner meh = new Scanner(System.in);
         

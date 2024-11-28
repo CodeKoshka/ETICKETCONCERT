@@ -14,16 +14,13 @@ import java.util.*;
     int choice, continueChoice;
     double change, payment = 0.0;  
 
-/*this is meant to store multiple variables 
-(totoong reason kung bakit nandito ito ay parad separate yung bookedticket saka usedticket -.-)*/   
+//this is meant to store multiple variables 
     public static Set<Integer> bookedSeats = new HashSet<>();
     public static Set<String> bookedTicketNumbers = new HashSet<>();
     public static Set<Integer> usedSeats = new HashSet<>();
     public static Set<String> usedTicketNumbers = new HashSet<>();
 
-    public void updateConcertName(String newConcertName) {
-        concertName = newConcertName;
-    }
+
 
 //this is the ticketing interface    
 public void showUserMenu(){
@@ -182,11 +179,14 @@ bookedSeats.remove(seatNumber);
 
 /*this part is so the ticket part can be updated from both the Admin.java file and User.java file
 (dahil dito rami kong logical error grabe 2hours para lang maghanap)*/
-    public void updateTicketPrice(double newPrice){
-    ticketPrice = newPrice;
-    }
-
+    public void updateConcertName(String newConcertName) {
+    concertName = newConcertName;
+}
     public void updateConcertDate(String newDate){
     concertDate = newDate;
-    }
 }
+    public void updateTicketPrice(double newPrice){
+    ticketPrice = newPrice;
+}
+}
+

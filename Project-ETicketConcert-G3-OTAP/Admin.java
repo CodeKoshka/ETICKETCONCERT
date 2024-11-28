@@ -6,7 +6,7 @@ import java.util.*;
     /*this is the admin section of the 3 Files that is use for the ETicket to function 
     (Dahil dito gusto ko umiyak)*/
     
-    //this is connected with the user so when the admin so when a user makes a book
+    //this is connected with the user so when the admin so when a user books a ticket it can also be access by the user
     private static final Set<Integer> bookedSeats = User.bookedSeats;
     private static final Set<String> bookedTicketNumbers = User.bookedTicketNumbers;
     private static final Set<Integer> usedSeats = User.usedSeats;
@@ -15,7 +15,7 @@ import java.util.*;
     private final String password = "BESTOTAP";//This is the password for the admin login (Paltan ng password kung gusto)
     private double ticketPrice = 10.0;//Default value of price for ticket (Napapaltan yan ng program mismo)
     private String concertDate = "12/25/2024";//Default value of date for ticket (Napapaltan yan ng program mismo)
-    private String concertName = "ERE By: Juan Karlos Labajo";
+    private String concertName = "ERE By: Juan Karlos Labajo";//Default value of concert and artist for ticket (Napapaltan yan ng program mismo)
     String ticketNum, artistName, updateConcert, enteredPassword;
     int confirmation, choice, month, day, year;     
 
