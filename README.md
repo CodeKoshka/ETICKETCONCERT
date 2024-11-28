@@ -44,5 +44,5 @@ It’s designed for one admin or user at a time, so it’s not ideal for high-tr
 # 5. Basic Error Handling
 The system could use more checks for invalid inputs, for example when you type an alphabet instead of a number on the switch options it crashes.
 
-# 6. Password resets on shutdown
-If the program shutdown or crashes the password resets back to default
+# 6. Password Resets on Shutdown
+If the program shutdown or crashes the password resets back to default making the program vulnerable if they know the default password
