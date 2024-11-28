@@ -11,11 +11,11 @@ import java.util.*;
     private static final Set<String> bookedTicketNumbers = User.bookedTicketNumbers;
     private static final Set<Integer> usedSeats = User.usedSeats;
     private static final Set<String> usedTicketNumbers = User.usedTicketNumbers;
-
+    
     private String password = "BESTOTAP";//This is the password for the admin login (Pwede na mapaltan sa admin menu)
-    private double ticketPrice = 10.0;//Default value of price for ticket (Napapaltan yan ng program mismo)
+    private String concertName = "ERE By: Juan Karlos Labajo";//Default value of concert and artist for ticket (Napapaltan yan ng program mismo) 
     private String concertDate = "12/25/2024";//Default value of date for ticket (Napapaltan yan ng program mismo)
-    private String concertName = "ERE By: Juan Karlos Labajo";//Default value of concert and artist for ticket (Napapaltan yan ng program mismo)
+    private double ticketPrice = 10.0;//Default value of price for ticket (Napapaltan yan ng program mismo)
     String ticketNum, artistName, updateConcert, enteredPassword;
     int confirmation, choice, month, day, year;     
 
@@ -85,19 +85,22 @@ while (true) {
         }
     }
 }
-//this changes the Price of the ticket also updates the User.java
-private void changeTicketPrice(){
-    System.out.println("=====================================");
-    System.out.println("Current Ticket Price: $" + ticketPrice);
-    System.out.println("=====================================");
-    System.out.print("Enter new ticket price: $");
-    ticketPrice = meh.nextDouble();
-    System.out.println("=====================================");
-    meh.nextLine();  
 
-    user.updateTicketPrice(ticketPrice);
-    System.out.println("Ticket price updated to $" + ticketPrice);
-    }
+//this is to change the concerts name and the artist also updates the User.java
+private void changeConcertName() {
+    System.out.println("=====================================");
+    System.out.println("Current Concert Name: " + concertName);
+    System.out.println("=====================================");
+    System.out.print("Enter new Concert Name: ");
+    updateConcert = meh.nextLine();
+    System.out.print("Enter new Artist Name: ");
+    artistName = meh.nextLine();
+
+concertName = updateConcert + " By: " + artistName;
+    
+    System.out.println("Artist name updated to: " + concertName);
+    user.updateConcertName(concertName); 
+}
 //this changes the Date of the ticket also updates the User.java
 private void changeConcertDate(){
     System.out.println("=====================================");
@@ -115,20 +118,18 @@ concertDate = month + "/" + day + "/" + year;
     user.updateConcertDate(concertDate);
     System.out.println("Concert date updated to: " + concertDate);
 }
-//this is to change the concerts name and the artist also updates the User.java
-private void changeConcertName() {
+//this changes the Price of the ticket also updates the User.java
+private void changeTicketPrice(){
     System.out.println("=====================================");
-    System.out.println("Current Concert Name: " + concertName);
+    System.out.println("Current Ticket Price: $" + ticketPrice);
     System.out.println("=====================================");
-    System.out.print("Enter new Concert Name: ");
-    updateConcert = meh.nextLine();
-    System.out.print("Enter new Artist Name: ");
-    artistName = meh.nextLine();
+    System.out.print("Enter new ticket price: $");
+    ticketPrice = meh.nextDouble();
+    System.out.println("=====================================");
+    meh.nextLine();  
 
-concertName = updateConcert + " By: " + artistName;
-    
-    System.out.println("Artist name updated to: " + concertName);
-    user.updateConcertName(concertName); 
+    user.updateTicketPrice(ticketPrice);
+    System.out.println("Ticket price updated to $" + ticketPrice);
 }
 /*this is for changing the password of the admin 
 (added it so i dont have to change it in the code itself wanted to add a .txt so i can save multiple passwords and if the program ends it will save in the database but its to complex and dk how to do it anymore)*/
@@ -274,7 +275,7 @@ private void viewAllUsedTickets(){
 }
 
     private void clearAllBookedTickets(){
-        System.out.println("Are you sure you want to clear all booked tickets? (1 for Yes / 2 for No)");
+        System.out.println("Are you sure you want to clear all booked tickets? (1 for Yes, 2 for No)");
         confirmation = meh.nextInt();
         meh.nextLine(); 
         if (confirmation == 1){
@@ -287,7 +288,7 @@ private void viewAllUsedTickets(){
 }
 
     private void clearAllUsedTickets(){
-        System.out.println("Are you sure you want to clear all used tickets? (1 for Yes / 2 for No)");
+        System.out.println("Are you sure you want to clear all used tickets? (1 for Yes, 2 for No)");
         confirmation = meh.nextInt();
         meh.nextLine(); 
         if (confirmation == 1){

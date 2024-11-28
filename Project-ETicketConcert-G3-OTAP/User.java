@@ -5,32 +5,33 @@ import java.util.*;
         Random random = new Random();
 //this is the User section of the 3 Files that is use for the ETicket to function. contains all the user needed to book a ETicket for a Concert.
     
-    private double ticketPrice = 10.0;
-    private String concertDate = "12/25/2024"; 
-    private String ticketNumber = "";
     private String concertName = "ERE By: Juan Karlos Labajo";
+    private String concertDate = "12/25/2024";
+    private double ticketPrice = 10.0;
+    private String ticketNumber = "";
     private int seatNumber = -1;
     String userName,ticketNum;
     int choice, continueChoice;
     double change, payment = 0.0;  
 
-//this is meant to store multiple variables 
+//this is meant to store multiple variables and prevents duplication
     public static Set<Integer> bookedSeats = new HashSet<>();
     public static Set<String> bookedTicketNumbers = new HashSet<>();
     public static Set<Integer> usedSeats = new HashSet<>();
     public static Set<String> usedTicketNumbers = new HashSet<>();
-
-
 
 //this is the ticketing interface    
 public void userMenu(){
 //outer is so the switch doesnt break (suggested by vscode)
             OUTER:
 while (true) {
+            System.out.println("");
             System.out.println("=====================================");
             System.out.println("Concert Name: " + concertName);
             System.out.println("Concert Date: " + concertDate);
             System.out.println("Ticket Price: $" + ticketPrice);
+            System.out.println("=====================================");
+            System.out.println("");
             System.out.println("=====================================");
             System.out.println("            [ User Menu ]            ");
             System.out.println("=====================================");
@@ -45,28 +46,28 @@ while (true) {
 
             switch (choice) {
             case 1:
-            bookTicket();
+                bookTicket();
             break;
             case 2:
-            cancelTicket();
+                cancelTicket();
             break;
             case 3:
-            useTicket();
+                useTicket();
             break;
             case 4:
-            System.out.println("Logging out...");
+                System.out.println("Logging out...");
             break OUTER;
             default:
-            System.out.println("[Invalid selection, Please try again]");
+                System.out.println("[Invalid selection, Please try again]");
             break;
             }
 
-        System.out.print("Do you want to continue with ticket booking? (1 for Yes, 2 for No):");
+        System.out.println("Do you want to continue with ticket booking? (1 for Yes, 2 for No)");
         continueChoice = meh.nextInt();
         meh.nextLine();
         while (continueChoice != 1 && continueChoice != 2){
         System.out.println("Invalid selection, please enter 1 for Yes or 2 for No.");
-        System.out.print("Do you want to continue with ticket booking? (1 for Yes, 2 for No): ");
+        System.out.println("Do you want to continue with ticket booking? (1 for Yes, 2 for No)");
         continueChoice = meh.nextInt();
         meh.nextLine();
         } if (continueChoice == 2){
