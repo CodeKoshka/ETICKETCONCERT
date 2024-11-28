@@ -24,22 +24,25 @@ Both the admin and user interfaces are straightforward, making it easy to naviga
 # 6. Real-Time Ticket Management
 Booked and used tickets are tracked separately, ensuring accurate data management for both users and the admin.
 
+# 7. Password Updates
+The password can now be changed in the interface, If needed the admin can change the password instead of changing it in the source code itself.
+
 # Limitations
 
 # 1. No Data Storage
 Since the system doesn’t save data permanently, everything resets when you close the program.
 
-# 2. Basic Security
-The admin password is hardcoded in the program, which isn’t very secure if someone gets access to the source code.
-
-# 3. No Online Payments
+# 2. No Online Payments
 Payments are simulated, so there’s no integration with actual payment methods like credit cards or e-wallets.
 
-# 4. Command-Line Only
+# 3. Command-Line Only
 It runs in the terminal, which might not be as user-friendly as a graphical app for some people.
 
-# 5. Single-User Sessions
+# 4. Single-User Sessions
 It’s designed for one admin or user at a time, so it’s not ideal for high-traffic use.
 
-# 6. Basic Error Handling
-The system could use more checks for invalid inputs, like incorrect dates or seat numbers outside the range.
+# 5. Basic Error Handling
+The system could use more checks for invalid inputs, for example when you type an alphabet instead of a number on the switch options it crashes.
+
+# 6. Password resets on shutdown
+If the program shutdown or crashes the password resets back to default
