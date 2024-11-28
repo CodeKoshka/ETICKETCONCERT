@@ -2,7 +2,7 @@
 Para sa defence baby
 
 # Flow Chart
-![Spaghetti_Flowchart](https://github.com/user-attachments/assets/6fb4a95c-cb8d-4bb7-aba1-93bbda39e693)
+![Spaghetti_Flowchart](https://github.com/user-attachments/assets/f7992b4c-389c-4d2a-8b14-6bfc49361e67)
 # Features 
                   
 # 1. Admin Controls
