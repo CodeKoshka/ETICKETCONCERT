@@ -28,7 +28,7 @@ while (true) {
             admin.login();
             break;
             case 2:
-            user.showUserMenu();
+            user.userMenu();
             break;
             case 3:
             System.out.println("Exiting the system...");

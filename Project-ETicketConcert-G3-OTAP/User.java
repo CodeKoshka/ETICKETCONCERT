@@ -23,7 +23,7 @@ import java.util.*;
 
 
 //this is the ticketing interface    
-public void showUserMenu(){
+public void userMenu(){
 //outer is so the switch doesnt break (suggested by vscode)
             OUTER:
 while (true) {
@@ -141,7 +141,7 @@ while (payment < ticketPrice){
     System.out.println("=====================================");
 }
 
-//this part if you want to cancel your ticket or not if there is no ticket found this also handles that part
+//this part if you want to cancel your ticket or not if there is no ticket found this also handles that part (.trim is meant for making sure the tickets dont break when the code generates whitespaces)
 private void cancelTicket(){
     System.out.print("Enter your ticket number to cancel: ");
     ticketNum = meh.nextLine().trim();  
@@ -157,7 +157,7 @@ bookedSeats.remove(seatNumber);
     System.out.println("Seat and ticket number are now available for reuse.");
     }
 
-//this part is for the user to use the ticket
+//this part is for the user to use the ticket (.trim is meant for making sure the tickets dont break when the code generates whitespaces)
 private void useTicket(){
     System.out.print("Enter your ticket number to use: ");
     ticketNum = meh.nextLine().trim();  
@@ -166,11 +166,11 @@ private void useTicket(){
     System.out.println("Ticket number not found.");
     return;
 }
-
+//this is meant so if the ticket is used the seat still is used so you cant make a ticket with the same seat
 usedTicketNumbers.add(ticketNum);
 usedSeats.add(seatNumber);
 
-
+//this is meant for the cancelation operation there both connected to the admin.java
 bookedTicketNumbers.remove(ticketNum);
 bookedSeats.remove(seatNumber);
 

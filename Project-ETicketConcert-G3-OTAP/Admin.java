@@ -29,13 +29,13 @@ public void login(){
 
     if (enteredPassword.equals(password)){
     System.out.println("Login successful!");
-    showAdminMenu();
+    adminMenu();
     }else{
     System.out.println("Incorrect password. ACCESS DENIED!!!");
     }
 }
 //main part ng interface 
-private void showAdminMenu(){
+private void adminMenu(){
             OUTER:
 while (true) {
         System.out.println("");
@@ -125,7 +125,7 @@ private void changeConcertName() {
     System.out.print("Enter new Artist Name: ");
     artistName = meh.nextLine();
 
-concertName = updateConcert + "By: " + artistName;
+concertName = updateConcert + " By: " + artistName;
     
     System.out.println("Artist name updated to: " + concertName);
     user.updateConcertName(concertName); 
