@@ -17,7 +17,8 @@ import java.util.*;
     private String concertDate = "12/25/2024";//Default value of date for ticket (Napapaltan yan ng program mismo)
     private double ticketPrice = 10.0;//Default value of price for ticket (Napapaltan yan ng program mismo)
     String ticketNum, artistName, updateConcert, enteredPassword;
-    int confirmation, choice, month, day, year;     
+    int confirmation, choice, month, day, year;
+    boolean valid = false;     
 
 public Admin(User user){
 this.user = user;
@@ -87,7 +88,7 @@ while (true) {
 }
 
 //this is to change the concerts name and the artist also updates the User.java
-private void changeConcertName() {
+private void changeConcertName(){
     System.out.println("=====================================");
     System.out.println("Current Concert Name: " + concertName);
     System.out.println("=====================================");
@@ -106,17 +107,42 @@ private void changeConcertDate(){
     System.out.println("=====================================");
     System.out.println("Current Concert Date: " + concertDate);
     System.out.println("=====================================");
-    System.out.print("Enter new month (1-12): ");
-    month = meh.nextInt();
-    System.out.print("Enter new day (1-31): ");
-    day = meh.nextInt();
-    System.out.print("Enter new year (2000-9999): ");
-    year = meh.nextInt();
 
-concertDate = month + "/" + day + "/" + year;
-        
+    
+    while (!valid) {
+        System.out.print("Enter new month (1-12): ");
+        month = meh.nextInt();
+        System.out.print("Enter new day (1-31): ");
+        day = meh.nextInt();
+        System.out.print("Enter new year (2000-9999): ");
+        year = meh.nextInt();
+
+        if (isDateValid(month, day, year)) {
+            valid = true;
+        } else {
+            System.out.println("[Invalid date entered, please retry.]");
+        }
+    }
+
+    concertDate = month + "/" + day + "/" + year;
     user.updateConcertDate(concertDate);
     System.out.println("Concert date updated to: " + concertDate);
+}
+//added this just incase the admin was stupid (found the formula from https://www.coursesidekick.com/computer-science/3636135 then simplify it)
+private boolean isDateValid(int month, int day, int year) {
+    if (month < 1 || month > 12 || day < 1 || day > 31 || year < 1000 || year > 9999) {
+        return false;
+    }
+    if ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30) {
+        return false;
+    }
+    if (month == 2) {
+        boolean isItLeapYear = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
+        if (day > 29 || (day > 28 && !isItLeapYear)) {
+            return false;
+        }
+    }
+    return true;
 }
 //this changes the Price of the ticket also updates the User.java
 private void changeTicketPrice(){
@@ -133,7 +159,7 @@ private void changeTicketPrice(){
 }
 /*this is for changing the password of the admin 
 (added it so i dont have to change it in the code itself wanted to add a .txt so i can save multiple passwords and if the program ends it will save in the database but its to complex and dk how to do it anymore)*/
-private void changePassword() {
+private void changePassword(){
     System.out.println("=====================================");
     System.out.print("Enter current password: ");
     String currentPassword = meh.nextLine();
@@ -159,7 +185,7 @@ private void changePassword() {
 }
 
 //this is the interface for the tickets 
-private void viewAllTickets() {
+private void viewAllTickets(){
             OUTER:
 while (true) {
         System.out.println("=====================================");
@@ -305,3 +331,5 @@ private void viewAllUsedTickets(){
     bookedTicketNumbers.add(ticketNumber);
     }
 }
+
+
