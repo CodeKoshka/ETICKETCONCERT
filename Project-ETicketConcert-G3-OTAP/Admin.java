@@ -116,6 +116,7 @@ private void changeConcertDate(){
         System.out.print("Enter new year (2000-9999): ");
         year = meh.nextInt();
         System.out.println("=====================================");
+
         if (validateDate(month, day, year)){
         valid = true;
         concertDate = month + "/" + day + "/" + year;
@@ -127,9 +128,9 @@ private void changeConcertDate(){
         }
     }
 }
-
 //added this just incase the admin put the wrong number
 public static boolean validateDate(int month, int day, int year){
+
     if (month < 1 || month > 12){
         System.out.println("Month must be within the range of 1 to 12.");
         return false;
@@ -191,11 +192,11 @@ private void changePassword(){
 
     if (newPassword.equals(confirmPassword)){
     password = newPassword; 
-    System.out.println("Password updated successfully.");
+        System.out.println("Password updated successfully.");
     }else{
-    System.out.println("Passwords do not match. Password not changed.");
+        System.out.println("Passwords do not match. Password not changed.");
     }
-    System.out.println("=====================================");
+        System.out.println("=====================================");
 }
 
 //this is the interface for the tickets 
@@ -249,22 +250,22 @@ private void viewAllTicketsLabeled(){
         System.out.println("           [ All Tickets ]           ");
         System.out.println("=====================================");
         if (bookedTicketNumbers.isEmpty() && usedTicketNumbers.isEmpty()) {
-        System.out.println("No tickets available.");
+            System.out.println("No tickets available.");
         }else{
-        System.out.println("Booked Tickets:");
+            System.out.println("Booked Tickets:");
         if (bookedTicketNumbers.isEmpty()){
-        System.out.println("No booked tickets.");
+            System.out.println("No booked tickets.");
         }else{
         for (String ticketNumber : bookedTicketNumbers){
-        System.out.println("Ticket - " + ticketNumber);
+            System.out.println("Ticket - " + ticketNumber);
     }
 }
         System.out.println("Used Tickets:");
         if (usedTicketNumbers.isEmpty()){
-        System.out.println("No used tickets.");
+            System.out.println("No used tickets.");
         }else{
         for (String ticketNumber : usedTicketNumbers){
-        System.out.println("Ticket - " + ticketNumber);
+            System.out.println("Ticket - " + ticketNumber);
         }
     }
     }
@@ -272,26 +273,26 @@ private void viewAllTicketsLabeled(){
 //this is where the tickets that had been booked can be seen if the admin requested it
 private void viewAllBookedTickets(){
         if (bookedTicketNumbers.isEmpty()){
-        System.out.println("No booked tickets available.");
+            System.out.println("No booked tickets available.");
         }else{
-        System.out.println("=====================================");
-        System.out.println("          [ Booked Tickets ]         ");
-        System.out.println("=====================================");
+            System.out.println("=====================================");
+            System.out.println("          [ Booked Tickets ]         ");
+            System.out.println("=====================================");
         for (String ticketNumber : bookedTicketNumbers){
-        System.out.println("Ticket Number: " + ticketNumber);
+            System.out.println("Ticket Number: " + ticketNumber);
         }
     }
 }
 //this is where the tickets that had been used can be seen if the admin requested it
 private void viewAllUsedTickets(){
         if (usedTicketNumbers.isEmpty()){
-        System.out.println("No used tickets available.");
+            System.out.println("No used tickets available.");
         }else{
-        System.out.println("=====================================");
-        System.out.println("           [ Used Tickets ]          ");
-        System.out.println("=====================================");
+            System.out.println("=====================================");
+            System.out.println("           [ Used Tickets ]          ");
+            System.out.println("=====================================");
         for (String ticketNumber : usedTicketNumbers) {
-        System.out.println("Ticket Number: " + ticketNumber);
+            System.out.println("Ticket Number: " + ticketNumber);
         }
     }
 }
@@ -302,15 +303,15 @@ private void viewAllUsedTickets(){
         ticketNum = meh.nextLine().trim();
 
         if (bookedTicketNumbers.contains(ticketNum)){
-        bookedTicketNumbers.remove(ticketNum);
-        bookedSeats.remove(ticketNum);
-        System.out.println("Ticket " + ticketNum + " has been deleted from booked tickets.");
+            bookedTicketNumbers.remove(ticketNum);
+            bookedSeats.remove(ticketNum);
+            System.out.println("Ticket " + ticketNum + " has been deleted from booked tickets.");
         }else if (usedTicketNumbers.contains(ticketNum)){
-        usedTicketNumbers.remove(ticketNum);
-        usedSeats.remove(ticketNum);
-        System.out.println("Ticket " + ticketNum + " has been deleted from used tickets.");
+            usedTicketNumbers.remove(ticketNum);
+            usedSeats.remove(ticketNum);
+            System.out.println("Ticket " + ticketNum + " has been deleted from used tickets.");
         }else{
-        System.out.println("Ticket not found.");
+            System.out.println("Ticket not found.");
     }
 }
 
@@ -319,11 +320,11 @@ private void viewAllUsedTickets(){
         confirmation = meh.nextInt();
         meh.nextLine(); 
         if (confirmation == 1){
-        bookedTicketNumbers.clear();
-        bookedSeats.clear();
-        System.out.println("All booked tickets have been cleared.");
+            bookedTicketNumbers.clear();
+            bookedSeats.clear();
+            System.out.println("All booked tickets have been cleared.");
         }else{
-        System.out.println("Action canceled.");
+            System.out.println("Action canceled.");
     }
 }
 
@@ -332,11 +333,11 @@ private void viewAllUsedTickets(){
         confirmation = meh.nextInt();
         meh.nextLine(); 
         if (confirmation == 1){
-        usedTicketNumbers.clear();
-        usedSeats.clear();
-        System.out.println("All used tickets have been cleared.");
+            usedTicketNumbers.clear();
+            usedSeats.clear();
+            System.out.println("All used tickets have been cleared.");
         }else{
-        System.out.println("Action canceled.");
+            System.out.println("Action canceled.");
     }
 }
 //this is to update the tickets for both the Admin.java and User.java
