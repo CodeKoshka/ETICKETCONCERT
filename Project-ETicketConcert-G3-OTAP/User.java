@@ -96,13 +96,13 @@ public void bookTicket(){
     System.out.print("Enter seat number (1-10000): ");
     seatNumber = meh.nextInt();
     meh.nextLine(); 
-}
+    }
 /* This randomizes the ticket number and adds nh on them %06d is to make sure the code still works if the number that was generated is 0 it wont break instead it will be printed
 nh Stand for National Harmony Company (trip ko lang lagyan ng nh >.<) */
     ticketNumber = "nh" + String.format("%06d", random.nextInt(599297) + 1);        
 while (bookedTicketNumbers.contains(ticketNumber)) {
     ticketNumber = "nh" + String.format("%06d", random.nextInt(599297) + 1);
-}
+    }
 //this is so the admin program can be updated
     bookedSeats.add(seatNumber);
     bookedTicketNumbers.add(ticketNumber);
@@ -112,19 +112,19 @@ while (bookedTicketNumbers.contains(ticketNumber)) {
 
 //this specific part of code is use for the payment and if is invalid or not if it is it goes back until you pay
 while (payment < ticketPrice){
-    System.out.print("Enter payment amount: $");
-    payment = meh.nextDouble();
-    meh.nextLine(); 
+        System.out.print("Enter payment amount: $");
+        payment = meh.nextDouble();
+        meh.nextLine(); 
     if (payment < ticketPrice){
-    System.out.println("Insufficient payment. Please enter an amount greater than or equal to the ticket price.");
+        System.out.println("Insufficient payment. Please enter an amount greater than or equal to the ticket price.");
     }
 }
     change = payment - ticketPrice;
     
     if (change > 0){
-    System.out.println("Payment successful. Your change: $" + change);
+        System.out.println("Payment successful. Your change: $" + change);
     }else{
-    System.out.println("Payment successful.");
+        System.out.println("Payment successful.");
 }
 
 //this is the ticket itself when you finish the booking
@@ -148,12 +148,12 @@ private void cancelTicket(){
     ticketNum = meh.nextLine().trim();  
 
     if (!bookedTicketNumbers.contains(ticketNum)){
-    System.out.println("Ticket number not found.");
-    return;
+        System.out.println("Ticket number not found.");
+        return;
     }
 
-bookedTicketNumbers.remove(ticketNum);
-bookedSeats.remove(seatNumber);  
+    bookedTicketNumbers.remove(ticketNum);
+    bookedSeats.remove(seatNumber);  
     System.out.println("Ticket canceled successfully.");
     System.out.println("Seat and ticket number are now available for reuse.");
     }
@@ -168,13 +168,12 @@ private void useTicket(){
     return;
 }
 //this is meant so if the ticket is used the seat still is used so you cant make a ticket with the same seat
-usedTicketNumbers.add(ticketNum);
-usedSeats.add(seatNumber);
+    usedTicketNumbers.add(ticketNum);
+    usedSeats.add(seatNumber);
 
 //this is meant for the cancelation operation there both connected to the admin.java
-bookedTicketNumbers.remove(ticketNum);
-bookedSeats.remove(seatNumber);
-
+    bookedTicketNumbers.remove(ticketNum);
+    bookedSeats.remove(seatNumber);
     System.out.println("Ticket used successfully.");
 }
 
@@ -182,12 +181,12 @@ bookedSeats.remove(seatNumber);
 (dahil dito rami kong logical error grabe 2hours para lang maghanap)*/
     public void updateConcertName(String newConcertName) {
     concertName = newConcertName;
-}
+    }
     public void updateConcertDate(String newDate){
     concertDate = newDate;
-}
+    }
     public void updateTicketPrice(double newPrice){
     ticketPrice = newPrice;
-}
+    }
 }
 
