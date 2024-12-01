@@ -47,16 +47,16 @@ while (true) {
             switch (choice) {
             case 1:
                 bookTicket();
-            break;
+                break;
             case 2:
                 cancelTicket();
-            break;
+                break;
             case 3:
                 useTicket();
-            break;
+                break;
             case 4:
                 System.out.println("Logging out...");
-            break OUTER;
+                break OUTER;
             default:
                 System.out.println("[Invalid selection, Please try again]");
             break;

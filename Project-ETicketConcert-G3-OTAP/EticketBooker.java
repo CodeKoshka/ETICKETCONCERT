@@ -26,16 +26,16 @@ while (true) {
             switch (userChoice) {
             case 1:
                 admin.login();
-            break;
+                break;
             case 2:
                 user.userMenu();
-            break;
+                break;
             case 3:
                 System.out.println("Exiting the system...");
-            break OUTER;
+                break OUTER;
             default:
                 System.out.println("[Invalid option. Please try again.]");
-            break;
+                break;
             }
         }
     }
