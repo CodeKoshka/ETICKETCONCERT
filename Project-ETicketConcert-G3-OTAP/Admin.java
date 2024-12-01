@@ -16,8 +16,9 @@ import java.util.*;
     private String concertName = "ERE By: Juan Karlos Labajo";//Default value of concert and artist for ticket (Napapaltan yan ng program mismo) 
     private String concertDate = "12/25/2024";//Default value of date for ticket (Napapaltan yan ng program mismo)
     private double ticketPrice = 10.0;//Default value of price for ticket (Napapaltan yan ng program mismo)
+    private int concertTime = 7:00;
     String ticketNum, artistName, updateConcert, enteredPassword;
-    int confirmation, choice, month, day, year;
+    int confirmation, choice, month, day, year, clock, hour, min;
     boolean valid = false;     
 
 public Admin(User user){
@@ -44,17 +45,19 @@ while (true) {
         System.out.println("Current Concert Name: " + concertName);
         System.out.println("Current Concert Date: " + concertDate);
         System.out.println("Current Ticket Price: $" + ticketPrice);
+        System.out.println("Current Concert Time: " + concertTime);
         System.out.println("=====================================");
         System.out.println("");
         System.out.println("=====================================");
         System.out.println("           [ Admin Menu ]            ");
         System.out.println("=====================================");
         System.out.println("1. Change Concert Name And Performer");
-        System.out.println("2. Change concert date");
-        System.out.println("3. Change ticket price");
-        System.out.println("4. Change admin password");
-        System.out.println("5. View all tickets");
-        System.out.println("6. Logout");
+        System.out.println("2. Change Concert date");
+        System.out.println("3. Change Concert Time");
+        System.out.println("4. Change Ticket price");
+        System.out.println("5. Change Admin password");
+        System.out.println("6. View All tickets");
+        System.out.println("7. Logout");
         System.out.print("Please select an option: ");
         choice = meh.nextInt();
         System.out.println("=====================================");
