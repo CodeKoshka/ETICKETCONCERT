@@ -18,7 +18,7 @@ import java.util.*;
     private double ticketPrice = 10.0;//Default value of price for ticket (Napapaltan yan ng program mismo)
     private int concertTime = 7:00;
     String ticketNum, artistName, updateConcert, enteredPassword;
-    int confirmation, choice, month, day, year, clock, hour, min;
+    int confirmation, choice, month, day, year, clock, hour, minute;
     boolean valid = false;     
 
 public Admin(User user){
@@ -72,15 +72,18 @@ while (true) {
                 changeConcertDate();
                 break;
             case 3:
-                changeTicketPrice();
+                changeTicketTime();
                 break;
             case 4:
-                changePassword();
+                changeTicketPrice();
                 break;
             case 5:
-                viewAllTickets();
+                changePassword();
                 break;
             case 6:
+                viewAllTickets();
+                break;
+            case 7:
                 System.out.println("[Logging out]");
                 break OUTER;
             default:
@@ -122,7 +125,9 @@ private void changeConcertDate(){
 
         if (validateDate(month, day, year)){
         valid = true;
+            
         concertDate = month + "/" + day + "/" + year;
+            
         user.updateConcertDate(concertDate);  
         System.out.println("Concert date updated to: " + concertDate);
         System.out.println("=====================================");
@@ -161,6 +166,26 @@ public static boolean validateDate(int month, int day, int year){
 //This code is to tell if february is a leapyear or not
 private static boolean LeapYear(int year) {
     return (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
+}
+//this added this for time
+private void changeTicketTime(){
+    System.out.println("=====================================");
+    System.out.println("Current Ticket Time: " + ticketTime);
+    System.out.println("=====================================");
+    System.out.print("Enter Hour: ");
+    hour = meh.nextInt();
+    System.out.print("Enter Minute:");
+    minute = meh.nextInt();
+
+    ticketTime = hour + minute;
+
+    if (hour > 24){
+        System.out.println("[Invalid Hour]");
+    else if (minute > 59){
+        System.out.println("[Invalid Minute]");
+    }else{
+        user.updateConcertTime(concertTicket);
+        System.out.println("Ticket Time Updated to" + ticketTime);
 }
 //this changes the Price of the ticket also updates the User.java
 private void changeTicketPrice(){
