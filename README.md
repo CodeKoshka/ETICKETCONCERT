@@ -2,6 +2,7 @@
 Para sa defence baby
 
 # Flow Chart
+![Spaghetti_Flowchart](https://github.com/user-attachments/assets/5e9b6c71-952f-48ad-9d12-44005059671e)
 [Spaghetti_Flowchart.pdf](https://github.com/user-attachments/files/17974919/Spaghetti_Flowchart.pdf)
 # Features 
                   
