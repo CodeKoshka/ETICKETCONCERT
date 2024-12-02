@@ -34,7 +34,7 @@ while (true) {
                 System.out.println("Exiting the system...");
                 break OUTER;
             default:
-                System.out.println("[Invalid option. Please try again.]");
+                System.out.println("[Invalid option. Please try again]");
                 break;
             }
         }

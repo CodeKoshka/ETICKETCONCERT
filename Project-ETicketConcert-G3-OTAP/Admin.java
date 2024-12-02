@@ -15,11 +15,11 @@ import java.util.*;
     private String password = "BESTOTAP";//This is the password for the admin login (Pwede na mapaltan sa admin menu)
     private String concertName = "ERE By: Juan Karlos Labajo";//Default value of concert and artist for ticket (Napapaltan yan ng program mismo) 
     private String concertDate = "12/25/2024";//Default value of date for ticket (Napapaltan yan ng program mismo)
+    private String concertTime = "07:00 PM";//Default value of time for ticket (Napapaltan yan ng program mismo)
     private double ticketPrice = 10.0;//Default value of price for ticket (Napapaltan yan ng program mismo)
-    private int concertTime = 7:00;
-    String ticketNum, artistName, updateConcert, enteredPassword;
-    int confirmation, choice, month, day, year, clock, hour, minute;
-    boolean valid = false;     
+    String ticketNum, artistName, updateConcert, enteredPassword, period;
+    int confirmation, choice, month, day, year, hour, minute, periodChoice;
+    boolean valid = false;
 
 public Admin(User user){
 this.user = user;
@@ -44,19 +44,19 @@ while (true) {
         System.out.println("=====================================");
         System.out.println("Current Concert Name: " + concertName);
         System.out.println("Current Concert Date: " + concertDate);
+        System.out.println("Current Concert Date: " + concertTime);
         System.out.println("Current Ticket Price: $" + ticketPrice);
-        System.out.println("Current Concert Time: " + concertTime);
         System.out.println("=====================================");
         System.out.println("");
         System.out.println("=====================================");
         System.out.println("           [ Admin Menu ]            ");
         System.out.println("=====================================");
         System.out.println("1. Change Concert Name And Performer");
-        System.out.println("2. Change Concert date");
+        System.out.println("2. Change Concert Date");
         System.out.println("3. Change Concert Time");
-        System.out.println("4. Change Ticket price");
-        System.out.println("5. Change Admin password");
-        System.out.println("6. View All tickets");
+        System.out.println("4. Change ticket price");
+        System.out.println("5. Change admin password");
+        System.out.println("6. View all tickets");
         System.out.println("7. Logout");
         System.out.print("Please select an option: ");
         choice = meh.nextInt();
@@ -72,7 +72,7 @@ while (true) {
                 changeConcertDate();
                 break;
             case 3:
-                changeTicketTime();
+                changeConcertTime();
                 break;
             case 4:
                 changeTicketPrice();
@@ -122,12 +122,9 @@ private void changeConcertDate(){
         System.out.print("Enter new year (2000-9999): ");
         year = meh.nextInt();
         System.out.println("=====================================");
-
         if (validateDate(month, day, year)){
         valid = true;
-            
         concertDate = month + "/" + day + "/" + year;
-            
         user.updateConcertDate(concertDate);  
         System.out.println("Concert date updated to: " + concertDate);
         System.out.println("=====================================");
@@ -136,9 +133,9 @@ private void changeConcertDate(){
         }
     }
 }
+
 //added this just incase the admin put the wrong number
 public static boolean validateDate(int month, int day, int year){
-
     if (month < 1 || month > 12){
         System.out.println("Month must be within the range of 1 to 12.");
         return false;
@@ -162,30 +159,44 @@ public static boolean validateDate(int month, int day, int year){
         return true;
     }
 }
-
 //This code is to tell if february is a leapyear or not
-private static boolean LeapYear(int year) {
+private static boolean LeapYear(int year){
     return (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
 }
-//this added this for time
-private void changeTicketTime(){
-    System.out.println("=====================================");
-    System.out.println("Current Ticket Time: " + ticketTime);
-    System.out.println("=====================================");
-    System.out.print("Enter Hour: ");
-    hour = meh.nextInt();
-    System.out.print("Enter Minute:");
-    minute = meh.nextInt();
+//This is meant for the hours when the concert will start at that time
+private void changeConcertTime(){
+    while (true){
+        System.out.println("=====================================");
+        System.out.println("Current Concert Time: " + concertTime);
+        System.out.println("=====================================");
 
-    ticketTime = hour + minute;
+        System.out.print("Enter hour (1-12): ");
+        hour = meh.nextInt();
+        if (hour < 1 || hour > 12) {
+            System.out.println("Invalid hour. Please enter a value between 1 and 12.");
+            continue; 
+        }
+        System.out.print("Enter minute (0-59): ");
+        minute = meh.nextInt();
+        if (minute < 0 || minute > 59) {
+            System.out.println("Invalid minute. Please enter a value between 0 and 59.");
+            continue; 
+        }
+        System.out.print("1. For AM 2. For PM: ");
+        periodChoice = meh.nextInt();
+        meh.nextLine(); 
+        if (periodChoice != 1 && periodChoice != 2) {
+            System.out.println("Invalid choice for AM/PM. Please enter 1 for AM or 2 for PM.");
+            continue; 
+        }
+        period = (periodChoice == 1) ? "AM" : "PM";
+        concertTime = String.format("%02d:%02d %s", hour, minute, period);
 
-    if (hour > 24){
-        System.out.println("[Invalid Hour]");
-    else if (minute > 59){
-        System.out.println("[Invalid Minute]");
-    }else{
-        user.updateConcertTime(concertTicket);
-        System.out.println("Ticket Time Updated to" + ticketTime);
+        user.updateConcertTime(concertTime);
+
+        System.out.println("Concert time updated to: " + concertTime);
+        break;
+    }
 }
 //this changes the Price of the ticket also updates the User.java
 private void changeTicketPrice(){
@@ -208,8 +219,8 @@ private void changePassword(){
     String currentPassword = meh.nextLine();
 
     if (!currentPassword.equals(password)) {
-    System.out.println("Incorrect current password. ACCESS DENIED!!!");
-    return;
+        System.out.println("Incorrect current password. ACCESS DENIED!!!");
+        return;
     }
 
     System.out.print("Enter new password: ");
@@ -219,7 +230,7 @@ private void changePassword(){
     String confirmPassword = meh.nextLine();
 
     if (newPassword.equals(confirmPassword)){
-    password = newPassword; 
+        password = newPassword; 
         System.out.println("Password updated successfully.");
     }else{
         System.out.println("Passwords do not match. Password not changed.");
@@ -278,22 +289,22 @@ private void viewAllTicketsLabeled(){
         System.out.println("           [ All Tickets ]           ");
         System.out.println("=====================================");
         if (bookedTicketNumbers.isEmpty() && usedTicketNumbers.isEmpty()) {
-            System.out.println("No tickets available.");
+        System.out.println("No tickets available.");
         }else{
-            System.out.println("Booked Tickets:");
+        System.out.println("Booked Tickets:");
         if (bookedTicketNumbers.isEmpty()){
-            System.out.println("No booked tickets.");
+        System.out.println("No booked tickets.");
         }else{
         for (String ticketNumber : bookedTicketNumbers){
-            System.out.println("Ticket - " + ticketNumber);
+        System.out.println("Ticket - " + ticketNumber);
     }
 }
         System.out.println("Used Tickets:");
         if (usedTicketNumbers.isEmpty()){
-            System.out.println("No used tickets.");
+        System.out.println("No used tickets.");
         }else{
         for (String ticketNumber : usedTicketNumbers){
-            System.out.println("Ticket - " + ticketNumber);
+        System.out.println("Ticket - " + ticketNumber);
         }
     }
     }
@@ -301,26 +312,26 @@ private void viewAllTicketsLabeled(){
 //this is where the tickets that had been booked can be seen if the admin requested it
 private void viewAllBookedTickets(){
         if (bookedTicketNumbers.isEmpty()){
-            System.out.println("No booked tickets available.");
+        System.out.println("No booked tickets available.");
         }else{
-            System.out.println("=====================================");
-            System.out.println("          [ Booked Tickets ]         ");
-            System.out.println("=====================================");
+        System.out.println("=====================================");
+        System.out.println("          [ Booked Tickets ]         ");
+        System.out.println("=====================================");
         for (String ticketNumber : bookedTicketNumbers){
-            System.out.println("Ticket Number: " + ticketNumber);
+        System.out.println("Ticket Number: " + ticketNumber);
         }
     }
 }
 //this is where the tickets that had been used can be seen if the admin requested it
 private void viewAllUsedTickets(){
         if (usedTicketNumbers.isEmpty()){
-            System.out.println("No used tickets available.");
+        System.out.println("No used tickets available.");
         }else{
-            System.out.println("=====================================");
-            System.out.println("           [ Used Tickets ]          ");
-            System.out.println("=====================================");
+        System.out.println("=====================================");
+        System.out.println("           [ Used Tickets ]          ");
+        System.out.println("=====================================");
         for (String ticketNumber : usedTicketNumbers) {
-            System.out.println("Ticket Number: " + ticketNumber);
+        System.out.println("Ticket Number: " + ticketNumber);
         }
     }
 }
@@ -331,15 +342,15 @@ private void viewAllUsedTickets(){
         ticketNum = meh.nextLine().trim();
 
         if (bookedTicketNumbers.contains(ticketNum)){
-            bookedTicketNumbers.remove(ticketNum);
-            bookedSeats.remove(ticketNum);
-            System.out.println("Ticket " + ticketNum + " has been deleted from booked tickets.");
+        bookedTicketNumbers.remove(ticketNum);
+        bookedSeats.remove(ticketNum);
+        System.out.println("Ticket " + ticketNum + " has been deleted from booked tickets.");
         }else if (usedTicketNumbers.contains(ticketNum)){
-            usedTicketNumbers.remove(ticketNum);
-            usedSeats.remove(ticketNum);
-            System.out.println("Ticket " + ticketNum + " has been deleted from used tickets.");
+        usedTicketNumbers.remove(ticketNum);
+        usedSeats.remove(ticketNum);
+        System.out.println("Ticket " + ticketNum + " has been deleted from used tickets.");
         }else{
-            System.out.println("Ticket not found.");
+        System.out.println("Ticket not found.");
     }
 }
 
@@ -348,11 +359,11 @@ private void viewAllUsedTickets(){
         confirmation = meh.nextInt();
         meh.nextLine(); 
         if (confirmation == 1){
-            bookedTicketNumbers.clear();
-            bookedSeats.clear();
-            System.out.println("All booked tickets have been cleared.");
+        bookedTicketNumbers.clear();
+        bookedSeats.clear();
+        System.out.println("All booked tickets have been cleared.");
         }else{
-            System.out.println("Action canceled.");
+        System.out.println("Action canceled.");
     }
 }
 
@@ -361,11 +372,11 @@ private void viewAllUsedTickets(){
         confirmation = meh.nextInt();
         meh.nextLine(); 
         if (confirmation == 1){
-            usedTicketNumbers.clear();
-            usedSeats.clear();
-            System.out.println("All used tickets have been cleared.");
+        usedTicketNumbers.clear();
+        usedSeats.clear();
+        System.out.println("All used tickets have been cleared.");
         }else{
-            System.out.println("Action canceled.");
+        System.out.println("Action canceled.");
     }
 }
 //this is to update the tickets for both the Admin.java and User.java
