@@ -30,10 +30,12 @@ public void login(){
     enteredPassword = meh.nextLine();
 
     if (enteredPassword.equals(password)){
-    System.out.println("Login successful!");
+    System.out.println("        [ Login successful! ]        ");
+    System.out.println("=====================================");
     adminMenu();
     }else{
-    System.out.println("Incorrect password. ACCESS DENIED!!!");
+    System.out.println("[ Incorrect password. ACCESS DENIED ]");
+    System.out.println("=====================================");
     }
 }
 //main part ng interface 
@@ -95,6 +97,7 @@ while (true) {
 
 //this is to change the concerts name and the artist also updates the User.java
 private void changeConcertName(){
+    System.out.println("");
     System.out.println("=====================================");
     System.out.println("Current Concert Name: " + concertName);
     System.out.println("=====================================");
@@ -110,6 +113,7 @@ concertName = updateConcert + " By: " + artistName;
 }
 //this changes the Date of the ticket also updates the User.java
 private void changeConcertDate(){
+    System.out.println("");
     System.out.println("=====================================");
     System.out.println("Current Concert Date: " + concertDate);
     System.out.println("=====================================");
@@ -132,7 +136,7 @@ private void changeConcertDate(){
         System.out.println("Concert date updated to: " + concertDate);
         System.out.println("=====================================");
         }else{
-        System.out.println("[Invalid date entered, please retry]");
+        System.out.println("[ Invalid date entered, please retry ]");
         }
     }
 }
@@ -169,6 +173,7 @@ private static boolean LeapYear(int year){
 //This is meant for the hours when the concert will start at that time
 private void changeConcertTime(){
     while (true){
+        System.out.println("");
         System.out.println("=====================================");
         System.out.println("Current Concert Time: " + concertTime);
         System.out.println("=====================================");
@@ -197,7 +202,7 @@ private void changeConcertTime(){
             System.out.println("Invalid choice for AM/PM. Please enter 1 for AM or 2 for PM.");
             continue; 
         }
-        
+
         if (minute == 0) {
             concertTime = hour + ":00 " + period;
         } else if (minute < 10) {
@@ -214,6 +219,7 @@ private void changeConcertTime(){
 }
 //this changes the Price of the ticket also updates the User.java
 private void changeTicketPrice(){
+    System.out.println("");
     System.out.println("=====================================");
     System.out.println("Current Ticket Price: $" + ticketPrice);
     System.out.println("=====================================");
@@ -255,7 +261,8 @@ private void changePassword(){
 //this is the interface for the tickets 
 private void viewAllTickets(){
             OUTER:
-while (true) {
+while (true){
+        System.out.println("");
         System.out.println("=====================================");
         System.out.println("         [ Ticket Section ]          ");
         System.out.println("=====================================");
@@ -270,7 +277,7 @@ while (true) {
         choice = meh.nextInt();
         System.out.println("=====================================");
 
-    switch (choice) {
+    switch (choice){
             case 1:
                 viewAllTicketsLabeled();
                 break;
@@ -299,6 +306,7 @@ while (true) {
 }
 //this is where the tickets that had been booked and used be seen if the admin requested it
 private void viewAllTicketsLabeled(){
+        System.out.println("");
         System.out.println("=====================================");
         System.out.println("           [ All Tickets ]           ");
         System.out.println("=====================================");
@@ -328,6 +336,7 @@ private void viewAllBookedTickets(){
         if (bookedTicketNumbers.isEmpty()){
         System.out.println("No booked tickets available.");
         }else{
+        System.out.println("");
         System.out.println("=====================================");
         System.out.println("          [ Booked Tickets ]         ");
         System.out.println("=====================================");
@@ -341,6 +350,7 @@ private void viewAllUsedTickets(){
         if (usedTicketNumbers.isEmpty()){
         System.out.println("No used tickets available.");
         }else{
+        System.out.println("");
         System.out.println("=====================================");
         System.out.println("           [ Used Tickets ]          ");
         System.out.println("=====================================");

@@ -79,6 +79,7 @@ while (true) {
 }
 //this is the ticket booking system that i design yay (grabe ko mag design)
 public void bookTicket(){
+    System.out.println("");
     System.out.println("=====================================");
     System.out.println("       [Ticket Booking System]       ");
     System.out.println("=====================================");

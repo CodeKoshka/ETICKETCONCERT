@@ -31,10 +31,10 @@ while (true) {
                 user.userMenu();
                 break;
             case 3:
-                System.out.println("Exiting the system...");
+                System.out.println("[ PROGRAM SHUTDOWN ]");
                 break OUTER;
             default:
-                System.out.println("[Invalid option. Please try again]");
+                System.out.println("[ Invalid option. Please try again ]");
                 break;
             }
         }
