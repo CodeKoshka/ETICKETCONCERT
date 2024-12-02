@@ -50,4 +50,4 @@ The system could use more checks for invalid inputs, for example when you type a
 If the program shutdown or crashes the password resets back to default making the program vulnerable if they know the default password
 
 # 7. Single Concert Support
-The system is limited to managing only one concert at a time. There’s no functionality to handle multiple concerts simultaneously, such as managing tickets, dates, or artists for several events.
+The system is limited to managing only one concert at a time. There’s no functionality to handle multiple concerts simultaneously, such as managing tickets, time, dates, or artists for several events.
