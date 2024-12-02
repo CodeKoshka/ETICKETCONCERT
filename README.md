@@ -1,5 +1,6 @@
 # ETicket Manager By: Group 3 BSCS-A1 First Year
-Para sa defence baby
+Para sa Defence Baby
+Sana di ma-gisa ng panel
 
 # Flow Chart
 ![Spaghetti_Flowchart](https://github.com/user-attachments/assets/5e9b6c71-952f-48ad-9d12-44005059671e)
@@ -14,7 +15,7 @@ They can view all tickets, delete specific ones, or clear all bookings if needed
 Users can book tickets with a unique seat and ticket number, The system also handles payments and gives change if needed.
 
 # 3. Flexible Updates
-Ticket prices, concert dates, the name of the concert, and the performing artist’s name can all be updated in real-time by the admin.
+Ticket prices, concert dates, concert time, the name of the concert, and the performing artist’s name can all be updated in real-time by the admin.
 
 # 4. Simple Cancellation and Usage
 Users can cancel a ticket, make it available for others, or mark it as "used" once it’s been scanned or redeemed.
@@ -47,3 +48,6 @@ The system could use more checks for invalid inputs, for example when you type a
 
 # 6. Password Resets on Shutdown
 If the program shutdown or crashes the password resets back to default making the program vulnerable if they know the default password
+
+# 7. Single Concert Support
+The system is limited to managing only one concert at a time. There’s no functionality to handle multiple concerts simultaneously, such as managing tickets, dates, or artists for several events.
