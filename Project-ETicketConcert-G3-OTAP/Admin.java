@@ -124,8 +124,11 @@ private void changeConcertDate(){
         System.out.println("=====================================");
         if (validateDate(month, day, year)){
         valid = true;
+
         concertDate = month + "/" + day + "/" + year;
+
         user.updateConcertDate(concertDate);  
+
         System.out.println("Concert date updated to: " + concertDate);
         System.out.println("=====================================");
         }else{
@@ -172,24 +175,28 @@ private void changeConcertTime(){
 
         System.out.print("Enter hour (1-12): ");
         hour = meh.nextInt();
-        if (hour < 1 || hour > 12) {
+        if (hour < 1 || hour > 12){
             System.out.println("Invalid hour. Please enter a value between 1 and 12.");
             continue; 
         }
         System.out.print("Enter minute (0-59): ");
         minute = meh.nextInt();
-        if (minute < 0 || minute > 59) {
+        if (minute < 0 || minute > 59){
             System.out.println("Invalid minute. Please enter a value between 0 and 59.");
             continue; 
         }
         System.out.print("1. For AM 2. For PM: ");
         periodChoice = meh.nextInt();
         meh.nextLine(); 
-        if (periodChoice != 1 && periodChoice != 2) {
+
+        if (periodChoice == 1){
+            period = "AM";
+        } else if (periodChoice == 2){
+            period = "PM";
+        } else {
             System.out.println("Invalid choice for AM/PM. Please enter 1 for AM or 2 for PM.");
             continue; 
         }
-        period = (periodChoice == 1) ? "AM" : "PM";
         concertTime = String.format("%02d:%02d %s", hour, minute, period);
 
         user.updateConcertTime(concertTime);
