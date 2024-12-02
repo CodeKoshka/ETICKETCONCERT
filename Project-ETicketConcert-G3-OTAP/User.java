@@ -186,14 +186,14 @@ bookedSeats.remove(seatNumber);
     public void updateConcertName(String newConcertName){
     concertName = newConcertName;
 }
-    public void updateConcertDate(String newDate){
-    concertDate = newDate;
+    public void updateConcertDate(String newConcertDate){
+    concertDate = newConcertDate;
 }
-    public void updateConcertTime(String newTime){
-    concertTime = newTime;
+    public void updateConcertTime(String newConcertTime){
+    concertTime = newConcertTime;
 }
-    public void updateTicketPrice(double newPrice){
-    ticketPrice = newPrice;
+    public void updateTicketPrice(double newConcertPrice){
+    ticketPrice = newConcertPrice;
 }
 }
 
