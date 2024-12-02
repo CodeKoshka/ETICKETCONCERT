@@ -138,7 +138,7 @@ private void changeConcertDate(){
 }
 
 //added this just incase the admin put the wrong number
-public static boolean validateDate(int month, int day, int year){
+private static boolean validateDate(int month, int day, int year){
     if (month < 1 || month > 12){
         System.out.println("Month must be within the range of 1 to 12.");
         return false;
@@ -197,7 +197,14 @@ private void changeConcertTime(){
             System.out.println("Invalid choice for AM/PM. Please enter 1 for AM or 2 for PM.");
             continue; 
         }
-        concertTime = String.format("%02d:%02d %s", hour, minute, period);
+        
+        if (minute == 0) {
+            concertTime = hour + ":00 " + period;
+        } else if (minute < 10) {
+            concertTime = hour + ":0" + minute + " " + period;
+        } else {
+            concertTime = hour + ":" + minute + " " + period;
+        }
 
         user.updateConcertTime(concertTime);
 
