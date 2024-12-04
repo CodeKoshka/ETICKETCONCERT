@@ -3,8 +3,9 @@ Para sa Defence Baby
 Sana di ma-gisa ng panel
 
 # Flow Chart
-![Spaghetti_Flowchart](https://github.com/user-attachments/assets/5e9b6c71-952f-48ad-9d12-44005059671e)
-[Spaghetti_Flowchart.pdf](https://github.com/user-attachments/files/17974919/Spaghetti_Flowchart.pdf)
+![Spaghetti_FlowChart](https://github.com/user-attachments/assets/ce695596-38ba-46fb-96a7-917f48b8c6aa)
+Download pdf if needed
+[Spaghetti_FlowChart.pdf](https://github.com/user-attachments/files/18004653/Spaghetti_FlowChart.pdf)
 # Features 
                   
 # 1. Admin Controls
