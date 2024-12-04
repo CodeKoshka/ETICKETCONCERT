@@ -45,10 +45,10 @@ It runs in the terminal, which might not be as user-friendly as a graphical app 
 It’s designed for one admin or user at a time, so it’s not ideal for high-traffic use.
 
 # 5. Basic Error Handling
-The system could use more checks for invalid inputs, for example when you type an alphabet instead of a number on the switch options it crashes.
+The system could use more checks for invalid inputs. For example, when you type an alphabet instead of a number on the switch options, it crashes.
 
 # 6. Password Resets on Shutdown
-If the program shutdown or crashes the password resets back to default making the program vulnerable if they know the default password
+If the program shuts down or crashes, the password resets back to the default, making the program vulnerable if the user knows the default password.
 
 # 7. Single Concert Support
 The system is limited to managing only one concert at a time. There’s no functionality to handle multiple concerts simultaneously, such as managing tickets, time, dates, or artists for several events.
