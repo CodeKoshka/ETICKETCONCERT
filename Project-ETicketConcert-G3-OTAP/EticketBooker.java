@@ -40,6 +40,3 @@ while (true) {
         }
     }
 }
-/* Salamat Sa CheatSheet saka VSCODE Natapos ko to Love You 
-  (meh signiture ko lang yan sa scanner)  */
-  

@@ -3,20 +3,20 @@ import java.util.*;
     public class Admin {
         Scanner meh = new Scanner(System.in);
         private User user;
-    /*this is the admin section of the 3 Files that is use for the ETicket to function 
-    (Dahil dito gusto ko umiyak)*/
+    //this is the admin section of the 3 Files that is use for the ETicket to function 
     
-    //this is connected with the user so when the admin so when a user books a ticket it can also be access by the user
-    private static final Set<Integer> bookedSeats = User.bookedSeats;
-    private static final Set<String> bookedTicketNumbers = User.bookedTicketNumbers;
-    private static final Set<Integer> usedSeats = User.usedSeats;
-    private static final Set<String> usedTicketNumbers = User.usedTicketNumbers;
+    private static final ArrayList<Integer> bookedSeats = User.bookedSeats;
+    private static final ArrayList<String> bookedTicketNumbers = User.bookedTicketNumbers;
+    private static final ArrayList<Integer> usedSeats = User.usedSeats;
+    private static final ArrayList<String> usedTicketNumbers = User.usedTicketNumbers;
+    private static final ArrayList<String> ticketOwners = User.ticketOwners;
+    private static final ArrayList<String> usedTicketOwners = User.usedTicketOwners;
     
     private String password = "BESTOTAP";//This is the password for the admin login (Pwede na mapaltan sa admin menu)
-    private String concertName = "ERE By: Juan Karlos Labajo";//Default value of concert and artist for ticket (Napapaltan yan ng program mismo) 
-    private String concertDate = "12/25/2024";//Default value of date for ticket (Napapaltan yan ng program mismo)
-    private String concertTime = "07:00 PM";//Default value of time for ticket (Napapaltan yan ng program mismo)
-    private double ticketPrice = 10.0;//Default value of price for ticket (Napapaltan yan ng program mismo)
+    private String concertName = "ERE By: Juan Karlos Labajo";//Default value of concert and artist for ticket  
+    private String concertDate = "12/25/2024";//Default value of date for ticket 
+    private String concertTime = "07:00 PM";//Default value of time for ticket 
+    private double ticketPrice = 10.0;//Default value of price for ticket 
     String ticketNum, artistName, updateConcert, enteredPassword, period;
     int confirmation, choice, month, day, year, hour, minute, periodChoice;
     boolean valid = false;
@@ -27,7 +27,7 @@ this.user = user;
 //this section as the user to enter the password to work (di natin gusto na kahit sino makause neto)
 public void login(){
     System.out.print("Enter admin password: ");
-    enteredPassword = meh.nextLine();
+    enteredPassword = meh.nextLine().trim();
 
     if (enteredPassword.equals(password)){
     System.out.println("        [ Login successful! ]        ");
@@ -56,9 +56,9 @@ while (true) {
         System.out.println("1. Change Concert Name And Performer");
         System.out.println("2. Change Concert Date");
         System.out.println("3. Change Concert Time");
-        System.out.println("4. Change ticket price");
-        System.out.println("5. Change admin password");
-        System.out.println("6. View all tickets");
+        System.out.println("4. Change Ticket Price");
+        System.out.println("5. Change Admin password");
+        System.out.println("6. Ticket Control Menu (Submenu)");
         System.out.println("7. Logout");
         System.out.print("Please select an option: ");
         choice = meh.nextInt();
@@ -141,7 +141,7 @@ private void changeConcertDate(){
     }
 }
 
-//added this just incase the admin put the wrong number
+//added this just incase the admin put the wrong date
 private static boolean validateDate(int month, int day, int year){
     if (month < 1 || month > 12){
         System.out.println("Month must be within the range of 1 to 12.");
@@ -196,18 +196,18 @@ private void changeConcertTime(){
 
         if (periodChoice == 1){
             period = "AM";
-        } else if (periodChoice == 2){
+        }else if (periodChoice == 2){
             period = "PM";
-        } else {
+        }else{
             System.out.println("Invalid choice for AM/PM. Please enter 1 for AM or 2 for PM.");
             continue; 
         }
 
-        if (minute == 0) {
+        if (minute == 0){
             concertTime = hour + ":00 " + period;
-        } else if (minute < 10) {
+        }else if (minute < 10){
             concertTime = hour + ":0" + minute + " " + period;
-        } else {
+        }else{
             concertTime = hour + ":" + minute + " " + period;
         }
 
@@ -231,14 +231,14 @@ private void changeTicketPrice(){
     user.updateTicketPrice(ticketPrice);
     System.out.println("Ticket price updated to $" + ticketPrice);
 }
-/*this is for changing the password of the admin 
-(added it so i dont have to change it in the code itself wanted to add a .txt so i can save multiple passwords and if the program ends it will save in the database but its to complex and dk how to do it anymore)*/
+//this is for changing the password of the admin 
+
 private void changePassword(){
     System.out.println("=====================================");
     System.out.print("Enter current password: ");
     String currentPassword = meh.nextLine();
 
-    if (!currentPassword.equals(password)) {
+    if (!currentPassword.equals(password)){
         System.out.println("Incorrect current password. ACCESS DENIED!!!");
         return;
     }
@@ -306,56 +306,63 @@ while (true){
 }
 //this is where the tickets that had been booked and used be seen if the admin requested it
 private void viewAllTicketsLabeled(){
-        System.out.println("");
-        System.out.println("=====================================");
-        System.out.println("           [ All Tickets ]           ");
-        System.out.println("=====================================");
-        if (bookedTicketNumbers.isEmpty() && usedTicketNumbers.isEmpty()) {
+    System.out.println("");
+    System.out.println("=====================================");
+    System.out.println("           [ All Tickets ]           ");
+    System.out.println("=====================================");
+
+    if (bookedTicketNumbers.isEmpty() && usedTicketNumbers.isEmpty()){
         System.out.println("No tickets available.");
-        }else{
+    }else{
+
         System.out.println("Booked Tickets:");
         if (bookedTicketNumbers.isEmpty()){
-        System.out.println("No booked tickets.");
+            System.out.println("No booked tickets.");
         }else{
-        for (String ticketNumber : bookedTicketNumbers){
-        System.out.println("Ticket - " + ticketNumber);
-    }
-}
+            for (int i = 0; i < bookedTicketNumbers.size(); i++){
+
+                System.out.println("Name: " + ticketOwners.get(i) + ", Ticket: " + bookedTicketNumbers.get(i));
+            }
+        }
+
+
         System.out.println("Used Tickets:");
         if (usedTicketNumbers.isEmpty()){
-        System.out.println("No used tickets.");
+            System.out.println("No used tickets.");
         }else{
-        for (String ticketNumber : usedTicketNumbers){
-        System.out.println("Ticket - " + ticketNumber);
+            for (int i = 0; i < usedTicketNumbers.size(); i++){
+
+                System.out.println("Name: " + usedTicketOwners.get(i) + ", Ticket: " + usedTicketNumbers.get(i));
+            }
         }
-    }
     }
 }
 //this is where the tickets that had been booked can be seen if the admin requested it
 private void viewAllBookedTickets(){
-        if (bookedTicketNumbers.isEmpty()){
+    if (bookedTicketNumbers.isEmpty()){
         System.out.println("No booked tickets available.");
-        }else{
+    }else{
         System.out.println("");
         System.out.println("=====================================");
         System.out.println("          [ Booked Tickets ]         ");
         System.out.println("=====================================");
-        for (String ticketNumber : bookedTicketNumbers){
-        System.out.println("Ticket Number: " + ticketNumber);
+        for (int i = 0; i < bookedTicketNumbers.size(); i++){
+            System.out.println("Name: " + ticketOwners.get(i) + ", Ticket Number: " + bookedTicketNumbers.get(i));
         }
     }
 }
 //this is where the tickets that had been used can be seen if the admin requested it
 private void viewAllUsedTickets(){
-        if (usedTicketNumbers.isEmpty()){
-        System.out.println("No used tickets available.");
-        }else{
-        System.out.println("");
-        System.out.println("=====================================");
-        System.out.println("           [ Used Tickets ]          ");
-        System.out.println("=====================================");
-        for (String ticketNumber : usedTicketNumbers) {
-        System.out.println("Ticket Number: " + ticketNumber);
+    System.out.println("");
+    System.out.println("=====================================");
+    System.out.println("        [ Used Tickets ]            ");
+    System.out.println("=====================================");
+
+    if (usedTicketNumbers.isEmpty()){
+        System.out.println("No used tickets.");
+    }else{
+        for (int i = 0; i < usedTicketNumbers.size(); i++){
+            System.out.println("Name: " + usedTicketOwners.get(i) + ", Ticket: " + usedTicketNumbers.get(i));
         }
     }
 }
@@ -405,9 +412,7 @@ private void viewAllUsedTickets(){
 }
 //this is to update the tickets for both the Admin.java and User.java
     public static void updateAdminTicketList(int seat, String ticketNumber){
-    bookedSeats.add(seat);
-    bookedTicketNumbers.add(ticketNumber);
+    if (!bookedSeats.contains(seat)) bookedSeats.add(seat);
+    if (!bookedTicketNumbers.contains(ticketNumber)) bookedTicketNumbers.add(ticketNumber);
     }
 }
-
-
