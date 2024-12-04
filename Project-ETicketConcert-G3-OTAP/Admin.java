@@ -3,8 +3,10 @@ import java.util.*;
     public class Admin {
         Scanner meh = new Scanner(System.in);
         private User user;
-    //this is the admin section of the 3 Files that is use for the ETicket to function 
-    
+
+//this is the admin section of the 3 Files that is use for the ETicket to function 
+
+//this is meant to request the data that is contained in the array of user.java
     private static final ArrayList<Integer> bookedSeats = User.bookedSeats;
     private static final ArrayList<String> bookedTicketNumbers = User.bookedTicketNumbers;
     private static final ArrayList<Integer> usedSeats = User.usedSeats;
@@ -12,7 +14,8 @@ import java.util.*;
     private static final ArrayList<String> ticketOwners = User.ticketOwners;
     private static final ArrayList<String> usedTicketOwners = User.usedTicketOwners;
     
-    private String password = "BESTOTAP";//This is the password for the admin login (Pwede na mapaltan sa admin menu)
+//this variables required to run the code
+    private String password = "BESTOTAP";//This is the password for the admin login 
     private String concertName = "ERE By: Juan Karlos Labajo";//Default value of concert and artist for ticket  
     private String concertDate = "12/25/2024";//Default value of date for ticket 
     private String concertTime = "07:00 PM";//Default value of time for ticket 
@@ -362,6 +365,7 @@ private void viewAllUsedTickets(){
         System.out.println("No used tickets.");
     }else{
         for (int i = 0; i < usedTicketNumbers.size(); i++){
+
             System.out.println("Name: " + usedTicketOwners.get(i) + ", Ticket: " + usedTicketNumbers.get(i));
         }
     }
@@ -373,41 +377,47 @@ private void viewAllUsedTickets(){
         ticketNum = meh.nextLine().trim();
 
         if (bookedTicketNumbers.contains(ticketNum)){
-        bookedTicketNumbers.remove(ticketNum);
-        bookedSeats.remove(ticketNum);
+            bookedTicketNumbers.remove(ticketNum);
+            bookedSeats.remove(ticketNum);
+
         System.out.println("Ticket " + ticketNum + " has been deleted from booked tickets.");
         }else if (usedTicketNumbers.contains(ticketNum)){
-        usedTicketNumbers.remove(ticketNum);
-        usedSeats.remove(ticketNum);
-        System.out.println("Ticket " + ticketNum + " has been deleted from used tickets.");
+            usedTicketNumbers.remove(ticketNum);
+            usedSeats.remove(ticketNum);
+
+            System.out.println("Ticket " + ticketNum + " has been deleted from used tickets.");
         }else{
-        System.out.println("Ticket not found.");
+            System.out.println("Ticket not found.");
     }
 }
-
+//this is meant to clear all of the booktickets
     private void clearAllBookedTickets(){
         System.out.println("Are you sure you want to clear all booked tickets? (1 for Yes, 2 for No)");
         confirmation = meh.nextInt();
         meh.nextLine(); 
+
         if (confirmation == 1){
-        bookedTicketNumbers.clear();
-        bookedSeats.clear();
-        System.out.println("All booked tickets have been cleared.");
+            bookedTicketNumbers.clear();
+            bookedSeats.clear();
+
+            System.out.println("All booked tickets have been cleared.");
         }else{
-        System.out.println("Action canceled.");
+            System.out.println("Action canceled.");
     }
 }
-
+//this is meant to clear all of the usedtickets
     private void clearAllUsedTickets(){
         System.out.println("Are you sure you want to clear all used tickets? (1 for Yes, 2 for No)");
         confirmation = meh.nextInt();
         meh.nextLine(); 
+
         if (confirmation == 1){
         usedTicketNumbers.clear();
         usedSeats.clear();
-        System.out.println("All used tickets have been cleared.");
+
+            System.out.println("All used tickets have been cleared.");
         }else{
-        System.out.println("Action canceled.");
+            System.out.println("Action canceled.");
     }
 }
 //this is to update the tickets for both the Admin.java and User.java

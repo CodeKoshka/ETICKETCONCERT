@@ -4,7 +4,17 @@ import java.util.*;
         Scanner meh = new Scanner(System.in);
         Random random = new Random();
 //this is the User section of the 3 Files that is use for the ETicket to function. contains all the user needed to book a ETicket for a Concert.
-    
+   
+//this is the arrays required by admin.java
+    public static ArrayList<Integer> bookedSeats = new ArrayList<>();
+    public static ArrayList<String> bookedTicketNumbers = new ArrayList<>();
+    public static ArrayList<Integer> usedSeats = new ArrayList<>();
+    public static ArrayList<String> usedTicketNumbers = new ArrayList<>();
+    public static ArrayList<String> ticketNumbers = new ArrayList<>();
+    public static ArrayList<String> ticketOwners = new ArrayList<>();
+    public static ArrayList<String> usedTicketOwners = new ArrayList<>();
+
+//this variables required to run the code
     private String concertName = "ERE By: Juan Karlos Labajo";
     private String concertDate = "12/25/2024";
     private String concertTime = "07:00 PM";
@@ -17,18 +27,11 @@ import java.util.*;
     double change;
     boolean ticketFound = false;  
 
-//this is meant to store multiple variables and prevents duplication
-    public static ArrayList<Integer> bookedSeats = new ArrayList<>();
-    public static ArrayList<String> bookedTicketNumbers = new ArrayList<>();
-    public static ArrayList<Integer> usedSeats = new ArrayList<>();
-    public static ArrayList<String> usedTicketNumbers = new ArrayList<>();
-    public static ArrayList<String> ticketNumbers = new ArrayList<>();
-    public static ArrayList<String> ticketOwners = new ArrayList<>();
-    public static ArrayList<String> usedTicketOwners = new ArrayList<>();
+
 
 //this is the ticketing interface    
 public void userMenu(){
-//outer is so the switch doesnt break (suggested by vscode)
+//outer is so the switch doesnt cause a logical break 
             OUTER:
 while (true) {
             System.out.println("");
@@ -131,19 +134,19 @@ if (!ticketNumbers.contains(ticketNumber)){
 
 //this specific part of code is use for the payment and if is invalid or not if it is it goes back until you pay
 while (payment < ticketPrice){
-    System.out.print("Enter payment amount: $");
+        System.out.print("Enter payment amount: $");
     payment = meh.nextDouble();
-    meh.nextLine(); 
+        meh.nextLine(); 
     if (payment < ticketPrice){
-    System.out.println("Insufficient payment. Please enter an amount greater than or equal to the ticket price.");
+        System.out.println("Insufficient payment. Please enter an amount greater than or equal to the ticket price.");
     }
 }
     change = payment - ticketPrice;
     
     if (change > 0){
-    System.out.println("Payment successful. Your change: $" + change);
+        System.out.println("Payment successful. Your change: $" + change);
     }else{
-    System.out.println("Payment successful.");
+        System.out.println("Payment successful.");
 }
 
 //this is the ticket itself when you finish the booking
@@ -168,14 +171,14 @@ private void cancelTicket(){
     ticketNum = meh.nextLine().trim();  
 
     if (!bookedTicketNumbers.contains(ticketNum)){
-    System.out.println("Ticket number not found.");
-    return;
+        System.out.println("Ticket number not found.");
+        return;
     }
 
 if (bookedTicketNumbers.contains(ticketNum)) bookedTicketNumbers.remove(ticketNum);
 if (bookedSeats.contains(seatNumber)) bookedSeats.remove((Integer) seatNumber);  
-    System.out.println("Ticket canceled successfully.");
-    System.out.println("Seat and ticket number are now available for reuse.");
+        System.out.println("Ticket canceled successfully.");
+        System.out.println("Seat and ticket number are now available for reuse.");
     }
 
 //this is where the ticket is used
@@ -235,17 +238,16 @@ public void viewTicketsByName(){
 }
 
 //this part is so the ticket part can be updated from both the Admin.java file and User.java file
-
     public void updateConcertName(String newConcertName){
     concertName = newConcertName;
-}
+    }
     public void updateConcertDate(String newConcertDate){
     concertDate = newConcertDate;
-}
+    }
     public void updateConcertTime(String newConcertTime){
     concertTime = newConcertTime;
-}
+    }
     public void updateTicketPrice(double newConcertPrice){
     ticketPrice = newConcertPrice;
-}
+    }
 }
