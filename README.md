@@ -57,4 +57,5 @@ The system is limited to managing only one concert at a time. There’s no funct
 there will be a new change to the program because of feedback since there many issues that we encounter 
 # list of issues that will be fix hopefully later or in the next 2 days
 issue with canceling a ticket with the user since tickets should be cancelled in the first place, the hassle of trying to buy multiple tickets, the transfer of said tickets and many more.
-# since we want this as best as possible so we want to meet the panels expectations and want their standards to be as high as possible to make the other groups suffer when they present theirs 
+#why we doing this?
+since we want this as best as possible so we want to meet the panels expectations and want their standards to be as high as possible to make the other groups suffer when they present theirs 
