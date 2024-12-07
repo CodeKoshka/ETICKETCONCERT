@@ -1,53 +1,93 @@
 import java.util.*;
 
-    public class User {
-        Scanner meh = new Scanner(System.in);
-        Random random = new Random();
-//this is the User section of the 3 Files that is use for the ETicket to function. contains all the user needed to book a ETicket for a Concert.
-   
-//this is the arrays required by admin.java
-    public static ArrayList<Integer> bookedSeats = new ArrayList<>();
+public class User{
+    
+    Scanner meh = new Scanner(System.in);
+    private Admin admin;
+
+    public User(){
+    }
+
+    public void setAdmin(Admin admin){
+        this.admin = admin;
+}
     public static ArrayList<String> bookedTicketNumbers = new ArrayList<>();
-    public static ArrayList<Integer> usedSeats = new ArrayList<>();
     public static ArrayList<String> usedTicketNumbers = new ArrayList<>();
     public static ArrayList<String> ticketNumbers = new ArrayList<>();
     public static ArrayList<String> ticketOwners = new ArrayList<>();
     public static ArrayList<String> usedTicketOwners = new ArrayList<>();
 
-//this variables required to run the code
+    public static ArrayList<Integer> bookedSeats = new ArrayList<>();
+    public static ArrayList<Integer> usedSeats = new ArrayList<>();
+    public static ArrayList<Integer> vipSeats = new ArrayList<>();
+    public static ArrayList<Integer> generalSeats = new ArrayList<>();
+    public static ArrayList<Integer> earlyBirdSeats = new ArrayList<>();
+    public static ArrayList<Integer> hiddenSeats = new ArrayList<>();
+    public static ArrayList<Integer> membersSeats = new ArrayList<>();
+    List<String> ticketsForName = new ArrayList<>();
+    List<Integer> seatList = null;
+
     private String concertName = "ERE By: Juan Karlos Labajo";
     private String concertDate = "12/25/2024";
     private String concertTime = "07:00 PM";
-    private double ticketPrice = 10.0;
-    private String ticketNumber = "";
-    private int seatNumber = -1;
+    
+    private static double earlyBirdDiscount = 0.2;
+    private static double groupDiscount = 0.1;
+    private final double vipPrice = 100.0;
+    private final double generalPrice = 50.0;
+    private final double membersPrice = 30.0;
+
+    private static int maximumSeats = 10000;
+    private static int earlyBirdLimit = 500;    
+    private static int groupRequirement = 5;
+
+    private int availableVIP = 1000;
+    private int availableGeneral = 2000;
+    private int availableHidden = 500;
+    private int availableMembers = 8500;
+
+    String ticketPrefix = "";
+
+    double ticketPrice = 0;
     double payment = 0.0;
-    String userName, ticketNum, owner;
-    int choice, continueChoice, index;
-    double change;
-    boolean ticketFound = false;  
+    
+    int earlyBirdBookings = 0;
+    int availableSeats = 0;
+    int seatNumber = 0;
 
+    String userName, ticketNumber, owner, ticketType, name;
+    double change, discountedPrice, totalCost;
+    int numberTickets, choice, index, seat;
 
-
-//this is the ticketing interface    
-public void userMenu(){
-//outer is so the switch doesnt cause a logical break 
-            OUTER:
-while (true) {
+    public void userMenu(){
+        OUTER:
+        while (true){
+            System.out.println("");
+            System.out.println("=====================================");
+            System.out.println("Use Ticket Status: " + (admin.isUseTicketEnabled() ? "Available" : "Not Available"));
+            System.out.println("=====================================");
             System.out.println("");
             System.out.println("=====================================");
             System.out.println("Concert Name: " + concertName);
             System.out.println("Concert Date: " + concertDate);
-            System.out.println("Concert Date: " + concertTime);
-            System.out.println("Ticket Price: $" + ticketPrice);
+            System.out.println("Concert Time: " + concertTime);
+            System.out.println("=====================================");
+            System.out.println("");
+            System.out.println("=====================================");
+            System.out.println("Available Ticket Types and Prices");
+            System.out.println("=====================================");
+            System.out.println("2. General Admission Tickets - Price: $" + generalPrice + " | Available: " + availableGeneral);
+            System.out.println("1. VIP Tickets - Price: $" + vipPrice + " | Available: " + availableVIP);
+            System.out.println("3. Hidden Tickets (Special Code Required)  | Available: "+ availableHidden);
+            System.out.println("4. Members Tickets - Price: $" + membersPrice + " | Available: " + availableMembers);
             System.out.println("=====================================");
             System.out.println("");
             System.out.println("=====================================");
             System.out.println("            [ User Menu ]            ");
             System.out.println("=====================================");
-            System.out.println("1. View Ticket");
-            System.out.println("2. Book Ticket");
-            System.out.println("3. Cancel Ticket");
+            System.out.println("1. View All Booked Tickets");
+            System.out.println("2. View My Ticket");
+            System.out.println("3. Book Ticket");
             System.out.println("4. Use Ticket");
             System.out.println("5. Logout");
             System.out.print("Please select an option: ");
@@ -55,199 +95,313 @@ while (true) {
             System.out.println("=====================================");
             meh.nextLine();
 
-            switch (choice) {
-
-            case 1:
-                viewTicketsByName();
-                break;
-            case 2:
-                bookTicket();
-                break;
-            case 3:
-                cancelTicket();
-                break;
-            case 4:
-                useTicket();
-                break;
-            case 5:
-                System.out.println("[ Thanks For Choosing Our System ]");
-                System.out.println("[ ShutDown ]");
-                break OUTER;
-            default:
-                System.out.println("[Invalid selection, Please try again]");
-            break;
+            switch (choice){
+                case 1:
+                    viewBookedTickets();
+                    break;
+                case 2:
+                    viewTicketsByName();
+                    break;
+                case 3:
+                    bookTicket();
+                    break;
+                case 4:
+                    if (!admin.isUseTicketEnabled()){
+                        System.out.println("'Use Ticket' is currently disabled. Please contact the admin.");
+                    }else{
+                        useTicket();
+                    }
+                    break;
+                case 5:
+                    System.out.println("[ Thanks For Choosing Our System ]");
+                    System.out.println("[ ShutDown ]");
+                    break OUTER;
+                default:
+                    System.out.println("[Invalid selection, Please try again]");
+                    break;
             }
+        }
+    }
+    public void viewBookedTickets(){
+        System.out.println("=====================================");
+        System.out.println(" [ List of Booked Tickets by Type ]  ");
+        System.out.println("=====================================");
+    
+        displayTicketsByType("VIP", vipSeats);
+        displayTicketsByType("General Admission", generalSeats);
+        displayTicketsByType("Hidden", hiddenSeats);
+        displayTicketsByType("Members-Only", membersSeats);
 
-        System.out.println("Do you want to go back to user menu (1 for Yes, 2 for No)");
-        continueChoice = meh.nextInt();
+        System.out.println("");
+        System.out.print("Press any key to return to the User Menu...");
         meh.nextLine();
-        while (continueChoice != 1 && continueChoice != 2){
-        System.out.println("Invalid selection, please enter 1 for Yes or 2 for No.");
-        System.out.println("Do you want to continue with ticket booking? (1 for Yes, 2 for No)");
-        continueChoice = meh.nextInt();
-        meh.nextLine();
-        }if (continueChoice == 2){
-        break;
+    }
+    
+    private void displayTicketsByType(String type, List<Integer> seatList){
+        System.out.println(type + " Tickets:");
+        boolean found = false;
+    
+        for (int i = 0; i < bookedTicketNumbers.size(); i++){
+            if (seatList.contains(bookedSeats.get(i))){
+                System.out.println("Ticket Number: " + bookedTicketNumbers.get(i) +
+                        " | Seat Number: " + bookedSeats.get(i));
+                found = true;
+            }
+        }
+    
+        if (!found){
+            System.out.println("No " + type + " tickets have been booked.");
+        }
+        System.out.println("-------------------------------------");
+    }
+    
+public void viewTicketsByName(){
+    System.out.print("Enter your name to view your tickets: ");
+    name = meh.nextLine();
+    
+    ticketsForName.clear();  
+    
+    for (int i = 0; i < bookedTicketNumbers.size(); i++){
+        if (ticketOwners.get(i).equalsIgnoreCase(name)){
+            ticketType = ticketOwners.get(i);  
+            seat = bookedSeats.get(i);  
+            ticketsForName.add(ticketType + " - " + bookedTicketNumbers.get(i) + " | Seat: " + seat); 
+        }
+    }
+
+    if (ticketsForName.isEmpty()){
+        System.out.println("No tickets found for " + name);
+    }else{
+        System.out.println("Tickets for " + name + ":");
+        for (String ticket : ticketsForName){
+            System.out.println(ticket);  
         }
     }
 }
-//this is the ticket booking system that i design yay (grabe ko mag design)
 public void bookTicket(){
-    System.out.println("");
-    System.out.println("=====================================");
-    System.out.println("       [Ticket Booking System]       ");
-    System.out.println("=====================================");
-    System.out.println("Welcome to the Ticket Booking System!");
-    System.out.println("Current ticket price: $" + ticketPrice);
-    System.out.println("Concert date: " + concertDate);
-
     System.out.print("Enter your name: ");
     userName = meh.nextLine();
 
-    System.out.print("Enter seat number (1-10000): ");
-    seatNumber = meh.nextInt();
-    meh.nextLine(); 
 
-    while (bookedSeats.contains(seatNumber)){
-    System.out.println("Seat " + seatNumber + " is already booked. Please choose another seat.");
-    System.out.print("Enter seat number (1-10000): ");
-    seatNumber = meh.nextInt();
-    meh.nextLine(); 
-}
-/* This randomizes the ticket number and adds nh on them %06d is to make sure the code still works if the number that was generated first was 0 it wont break instead it will be printed */
-    ticketNumber = "nh" + String.format("%06d", random.nextInt(599297) + 1);    
-while (bookedTicketNumbers.contains(ticketNumber)){
-    ticketNumber = "nh" + String.format("%06d", random.nextInt(599297) + 1);
-}
-
-if (!ticketNumbers.contains(ticketNumber)){
-    ticketNumbers.add(ticketNumber);
-    ticketOwners.add(userName);
-}
-
-//this is so the admin program can be updated
-    if (!bookedSeats.contains(seatNumber)) bookedSeats.add(seatNumber);
-    if (!bookedTicketNumbers.contains(ticketNumber)) bookedTicketNumbers.add(ticketNumber);
-
-//this is to update the tickets for both the Admin.java and User.java    
-    Admin.updateAdminTicketList(seatNumber, ticketNumber);
-
-//this specific part of code is use for the payment and if is invalid or not if it is it goes back until you pay
-while (payment < ticketPrice){
-        System.out.print("Enter payment amount: $");
-    payment = meh.nextDouble();
+    if (earlyBirdBookings < earlyBirdLimit){ 
+        System.out.println("=====================================");
+        System.out.println("Early Bird Promo: First " + earlyBirdLimit + " people get a " + (earlyBirdDiscount * 100) + "% discount!");
+        System.out.println("=====================================");
+    }
+    while (true){
+        System.out.println("Select Ticket Type:");
+        System.out.println("1. VIP");
+        System.out.println("2. General Admission (No specific seat)");
+        System.out.println("3. Hidden (Code Required)");
+        System.out.println("4. Members-Only");
+        System.out.print("Enter choice: ");
+        choice = meh.nextInt();
         meh.nextLine(); 
-    if (payment < ticketPrice){
-        System.out.println("Insufficient payment. Please enter an amount greater than or equal to the ticket price.");
-    }
-}
-    change = payment - ticketPrice;
     
-    if (change > 0){
-        System.out.println("Payment successful. Your change: $" + change);
-    }else{
-        System.out.println("Payment successful.");
-}
+        switch (choice){
+            case 1:
+                ticketPrice = admin.getTicketPriceVIP();
+                availableSeats = admin.getAvailableVIPSeats();
+                ticketPrefix = "VIP";
+                seatList = vipSeats;
+                break;
+            case 2:
+                ticketPrice = admin.getTicketPriceGeneral();
+                availableSeats = admin.getAvailableGeneralSeats();
+                ticketPrefix = "GEN";
+                seatList = generalSeats;
+                break;
+            case 3:
+                availableSeats = admin.getAvailableHiddenSeats();
+                ticketPrefix = "HID";
+                seatList = hiddenSeats;
+                break;
+            case 4:
+                ticketPrice = admin.getTicketPriceMembers();
+                availableSeats = admin.getAvailableMembersSeats();
+                ticketPrefix = "MEM";
+                seatList = membersSeats;
+                break;
+            default:
+                System.out.println("Invalid ticket type. Please try again.");
+                continue; 
+        }
+        break; 
+    }
 
-//this is the ticket itself when you finish the booking
-    System.out.println("=====================================");
-    System.out.println("");
-    System.out.println("       [ Booking Successful ]        ");
-    System.out.println("");
-    System.out.println("=============[ Ticket ]==============");
-    System.out.println("Name:           " + userName);
-    System.out.println("Seat:           " + seatNumber);
-    System.out.println("Ticket Number:  " + ticketNumber);
-    System.out.println("Concert Name:   " + concertName);
-    System.out.println("Concert Date:   " + concertDate);
-    System.out.println("Concert Date:   " + concertTime);
-    System.out.println("Ticket Price:  $" + ticketPrice);
-    System.out.println("=====================================");
-}
+        discountedPrice = ticketPrice; 
+    if (earlyBirdBookings < earlyBirdLimit){
+        discountedPrice *= (1 - earlyBirdDiscount);
+        earlyBirdBookings++;
+    }
+    System.out.printf("Discounted price per ticket: $%.2f%n", discountedPrice);
+    System.out.printf("Original price per ticket: $%.2f | Available seats: %d%n", ticketPrice, availableSeats);
 
-//this part if you want to cancel your ticket or not if there is no ticket found this also handles that part 
-private void cancelTicket(){
-    System.out.print("Enter your ticket number to cancel: ");
-    ticketNum = meh.nextLine().trim();  
+    System.out.print("Enter number of tickets to book: ");
+    numberTickets = meh.nextInt();
+    meh.nextLine(); 
 
-    if (!bookedTicketNumbers.contains(ticketNum)){
-        System.out.println("Ticket number not found.");
+    if (numberTickets <= 0 || numberTickets > availableSeats){
+        System.out.println("Invalid number of tickets. Please try again.");
         return;
     }
 
-if (bookedTicketNumbers.contains(ticketNum)) bookedTicketNumbers.remove(ticketNum);
-if (bookedSeats.contains(seatNumber)) bookedSeats.remove((Integer) seatNumber);  
-        System.out.println("Ticket canceled successfully.");
-        System.out.println("Seat and ticket number are now available for reuse.");
+   totalCost = ticketPrice * numberTickets;
+
+    if (numberTickets >= User.getGroupRequirement()){ 
+        totalCost *= (1 - User.getGroupDiscount()); 
+        System.out.println("- Group Discount Applied: " + (User.getGroupDiscount() * 100) + "%");
     }
 
-//this is where the ticket is used
-private void useTicket(){
-    System.out.print("Enter your ticket number to use: ");
-    ticketNum = meh.nextLine().trim();  
-
-    index = bookedTicketNumbers.indexOf(ticketNum);
-    if (index == -1){
-        System.out.println("Ticket number not found.");
-        return;
-    }
-
-   owner = ticketOwners.get(index);
-
-    if (!usedTicketNumbers.contains(ticketNum)){
-        usedTicketNumbers.add(ticketNum);
-        usedTicketOwners.add(owner);  
-    }
-
-    if (!usedSeats.contains(seatNumber)){
-        usedSeats.add(seatNumber);
-    }
-    bookedTicketNumbers.remove(ticketNum);
-    bookedSeats.remove((Integer) seatNumber);
-
-
-    System.out.println("Ticket used successfully.");
-}
-//this is meant to see how the persons ticket used
-public void viewTicketsByName(){
-    System.out.print("Enter the name to search for tickets: ");
-    String searchName = meh.nextLine().trim();
-
-    System.out.println("");
-    System.out.println("=====================================");
-    System.out.println("       [ Tickets for " + searchName + " ]       ");
-    System.out.println("=====================================");
-    for (int i = 0; i < bookedSeats.size(); i++){
-        if (userName.equalsIgnoreCase(searchName)){
-            System.out.println("=============[ Ticket ]==============");
-            System.out.println("Name:           " + userName);
-            System.out.println("Seat:           " + bookedSeats.get(i));
-            System.out.println("Ticket Number:  " + bookedTicketNumbers.get(i));
-            System.out.println("Concert Name:   " + concertName);
-            System.out.println("Concert Date:   " + concertDate);
-            System.out.println("Concert Date:   " + concertTime);
-            System.out.println("Ticket Price:  $" + ticketPrice);
-            System.out.println("=====================================");
-            ticketFound = true;
+    if (earlyBirdBookings < earlyBirdLimit || groupDiscount > 0){
+        System.out.println("Discounts applied:");
+        if (earlyBirdBookings < earlyBirdLimit){
+            System.out.println("- Early Bird Discount: " + (earlyBirdDiscount * 100) + "%");
+        }
+        if (groupDiscount > 0){
+            System.out.println("- Group Discount: " + (groupDiscount * 100) + "%");
         }
     }
 
-    if (!ticketFound){
-        System.out.println("No tickets found for the name: " + searchName);
+    System.out.printf("Total cost after discounts: $%.2f%n", totalCost);
+
+    while (true){
+        System.out.print("Enter payment amount: ");
+        payment = meh.nextDouble();
+        meh.nextLine(); 
+
+        if (payment < totalCost){
+            System.out.println("Insufficient payment. Please try again.");
+        }else{
+            change = payment - totalCost;
+            System.out.printf("Payment successful. Change: $%.2f%n", change);
+            break;
+        }
     }
+
+    for (int i = 0; i < numberTickets; i++){
+          
+        if (choice != 2){
+            System.out.print("Enter seat number: ");
+            seatNumber = meh.nextInt();
+            meh.nextLine(); 
+
+            if (bookedSeats.contains(seatNumber)){
+                System.out.println("Seat " + seatNumber + " is already booked. Try again.");
+                i--; 
+                continue;
+            }
+        }
+
+        ticketNumber = ticketPrefix + "-" + UUID.randomUUID().toString().substring(0, 16);
+        bookedSeats.add(seatNumber);
+        bookedTicketNumbers.add(ticketNumber);
+        ticketOwners.add(userName);
+
+        if (seatList != null){
+            seatList.add(seatNumber);
+        }
+
+        System.out.printf("Ticket %d booked: %s | Seat: %d%n", i + 1, ticketNumber, seatNumber);
+    }
+
+    switch (choice){
+        case 1:
+            availableVIP -= numberTickets;
+            break;
+        case 2:
+            availableGeneral -= numberTickets;
+            break;
+        case 3:
+            availableHidden -= numberTickets;
+            break;
+        case 4:
+            availableMembers -= numberTickets;
+            break;
+    }
+
+    admin.updateRevenueAndTickets(totalCost, numberTickets);
+    System.out.println("");
+    System.out.print("Press any key to return to the User Menu");
+    meh.nextLine();
+    }
+public void useTicket(){
+
+    if (!admin.isUseTicketEnabled()){
+        System.out.println("Ticket usage is currently disabled. Please contact the admin.");
+        return;
+    }
+
+    System.out.print("Enter your ticket number to use: ");
+     ticketNumber = meh.nextLine().trim();
+
+        index = bookedTicketNumbers.indexOf(ticketNumber);
+    if (index == -1){
+        System.out.println("Ticket number not found. Please enter a valid ticket number.");
+        return;
+    }
+
+    owner = ticketOwners.get(index);
+    seatNumber = bookedSeats.get(index);
+
+    if (usedTicketNumbers.contains(ticketNumber)){
+        System.out.println("This ticket has already been used. Please check with the admin for further assistance.");
+        return;
+    }
+
+    usedTicketNumbers.add(ticketNumber);
+    usedTicketOwners.add(owner);
+    usedSeats.add(seatNumber);
+
+    bookedTicketNumbers.remove(index);
+    bookedSeats.remove(index);
+    ticketOwners.remove(index);
+
+    System.out.printf("Ticket used successfully! Owner: %s | Seat Number: %d%n", owner, seatNumber);
+    System.out.println("");
+    System.out.print("Press any key to return to the User Menu");
+    meh.nextLine();
 }
 
-//this part is so the ticket part can be updated from both the Admin.java file and User.java file
-    public void updateConcertName(String newConcertName){
-    concertName = newConcertName;
-    }
-    public void updateConcertDate(String newConcertDate){
-    concertDate = newConcertDate;
-    }
-    public void updateConcertTime(String newConcertTime){
-    concertTime = newConcertTime;
-    }
-    public void updateTicketPrice(double newConcertPrice){
-    ticketPrice = newConcertPrice;
+public static void setMaximumSeats(int newMaxSeats){
+    if (newMaxSeats >= 1000 && newMaxSeats <= 10000){
+        maximumSeats = newMaxSeats;
     }
 }
+    public void updateConcertName(String newConcertName){
+        concertName = newConcertName;
+    }
+
+    public void updateConcertDate(String newConcertDate){
+        concertDate = newConcertDate;
+    }
+
+    public void updateConcertTime(String newConcertTime){
+        concertTime = newConcertTime;
+    }
+    public static void setEarlyBirdLimit(int limit){
+        earlyBirdLimit = limit;
+    }
+    public static void setEarlyBirdDiscount(double discount){
+        earlyBirdDiscount = discount;
+    }
+    
+    public static void setGroupDiscount(double discount){
+        groupDiscount = discount;
+    }
+    public static void setGroupRequirement(int requirement){
+        groupRequirement = requirement;
+    }
+    public static double getEarlyBirdDiscount(){
+        return earlyBirdDiscount;
+    }
+    
+    public static double getGroupDiscount(){
+        return groupDiscount;
+    }
+    public static int getGroupRequirement(){
+        return groupRequirement;
+    }
+
+}
+
