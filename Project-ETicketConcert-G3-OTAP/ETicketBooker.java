@@ -5,11 +5,12 @@ public class ETicketBooker {
         Scanner meh = new Scanner(System.in);
         int userChoice;
 
-        User user = new User();  
         Admin admin = new Admin();  
+        User user = new User();    
 
-        admin.setUser(user);      
-        user.setAdmin(admin);    
+        admin.setUser(user);
+        user.setAdmin(admin);
+        user.initializeAdminData();
       
         OUTER:
         while (true) {
@@ -33,10 +34,12 @@ public class ETicketBooker {
                     user.userMenu();  
                     break;
                 case 3:
-                    System.out.println("[ PROGRAM SHUTDOWN ]");
+                    System.out.println("[ Thank You For Choosing Our System ]");
+                    System.out.println("          [ GOODBYE! >-.-< ]         ");
+                    System.out.println("         [ PROGRAM SHUTDOWN ]        ");
                     break OUTER;
                 default:
-                    System.out.println("[ Invalid option. Please try again ]");
+                    System.out.println(" [ Invalid option Please try again ] ");
                     break;
             }
         }

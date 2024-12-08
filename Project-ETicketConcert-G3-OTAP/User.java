@@ -4,18 +4,19 @@ public class User{
     
     Scanner meh = new Scanner(System.in);
     private Admin admin;
-
+ 
     public User(){
     }
 
     public void setAdmin(Admin admin){
         this.admin = admin;
-}
+    }
     public static ArrayList<String> bookedTicketNumbers = new ArrayList<>();
     public static ArrayList<String> usedTicketNumbers = new ArrayList<>();
     public static ArrayList<String> ticketNumbers = new ArrayList<>();
     public static ArrayList<String> ticketOwners = new ArrayList<>();
     public static ArrayList<String> usedTicketOwners = new ArrayList<>();
+    public static ArrayList<String> ticketsForName = new ArrayList<>();
 
     public static ArrayList<Integer> bookedSeats = new ArrayList<>();
     public static ArrayList<Integer> usedSeats = new ArrayList<>();
@@ -24,7 +25,7 @@ public class User{
     public static ArrayList<Integer> earlyBirdSeats = new ArrayList<>();
     public static ArrayList<Integer> hiddenSeats = new ArrayList<>();
     public static ArrayList<Integer> membersSeats = new ArrayList<>();
-    List<String> ticketsForName = new ArrayList<>();
+    
     List<Integer> seatList = null;
 
     private String concertName = "ERE By: Juan Karlos Labajo";
@@ -41,23 +42,43 @@ public class User{
     private static int earlyBirdLimit = 500;    
     private static int groupRequirement = 5;
 
+    private int hiddenSeatLimit = 500; 
+    private int vipSeatLimit = 1500; 
     private int availableVIP = 1000;
     private int availableGeneral = 2000;
     private int availableHidden = 500;
     private int availableMembers = 8500;
 
+
+    private int hiddenSeatEnd;
+    private int vipSeatStart;
+    private int vipSeatEnd;
+    private int membersSeatStart;
+    private int membersSeatEnd;
     String ticketPrefix = "";
 
     double ticketPrice = 0;
     double payment = 0.0;
     
     int earlyBirdBookings = 0;
-    int availableSeats = 0;
+    int hiddenSeatStart = 1;
     int seatNumber = 0;
 
-    String userName, ticketNumber, owner, ticketType, name;
+
+    String userName, ticketNumber, owner, ticketType, name, guestCode;
     double change, discountedPrice, totalCost;
-    int numberTickets, choice, index, seat;
+    int numberTickets, choice, index, seat, availableSeats;
+
+    boolean found = false;
+
+    public void initializeAdminData(){
+        hiddenSeatEnd = getAvailableHiddenSeats();
+        vipSeatStart = hiddenSeatEnd + 1; 
+        vipSeatEnd = vipSeatStart + getAvailableVIPSeats() - 1; 
+        membersSeatStart = vipSeatEnd + 1; 
+        membersSeatEnd = getMaximumSeats();
+        admin.recalculateSeatRanges();
+    }
 
     public void userMenu(){
         OUTER:
@@ -74,12 +95,15 @@ public class User{
             System.out.println("=====================================");
             System.out.println("");
             System.out.println("=====================================");
-            System.out.println("Available Ticket Types and Prices");
+            System.out.println("   [ Available Ticket and Prices ]   ");
             System.out.println("=====================================");
-            System.out.println("2. General Admission Tickets - Price: $" + generalPrice + " | Available: " + availableGeneral);
-            System.out.println("1. VIP Tickets - Price: $" + vipPrice + " | Available: " + availableVIP);
-            System.out.println("3. Hidden Tickets (Special Code Required)  | Available: "+ availableHidden);
-            System.out.println("4. Members Tickets - Price: $" + membersPrice + " | Available: " + availableMembers);
+            System.out.printf("General Admission - Price: $%.2f | Available: %d%n", generalPrice, getAvailableGeneralSeats());
+            System.out.printf("Hidden Tickets (CODE REQUIRED) | Available: %d | Seat Range: %d-%d%n", 
+            admin.getAvailableHiddenSeats(), admin.getHiddenSeatStart(), admin.getHiddenSeatEnd());
+            System.out.printf("VIP Tickets - Price: $%.2f | Available: %d | Seat Range: %d-%d%n", 
+            vipPrice, admin.getAvailableVIPSeats(), admin.getVIPSeatStart(), admin.getVIPSeatEnd());
+            System.out.printf("Members-Only Tickets - Price: $%.2f | Available: %d | Seat Range: %d-%d%n", 
+            membersPrice, admin.getAvailableMembersSeats(), admin.getMembersSeatStart(), admin.getMembersSeatEnd());
             System.out.println("=====================================");
             System.out.println("");
             System.out.println("=====================================");
@@ -107,14 +131,17 @@ public class User{
                     break;
                 case 4:
                     if (!admin.isUseTicketEnabled()){
-                        System.out.println("'Use Ticket' is currently disabled. Please contact the admin.");
+                        System.out.println("Concert Not Ready Yet.");
+                        System.out.println("");
+                        System.out.print("Press any key to return to the User Menu:");
+                        meh.nextLine();
                     }else{
                         useTicket();
                     }
                     break;
                 case 5:
-                    System.out.println("[ Thanks For Choosing Our System ]");
-                    System.out.println("[ ShutDown ]");
+                    System.out.println(" [ Thanks For Choosing Our System ]  ");
+                    System.out.println("             [ RETURN ]              ");
                     break OUTER;
                 default:
                     System.out.println("[Invalid selection, Please try again]");
@@ -122,24 +149,25 @@ public class User{
             }
         }
     }
+
+
     public void viewBookedTickets(){
+        System.out.println("");
         System.out.println("=====================================");
         System.out.println(" [ List of Booked Tickets by Type ]  ");
         System.out.println("=====================================");
     
         displayTicketsByType("VIP", vipSeats);
         displayTicketsByType("General Admission", generalSeats);
-        displayTicketsByType("Hidden", hiddenSeats);
         displayTicketsByType("Members-Only", membersSeats);
 
         System.out.println("");
-        System.out.print("Press any key to return to the User Menu...");
+        System.out.print("Press any key to return to the User Menu:");
         meh.nextLine();
     }
     
     private void displayTicketsByType(String type, List<Integer> seatList){
         System.out.println(type + " Tickets:");
-        boolean found = false;
     
         for (int i = 0; i < bookedTicketNumbers.size(); i++){
             if (seatList.contains(bookedSeats.get(i))){
@@ -155,9 +183,9 @@ public class User{
         System.out.println("-------------------------------------");
     }
     
-public void viewTicketsByName(){
-    System.out.print("Enter your name to view your tickets: ");
-    name = meh.nextLine();
+    public void viewTicketsByName(){
+        System.out.print("Enter your name to view your tickets: ");
+        name = meh.nextLine();
     
     ticketsForName.clear();  
     
@@ -177,122 +205,145 @@ public void viewTicketsByName(){
             System.out.println(ticket);  
         }
     }
+
+    System.out.println("");
+    System.out.print("Press any key to return to the User Menu: ");
+    meh.nextLine();
 }
+
 public void bookTicket(){
     System.out.print("Enter your name: ");
     userName = meh.nextLine();
 
-
-    if (earlyBirdBookings < earlyBirdLimit){ 
+    if (earlyBirdBookings < earlyBirdLimit){
+        System.out.println("");
         System.out.println("=====================================");
         System.out.println("Early Bird Promo: First " + earlyBirdLimit + " people get a " + (earlyBirdDiscount * 100) + "% discount!");
         System.out.println("=====================================");
     }
     while (true){
-        System.out.println("Select Ticket Type:");
-        System.out.println("1. VIP");
-        System.out.println("2. General Admission (No specific seat)");
-        System.out.println("3. Hidden (Code Required)");
+        System.out.println("");
+        System.out.println("=====================================");
+        System.out.println("   [ WELCOME TO THE BOOKING MENU ]   ");
+        System.out.println("=====================================");
+        System.out.println("1. General Admission (NO-SEATS!)");
+        System.out.println("2. Hidden (Code Required)");
+        System.out.println("3. VIP");
         System.out.println("4. Members-Only");
-        System.out.print("Enter choice: ");
+        System.out.print("Please Select Ticket Type: ");
         choice = meh.nextInt();
-        meh.nextLine(); 
-    
+        System.out.println("=====================================");
+        meh.nextLine();
+
         switch (choice){
             case 1:
-                ticketPrice = admin.getTicketPriceVIP();
-                availableSeats = admin.getAvailableVIPSeats();
-                ticketPrefix = "VIP";
-                seatList = vipSeats;
-                break;
-            case 2:
                 ticketPrice = admin.getTicketPriceGeneral();
                 availableSeats = admin.getAvailableGeneralSeats();
                 ticketPrefix = "GEN";
                 seatList = generalSeats;
                 break;
-            case 3:
+
+            case 2:
                 availableSeats = admin.getAvailableHiddenSeats();
                 ticketPrefix = "HID";
                 seatList = hiddenSeats;
+
+                System.out.print("Enter Special Guest Code: ");
+                guestCode = meh.nextLine().trim();
+                if (!Admin.specialGuestCodes.contains(guestCode)){
+                    System.out.println("Invalid Special Guest Code. Booking denied.");
+                    return;
+                }
                 break;
+
+            case 3:
+                ticketPrice = admin.getTicketPriceVIP();
+                availableSeats = admin.getAvailableVIPSeats();
+                ticketPrefix = "VIP";
+                seatList = vipSeats;
+                break;
+
             case 4:
                 ticketPrice = admin.getTicketPriceMembers();
                 availableSeats = admin.getAvailableMembersSeats();
                 ticketPrefix = "MEM";
                 seatList = membersSeats;
                 break;
+
             default:
                 System.out.println("Invalid ticket type. Please try again.");
-                continue; 
+                continue;
         }
-        break; 
+        break;
     }
-
-        discountedPrice = ticketPrice; 
-    if (earlyBirdBookings < earlyBirdLimit){
-        discountedPrice *= (1 - earlyBirdDiscount);
-        earlyBirdBookings++;
-    }
-    System.out.printf("Discounted price per ticket: $%.2f%n", discountedPrice);
-    System.out.printf("Original price per ticket: $%.2f | Available seats: %d%n", ticketPrice, availableSeats);
 
     System.out.print("Enter number of tickets to book: ");
     numberTickets = meh.nextInt();
-    meh.nextLine(); 
+    meh.nextLine();
 
     if (numberTickets <= 0 || numberTickets > availableSeats){
         System.out.println("Invalid number of tickets. Please try again.");
         return;
     }
 
-   totalCost = ticketPrice * numberTickets;
-
-    if (numberTickets >= User.getGroupRequirement()){ 
-        totalCost *= (1 - User.getGroupDiscount()); 
-        System.out.println("- Group Discount Applied: " + (User.getGroupDiscount() * 100) + "%");
-    }
-
-    if (earlyBirdBookings < earlyBirdLimit || groupDiscount > 0){
-        System.out.println("Discounts applied:");
+    if (choice != 2){  
+        totalCost = ticketPrice * numberTickets;
+        if (numberTickets >= getGroupRequirement()){
+            totalCost *= (1 - getGroupDiscount());
+            System.out.println("- Group Discount Applied: " + (getGroupDiscount() * 100) + "%");
+        }
         if (earlyBirdBookings < earlyBirdLimit){
-            System.out.println("- Early Bird Discount: " + (earlyBirdDiscount * 100) + "%");
+            totalCost *= (1 - earlyBirdDiscount);
+            earlyBirdBookings += numberTickets;
+            System.out.println("- Early Bird Discount Applied: " + (earlyBirdDiscount * 100) + "%");
         }
-        if (groupDiscount > 0){
-            System.out.println("- Group Discount: " + (groupDiscount * 100) + "%");
-        }
+        System.out.printf("Total cost after discounts: $%.2f%n", totalCost);
+    }else{
+        System.out.println("No payment required for Hidden tickets.");
     }
 
-    System.out.printf("Total cost after discounts: $%.2f%n", totalCost);
+    if (choice != 2){
+        
+        while (true){
+            System.out.print("Enter payment amount: ");
+            payment = meh.nextDouble();
+            meh.nextLine();
 
-    while (true){
-        System.out.print("Enter payment amount: ");
-        payment = meh.nextDouble();
-        meh.nextLine(); 
-
-        if (payment < totalCost){
-            System.out.println("Insufficient payment. Please try again.");
-        }else{
-            change = payment - totalCost;
-            System.out.printf("Payment successful. Change: $%.2f%n", change);
-            break;
+            if (payment < totalCost){
+                System.out.println("Insufficient payment. Please try again.");
+            }else{
+                change = payment - totalCost;
+                System.out.printf("Payment successful. Change: $%.2f%n", change);
+                break;
+            }
         }
     }
 
     for (int i = 0; i < numberTickets; i++){
-          
-        if (choice != 2){
-            System.out.print("Enter seat number: ");
-            seatNumber = meh.nextInt();
-            meh.nextLine(); 
+        do{
+            if (choice == 1){
+    do{
+        seatNumber = admin.getNextAvailableSeatAfter(admin.getGeneralSeatEnd());
+        admin.GeneralSeatEnd(); 
+    }while (bookedSeats.contains(seatNumber)); 
+            }else{
+                System.out.printf("Enter seat number for %s (%d-%d): ", ticketPrefix,
+                    choice == 2 ? admin.getHiddenSeatStart() : admin.getVIPSeatStart(),
+                    choice == 2 ? admin.getHiddenSeatEnd() : admin.getVIPSeatEnd());
+                seatNumber = meh.nextInt();
+                meh.nextLine();
+            }
 
             if (bookedSeats.contains(seatNumber)){
-                System.out.println("Seat " + seatNumber + " is already booked. Try again.");
-                i--; 
-                continue;
-            }
+                System.out.println("Seat " + seatNumber + " is already booked. Try another.");
+            }else if ((choice == 2 && (seatNumber < admin.getHiddenSeatStart() || seatNumber > admin.getHiddenSeatEnd())) ||
+                       (choice == 3 && (seatNumber < admin.getVIPSeatStart() || seatNumber > admin.getVIPSeatEnd())) ||
+                       (choice == 4 && (seatNumber < admin.getMembersSeatStart() || seatNumber > admin.getMembersSeatEnd()))){
+                System.out.println("Invalid seat number. Try again.");
+            }else{
+        break;  
         }
-
+        }while (true);
         ticketNumber = ticketPrefix + "-" + UUID.randomUUID().toString().substring(0, 16);
         bookedSeats.add(seatNumber);
         bookedTicketNumbers.add(ticketNumber);
@@ -300,6 +351,7 @@ public void bookTicket(){
 
         if (seatList != null){
             seatList.add(seatNumber);
+            admin.recalculateSeatRanges();  
         }
 
         System.out.printf("Ticket %d booked: %s | Seat: %d%n", i + 1, ticketNumber, seatNumber);
@@ -307,32 +359,31 @@ public void bookTicket(){
 
     switch (choice){
         case 1:
-            availableVIP -= numberTickets;
+            admin.setAvailableGeneralSeats(admin.getAvailableGeneralSeats() - numberTickets);
             break;
         case 2:
-            availableGeneral -= numberTickets;
+            admin.setAvailableHiddenSeats(admin.getAvailableHiddenSeats() - numberTickets);
             break;
         case 3:
-            availableHidden -= numberTickets;
+            admin.setAvailableVIPSeats(admin.getAvailableVIPSeats() - numberTickets);
             break;
         case 4:
-            availableMembers -= numberTickets;
+            admin.setAvailableMembersSeats(admin.getAvailableMembersSeats() - numberTickets);
             break;
     }
 
     admin.updateRevenueAndTickets(totalCost, numberTickets);
     System.out.println("");
-    System.out.print("Press any key to return to the User Menu");
+    System.out.print("Press any key to return to the User Menu:");
     meh.nextLine();
-    }
-public void useTicket(){
-
+}
+    public void useTicket(){
     if (!admin.isUseTicketEnabled()){
         System.out.println("Ticket usage is currently disabled. Please contact the admin.");
         return;
     }
 
-    System.out.print("Enter your ticket number to use: ");
+    System.out.print("Enter your TicketID to use: ");
      ticketNumber = meh.nextLine().trim();
 
         index = bookedTicketNumbers.indexOf(ticketNumber);
@@ -359,49 +410,91 @@ public void useTicket(){
 
     System.out.printf("Ticket used successfully! Owner: %s | Seat Number: %d%n", owner, seatNumber);
     System.out.println("");
-    System.out.print("Press any key to return to the User Menu");
+    System.out.print("Press any key to return to the User Menu:");
     meh.nextLine();
 }
 
-public static void setMaximumSeats(int newMaxSeats){
-    if (newMaxSeats >= 1000 && newMaxSeats <= 10000){
-        maximumSeats = newMaxSeats;
-    }
-}
-    public void updateConcertName(String newConcertName){
-        concertName = newConcertName;
-    }
-
-    public void updateConcertDate(String newConcertDate){
-        concertDate = newConcertDate;
-    }
-
-    public void updateConcertTime(String newConcertTime){
-        concertTime = newConcertTime;
-    }
-    public static void setEarlyBirdLimit(int limit){
-        earlyBirdLimit = limit;
-    }
-    public static void setEarlyBirdDiscount(double discount){
-        earlyBirdDiscount = discount;
-    }
-    
-    public static void setGroupDiscount(double discount){
-        groupDiscount = discount;
-    }
-    public static void setGroupRequirement(int requirement){
-        groupRequirement = requirement;
-    }
-    public static double getEarlyBirdDiscount(){
-        return earlyBirdDiscount;
-    }
-    
-    public static double getGroupDiscount(){
-        return groupDiscount;
-    }
-    public static int getGroupRequirement(){
-        return groupRequirement;
-    }
-
+public void updateConcertName(String newConcertName){
+    concertName = newConcertName;
 }
 
+public void updateConcertDate(String newConcertDate){
+    concertDate = newConcertDate;
+}
+
+public void updateConcertTime(String newConcertTime){
+    concertTime = newConcertTime;
+}
+
+public static void setEarlyBirdLimit(int limit){
+    earlyBirdLimit = limit;
+}
+
+public static void setEarlyBirdDiscount(double discount){
+    earlyBirdDiscount = discount;
+}
+
+public static void setGroupDiscount(double discount){
+    groupDiscount = discount;
+}
+
+public static void setGroupRequirement(int requirement){
+    groupRequirement = requirement;
+}
+
+public void setAvailableVIPSeats(int seats){
+    availableVIP = seats;
+}
+
+public void setAvailableHiddenSeats(int seats){
+    availableHidden = seats;
+}
+
+public void setAvailableMembersSeats(int seats){
+    availableMembers = seats;
+}
+
+public void setAvailableGeneralSeats(int seats){
+    availableGeneral = seats;
+}
+
+public static void setMaximumSeats(int seats){
+    maximumSeats = seats;
+}
+
+public int getAvailableVIPSeats(){
+    return availableVIP;
+}
+
+public int getAvailableHiddenSeats(){
+    return availableHidden;
+}
+
+public int getAvailableMembersSeats(){
+    return availableMembers;
+}
+
+public int getAvailableGeneralSeats(){
+    return availableGeneral;
+}
+
+public static int getMaximumSeats(){
+    return maximumSeats;
+}
+
+public static double getEarlyBirdDiscount(){
+    return earlyBirdDiscount;
+}
+
+public static double getGroupDiscount(){
+    return groupDiscount;
+}
+
+public static int getEarlyBirdLimit(){
+    return earlyBirdLimit;
+}
+
+public static int getGroupRequirement(){
+    return groupRequirement;
+    }
+}
