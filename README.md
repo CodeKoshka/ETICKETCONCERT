@@ -4,4 +4,4 @@ Sana di ma-gisa ng panel
 
 # new version (experimental)
 
-trying to fix logical issues, trying to make the code as less complicated, and designing.
+designing and comments left then this will no longer be experimental.
