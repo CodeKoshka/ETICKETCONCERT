@@ -1,17 +1,19 @@
 import java.util.*;
-
+//Main part of the program itself this part is meant to be the main interface and the bridge between admin.java and user.java
 public class ETicketBooker {
     public static void main(String[] args) {
         Scanner meh = new Scanner(System.in);
         int userChoice;
 
+//meants to connect user user.java and admin.java
         Admin admin = new Admin();  
         User user = new User();    
 
         admin.setUser(user);
         user.setAdmin(admin);
         user.initializeAdminData();
-      
+
+//the login interface of admin.java and user.java
         OUTER:
         while (true) {
             System.out.println("");
@@ -45,3 +47,4 @@ public class ETicketBooker {
         }
     }
 }
+

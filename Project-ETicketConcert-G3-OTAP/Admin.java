@@ -6,13 +6,15 @@ public class Admin{
     private User user;
 
     public Admin(){
+//this are special codes that was premade for demonstration
         specialGuestCodes.add("VIPCODE123");
         specialGuestCodes.add("GUEST2024");
     }
-
+// this is meant to connect admin.java and user.java
     public void setUser(User user){
         this.user = user;
     }
+//this are the arraylist that store data  
     public static final ArrayList<String> specialGuestCodes = new ArrayList<>();
     private static final ArrayList<String> bookedTicketNumbers = User.bookedTicketNumbers; 
     private static final ArrayList<String> usedTicketNumbers = User.usedTicketNumbers;
@@ -21,6 +23,7 @@ public class Admin{
     private static final ArrayList<Integer> bookedSeats = User.bookedSeats;
     private static final ArrayList<Integer> usedSeats = User.usedSeats; 
 
+    //this are the multiple variables required by the system
     private String password = "BESTOTAP"; 
     private String concertName = "ERE By: Juan Karlos Labajo"; 
     private String concertDate = "12/25/2024"; 
@@ -73,7 +76,7 @@ public class Admin{
     
     private boolean useTicketEnabled = false; 
     boolean valid = false;
-
+//======================================================[ "Admin Login Section" ]======================================================
     public void login(){
         System.out.print("Enter admin password: ");
         enteredPassword = meh.nextLine().trim();
@@ -89,7 +92,7 @@ public class Admin{
         System.out.println("=====================================");
     }
 }
-
+//=======================================================[ "Admin Menu Section" ]=======================================================
 private void adminMenu(){
     OUTER:
     while (true){
@@ -155,7 +158,7 @@ private void adminMenu(){
         }
     }
 }
-
+//======================================================[ "Change Concert Name Section" ]======================================================
     private void changeConcertName(){
         System.out.println("");
         System.out.println("=====================================");
@@ -175,7 +178,7 @@ private void adminMenu(){
         System.out.print("Press any key to return to the Admin Menu: ");
         meh.nextLine(); 
     }
-
+//======================================================[ "Change Concert Date Section" ]======================================================
     private void changeConcertDate(){
         System.out.println("");
         System.out.println("=====================================");
@@ -208,7 +211,7 @@ private void adminMenu(){
         meh.nextLine(); 
         meh.nextLine();
     }
-
+//this are rules implemented to make sure the date is right
     private boolean validateDate(int month, int day, int year){
         if (month < 1 || month > 12){
             System.out.println("Month must be within the range of 1 to 12.");
@@ -233,11 +236,11 @@ private void adminMenu(){
             return true;
         }
     }
-
+//this is meant to check if the year is a leap year
     private static boolean LeapYear(int year){
         return (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
     }
-
+//======================================================[ "Change Concert Time Section" ]======================================================
     private void changeConcertTime(){
         while (true){
             System.out.println("");
@@ -287,7 +290,7 @@ private void adminMenu(){
             break;
         }
     }
-
+//======================================================[ "Change Password Section" ]======================================================
     private void changePassword(){
         System.out.println("=====================================");
         System.out.print("Enter current password: ");
@@ -315,7 +318,7 @@ private void adminMenu(){
         System.out.print("Press any key to return to the Admin Menu: ");
         meh.nextLine();
     }
-
+//======================================================[ "Manage Seats And Prices (SubMenu) Section" ]======================================================
     public void adjustTicketTypes(){
         if (!bookedSeats.isEmpty() || !usedSeats.isEmpty()){
             if (choice >= 1 && choice <= 4){  
@@ -441,13 +444,13 @@ private void adminMenu(){
             }
         }
     }
-    
+//======================================================[ "Ticket Control (SubMenu) Section" ]======================================================  
     private void viewAllTickets(){
         OUTER:
         while (true){
             System.out.println("");
             System.out.println("=====================================");
-            System.out.println("         [ Ticket Section ]          ");
+            System.out.println("      [ Ticket Control Menu ]        ");
             System.out.println("=====================================");
             System.out.println("1. View all tickets (booked + used)");
             System.out.println("2. View all booked tickets");
@@ -487,7 +490,7 @@ private void adminMenu(){
             }
         }
     }
-
+//======================================================[ "Show All Ticket Section" ]====================================================== 
     private void viewAllTicketsLabeled(){
         System.out.println("=====================================");
         System.out.println("           [ All Tickets ]           ");
@@ -515,7 +518,7 @@ private void adminMenu(){
             }
         }
     }
-
+//======================================================[ "Show All Booked Ticket Section" ]====================================================== 
     private void viewAllBookedTickets(){
         if (bookedTicketNumbers.isEmpty()){
             System.out.println("No booked tickets available.");
@@ -528,7 +531,7 @@ private void adminMenu(){
             }
         }
     }
-
+//======================================================[ "Show All Used Ticket Section" ]====================================================== 
     private void viewAllUsedTickets(){
         System.out.println("=====================================");
         System.out.println("        [ Used Tickets ]            ");
@@ -542,7 +545,7 @@ private void adminMenu(){
             }
         }
     }
-
+//======================================================[ "Delete Secific Ticket Section" ]====================================================== 
     private void deleteSpecificTicket(){
         System.out.print("Enter the seat number to delete: ");
         meh.nextLine();
@@ -595,7 +598,7 @@ private void adminMenu(){
             System.out.println("Ticket with seat number " + seatNumber + " not found.");
         }
     }
-
+//======================================================[ "Delete All Booked Tickets Section" ]====================================================== 
     private void clearAllBookedTickets(){
         System.out.println("Are you sure you want to clear all booked tickets? (1 for Yes / Any number for No)");
         confirmation = meh.nextInt();
@@ -639,7 +642,7 @@ private void adminMenu(){
             System.out.println("Action canceled.");
         }
     }
-    
+//======================================================[ "Delete All Used Tickets Section" ]======================================================     
     private void clearAllUsedTickets(){
         System.out.println("Are you sure you want to clear all used tickets? (1 for Yes / Any number for No)");
         confirmation = meh.nextInt();
@@ -665,7 +668,7 @@ private void adminMenu(){
             System.out.println("Action canceled.");
         }
     }
-
+//======================================================[ "Manage Discounts (SubMenu) Section" ]======================================================
     private void adjustDiscountsAndLimits(){
         while (true){
             System.out.println("");
@@ -749,7 +752,7 @@ private void adminMenu(){
             }
         }
     }
-
+//======================================================[ "Concert Status Menu Section" ]======================================================
     private void checkConcert(){
         while (true){
             System.out.println("");
@@ -798,7 +801,7 @@ private void adminMenu(){
             }
         }
     }
-
+//======================================================[ "Manage SpecialGuest Codes (SubMenu) Section" ]======================================================
     private void manageSpecialGuestCodes(){
         while (true){
             System.out.println("");
@@ -811,6 +814,7 @@ private void adminMenu(){
             System.out.println("4. Back to Admin Menu");
             System.out.print("Enter your choice: ");
             choice = meh.nextInt();
+            System.out.println("=====================================");
             meh.nextLine(); 
     
             switch (choice){
@@ -846,7 +850,7 @@ private void adminMenu(){
             }
         }
     }
-    
+//======================================================[ "End Concert Section" ]======================================================   
     private void endConcert(){
         System.out.println("Are you sure you want to end the concert? All data will be reset. (1 for Yes / Any number for No)");
         confirmation = meh.nextInt();
@@ -891,7 +895,10 @@ private void adminMenu(){
         if (!usedTicketNumbers.contains(ticketNumber)) usedTicketNumbers.add(ticketNumber);
     }
 }
-
+//======================================================[ "Getter and Setter Section" ]======================================================
+/*this is parts that are required for both user.java and admin.java 
+  this is all of this parts that updates both admin.java and user.java if anything gets added by the system or remove
+*/
 public void enableUseTicket(){
     useTicketEnabled = true;
     System.out.println("'Use Ticket' option has been enabled.");
@@ -932,7 +939,6 @@ public void setMaximumSeats(int seats){
 public void setAvailableHiddenSeats(int newSeats){
     availableHidden = newSeats;  
     hiddenSeatEnd = hiddenSeatStart + availableHidden - 1;
-    System.out.println("Updated Hidden seat range: " + hiddenSeatStart + " to " + hiddenSeatEnd);
     recalculateSeatRanges();  
 }
 
@@ -1107,16 +1113,16 @@ public void recalculateMembersSeats(){
         availableMembers = remainingSeats;
         user.setAvailableMembersSeats(availableMembers); 
     }else{
-        System.out.println("[Error]: VIP and Hidden seats exceed maximum capacity!");
+        System.out.println("[Error] VIP and Hidden seats exceed maximum capacity!");
     }
 }
 
     public void validateSeatRanges(){
         if (availableHidden + availableVIP > maximumSeats){
-            System.out.println("[Error]: Total Hidden and VIP seats exceed maximum capacity!");
+            System.out.println("[Error] Total Hidden and VIP seats exceed maximum capacity!");
         }
         if (vipStart > maximumSeats){
-            System.out.println("[Error]: VIP seat range exceeds maximum capacity!");
+            System.out.println("[Error] VIP seat range exceeds maximum capacity!");
         }else{
             System.out.println("Seat ranges validated successfully.");
         }

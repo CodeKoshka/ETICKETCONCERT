@@ -4,13 +4,13 @@ public class User{
     
     Scanner meh = new Scanner(System.in);
     private Admin admin;
- 
     public User(){
     }
-
+// this is meant to connect admin.java and user.java
     public void setAdmin(Admin admin){
         this.admin = admin;
     }
+//this are the arraylist that store data  
     public static ArrayList<String> bookedTicketNumbers = new ArrayList<>();
     public static ArrayList<String> usedTicketNumbers = new ArrayList<>();
     public static ArrayList<String> ticketNumbers = new ArrayList<>();
@@ -25,9 +25,11 @@ public class User{
     public static ArrayList<Integer> earlyBirdSeats = new ArrayList<>();
     public static ArrayList<Integer> hiddenSeats = new ArrayList<>();
     public static ArrayList<Integer> membersSeats = new ArrayList<>();
-    
+
+//list of seats
     List<Integer> seatList = null;
 
+//this are the multiple variables required by the system
     private String concertName = "ERE By: Juan Karlos Labajo";
     private String concertDate = "12/25/2024";
     private String concertTime = "07:00 PM";
@@ -70,7 +72,12 @@ public class User{
     int numberTickets, choice, index, seat, availableSeats;
 
     boolean found = false;
+    boolean hasGeneralTickets = false;
+    boolean hasVIPTickets = false;
+    boolean hasHiddenTickets = false;
+    boolean hasMembersTickets = false;
 
+//this is variables were seperated due to scanner errors
     public void initializeAdminData(){
         hiddenSeatEnd = getAvailableHiddenSeats();
         vipSeatStart = hiddenSeatEnd + 1; 
@@ -79,7 +86,8 @@ public class User{
         membersSeatEnd = getMaximumSeats();
         admin.recalculateSeatRanges();
     }
-
+//======================================================[ "User Menu Section" ]======================================================
+//this is the main interface of the userMenu
     public void userMenu(){
         OUTER:
         while (true){
@@ -121,7 +129,7 @@ public class User{
 
             switch (choice){
                 case 1:
-                    viewBookedTickets();
+                    viewSeats();
                     break;
                 case 2:
                     viewTicketsByName();
@@ -149,85 +157,161 @@ public class User{
             }
         }
     }
+//======================================================[ "View Seats Section" ]======================================================
+//This is meant to view all booked seats so the user know what seats are booked or not
+public void viewSeats(){
+    System.out.println("");
+    System.out.println("=====================================");
+    System.out.println("      [ List of Seats by Type ]      ");
+    System.out.println("=====================================");
 
-
-    public void viewBookedTickets(){
-        System.out.println("");
-        System.out.println("=====================================");
-        System.out.println(" [ List of Booked Tickets by Type ]  ");
-        System.out.println("=====================================");
-    
-        displayTicketsByType("VIP", vipSeats);
-        displayTicketsByType("General Admission", generalSeats);
-        displayTicketsByType("Members-Only", membersSeats);
-
-        System.out.println("");
-        System.out.print("Press any key to return to the User Menu:");
-        meh.nextLine();
+    //this is meant to display General Admission seats that have been booked
+    System.out.println("General Admission Tickets:");  
+    for (int i = 0; i < bookedTicketNumbers.size(); i++){
+        if (generalSeats.contains(bookedSeats.get(i))){
+            System.out.println("[Booked] Ticket Number: " + bookedTicketNumbers.get(i) +
+                    " | Seat Number: " + bookedSeats.get(i));
+            hasGeneralTickets = true;
     }
-    
-    private void displayTicketsByType(String type, List<Integer> seatList){
-        System.out.println(type + " Tickets:");
-    
-        for (int i = 0; i < bookedTicketNumbers.size(); i++){
-            if (seatList.contains(bookedSeats.get(i))){
-                System.out.println("Ticket Number: " + bookedTicketNumbers.get(i) +
-                        " | Seat Number: " + bookedSeats.get(i));
-                found = true;
-            }
-        }
-    
-        if (!found){
-            System.out.println("No " + type + " tickets have been booked.");
-        }
-        System.out.println("-------------------------------------");
+}
+    for (int i = 0; i < usedTicketNumbers.size(); i++){
+        if (generalSeats.contains(usedSeats.get(i))){
+            System.out.println("[Used] Ticket Number: " + usedTicketNumbers.get(i) +
+                    " | Seat Number: " + usedSeats.get(i));
+            hasGeneralTickets = true;
     }
-    
+}
+    if (!hasGeneralTickets){
+        System.out.println("No General Admission tickets found.");
+    }
+    System.out.println("-------------------------------------");
+
+    //this is meant to display Special Guest seats that had been booked
+    System.out.println("Special Guest Tickets:");
+    for (int i = 0; i < bookedTicketNumbers.size(); i++){
+    if (hiddenSeats.contains(bookedSeats.get(i))){
+        System.out.println("[Booked] Ticket Number: " + bookedTicketNumbers.get(i) +
+            " | Seat Number: " + bookedSeats.get(i));
+        hasHiddenTickets = true;
+    }
+}
+    for (int i = 0; i < usedTicketNumbers.size(); i++){
+        if (hiddenSeats.contains(usedSeats.get(i))){
+        System.out.println("[Used] Ticket Number: " + usedTicketNumbers.get(i) +
+            " | Seat Number: " + usedSeats.get(i));
+        hasHiddenTickets = true;
+    }
+}
+if (!hasHiddenTickets){
+    System.out.println("No Special Guest tickets found.");
+}
+    System.out.println("-------------------------------------");
+
+    //this is meant to display VIP seats that had been booked
+    System.out.println("VIP Tickets:");
+    for (int i = 0; i < bookedTicketNumbers.size(); i++){
+        if (vipSeats.contains(bookedSeats.get(i))){
+        System.out.println("[Booked] Ticket Number: " + bookedTicketNumbers.get(i) +
+            " | Seat Number: " + bookedSeats.get(i));
+        hasVIPTickets = true;
+    }
+}
+    for (int i = 0; i < usedTicketNumbers.size(); i++){
+        if (vipSeats.contains(usedSeats.get(i))){
+        System.out.println("[Used] Ticket Number: " + usedTicketNumbers.get(i) +
+            " | Seat Number: " + usedSeats.get(i));
+        hasVIPTickets = true;
+    }
+}
+    if (!hasVIPTickets){
+        System.out.println("No VIP tickets found.");
+}
+    System.out.println("-------------------------------------");
+
+    // this is meant to display Members-Only seats that had been booked
+    System.out.println("Members-Only Tickets:");
+    for (int i = 0; i < bookedTicketNumbers.size(); i++){
+        if (membersSeats.contains(bookedSeats.get(i))){
+        System.out.println("[Booked] Ticket Number: " + bookedTicketNumbers.get(i) +
+            " | Seat Number: " + bookedSeats.get(i));
+        hasMembersTickets = true;
+    }
+}
+    for (int i = 0; i < usedTicketNumbers.size(); i++){
+        if (membersSeats.contains(usedSeats.get(i))){
+        System.out.println("[Used] Ticket Number: " + usedTicketNumbers.get(i) +
+            " | Seat Number: " + usedSeats.get(i));
+        hasMembersTickets = true;
+    }
+}
+    if (!hasMembersTickets){
+        System.out.println("No Members-Only tickets found.");
+}
+    System.out.println("-------------------------------------");
+
+    System.out.println("");
+    System.out.print("Press any key to return to the User Menu:");
+    meh.nextLine();
+}
+//======================================================[ "View Ticket ByName Section" ]======================================================
     public void viewTicketsByName(){
         System.out.print("Enter your name to view your tickets: ");
         name = meh.nextLine();
     
+//this is meant so multiple names dont mix up when different names is called multiple times
     ticketsForName.clear();  
     
+//this is for booked tickets
     for (int i = 0; i < bookedTicketNumbers.size(); i++){
         if (ticketOwners.get(i).equalsIgnoreCase(name)){
-            ticketType = ticketOwners.get(i);  
-            seat = bookedSeats.get(i);  
-            ticketsForName.add(ticketType + " - " + bookedTicketNumbers.get(i) + " | Seat: " + seat); 
-        }
+            ticketType = "Booked";  
+            seat = bookedSeats.get(i);
+            ticketsForName.add(ticketType + " - Ticket Number: " + bookedTicketNumbers.get(i) + " | Seat: " + seat);
     }
+}
+
+//this is for used tickets
+    for (int i = 0; i < usedTicketNumbers.size(); i++){
+        if (usedTicketOwners.get(i).equalsIgnoreCase(name)){
+            ticketType = "Used";  
+            seat = usedSeats.get(i);
+            ticketsForName.add(ticketType + " - Ticket Number: " + usedTicketNumbers.get(i) + " | Seat: " + seat);
+    }
+}
 
     if (ticketsForName.isEmpty()){
         System.out.println("No tickets found for " + name);
     }else{
         System.out.println("Tickets for " + name + ":");
         for (String ticket : ticketsForName){
-            System.out.println(ticket);  
-        }
+            System.out.println(ticket);
     }
+}
 
     System.out.println("");
     System.out.print("Press any key to return to the User Menu: ");
     meh.nextLine();
 }
-
+//======================================================[ "BookTicket Section" ]======================================================
 public void bookTicket(){
+//this is enters your name which will be important for viewing tickets later
     System.out.print("Enter your name: ");
     userName = meh.nextLine();
-
+//this is meant to check if there is a promo which is the "Early Bird" Discount 
     if (earlyBirdBookings < earlyBirdLimit){
         System.out.println("");
         System.out.println("=====================================");
         System.out.println("Early Bird Promo: First " + earlyBirdLimit + " people get a " + (earlyBirdDiscount * 100) + "% discount!");
         System.out.println("=====================================");
     }
+//interface of our booking system
     while (true){
         System.out.println("");
         System.out.println("=====================================");
         System.out.println("   [ WELCOME TO THE BOOKING MENU ]   ");
         System.out.println("=====================================");
         System.out.println("1. General Admission (NO-SEATS!)");
-        System.out.println("2. Hidden (Code Required)");
+        System.out.println("2. Special Guest (Code Required)");
         System.out.println("3. VIP");
         System.out.println("4. Members-Only");
         System.out.print("Please Select Ticket Type: ");
@@ -244,6 +328,8 @@ public void bookTicket(){
                 break;
 
             case 2:
+/*special Guest is special since there meant for special guest, personel and giveaways 
+  that is why it requires a code instead of the normal purchase process*/
                 availableSeats = admin.getAvailableHiddenSeats();
                 ticketPrefix = "HID";
                 seatList = hiddenSeats;
@@ -280,12 +366,12 @@ public void bookTicket(){
     System.out.print("Enter number of tickets to book: ");
     numberTickets = meh.nextInt();
     meh.nextLine();
-
+//this is to check if the seat they input is available
     if (numberTickets <= 0 || numberTickets > availableSeats){
         System.out.println("Invalid number of tickets. Please try again.");
         return;
     }
-
+//this is meant to implement the discounts
     if (choice != 2){  
         totalCost = ticketPrice * numberTickets;
         if (numberTickets >= getGroupRequirement()){
@@ -301,7 +387,7 @@ public void bookTicket(){
     }else{
         System.out.println("No payment required for Hidden tickets.");
     }
-
+//this handles the payment but the issue is this is just simulated
     if (choice != 2){
         
         while (true){
@@ -318,7 +404,7 @@ public void bookTicket(){
             }
         }
     }
-
+//this is are rules that we added to make sure that the seats don't overlap with each other
     for (int i = 0; i < numberTickets; i++){
         do{
             if (choice == 1){
@@ -343,7 +429,10 @@ public void bookTicket(){
             }else{
         break;  
         }
-        }while (true);
+    }
+    while (true);
+/*this meant to make a ticket id it used to be numbers but due to security risk we turned to both alphabet and numeric 
+but the issue is changing the ticketNumber to ticketID which will be annoying to do that is why we left it as it is.*/   
         ticketNumber = ticketPrefix + "-" + UUID.randomUUID().toString().substring(0, 16);
         bookedSeats.add(seatNumber);
         bookedTicketNumbers.add(ticketNumber);
@@ -356,7 +445,7 @@ public void bookTicket(){
 
         System.out.printf("Ticket %d booked: %s | Seat: %d%n", i + 1, ticketNumber, seatNumber);
     }
-
+//this meant to update the available seats of each ticket
     switch (choice){
         case 1:
             admin.setAvailableGeneralSeats(admin.getAvailableGeneralSeats() - numberTickets);
@@ -371,13 +460,15 @@ public void bookTicket(){
             admin.setAvailableMembersSeats(admin.getAvailableMembersSeats() - numberTickets);
             break;
     }
-
+//this is just updates the revenue and the number of tickets sold in admin.java
     admin.updateRevenueAndTickets(totalCost, numberTickets);
     System.out.println("");
     System.out.print("Press any key to return to the User Menu:");
     meh.nextLine();
 }
+//======================================================[ "Use Ticket Section" ]======================================================
     public void useTicket(){
+//this a check if the use ticket is available or not
     if (!admin.isUseTicketEnabled()){
         System.out.println("Ticket usage is currently disabled. Please contact the admin.");
         return;
@@ -385,13 +476,13 @@ public void bookTicket(){
 
     System.out.print("Enter your TicketID to use: ");
      ticketNumber = meh.nextLine().trim();
-
+// a check to see if there is a booked ticket or not
         index = bookedTicketNumbers.indexOf(ticketNumber);
     if (index == -1){
         System.out.println("Ticket number not found. Please enter a valid ticket number.");
         return;
     }
-
+//this is just a check if the ticket is used or not
     owner = ticketOwners.get(index);
     seatNumber = bookedSeats.get(index);
 
@@ -400,10 +491,11 @@ public void bookTicket(){
         return;
     }
 
+//this is meant to turn booked tickets as used tickets 
     usedTicketNumbers.add(ticketNumber);
     usedTicketOwners.add(owner);
     usedSeats.add(seatNumber);
-
+//this just removes the booked tickets since they been turned to used tickets
     bookedTicketNumbers.remove(index);
     bookedSeats.remove(index);
     ticketOwners.remove(index);
@@ -413,7 +505,10 @@ public void bookTicket(){
     System.out.print("Press any key to return to the User Menu:");
     meh.nextLine();
 }
-
+//======================================================[ "Getter and Setter Section" ]======================================================
+/*this is parts that are required for both user.java and admin.java 
+  this is all of this parts that updates both admin.java and user.java if anything gets added by the system or remove
+*/
 public void updateConcertName(String newConcertName){
     concertName = newConcertName;
 }
