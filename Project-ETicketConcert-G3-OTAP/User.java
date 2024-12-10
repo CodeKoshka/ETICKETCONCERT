@@ -115,7 +115,7 @@ public class User{
             System.out.println("=====================================");
             System.out.println("            [ User Menu ]            ");
             System.out.println("=====================================");
-            System.out.println("1. View All Booked Tickets");
+            System.out.println("1. View All Booked Seats");
             System.out.println("2. View My Ticket");
             System.out.println("3. Book Ticket");
             System.out.println("4. Use Ticket");
