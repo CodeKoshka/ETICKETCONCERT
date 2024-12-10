@@ -333,7 +333,7 @@ private void adminMenu(){
         meh.nextLine();
     }
 //======================================================[ "Manage Seats And Prices (SubMenu) Section" ]======================================================
-//submenu interface of checkConcert
+//submenu interface of Manage Seats And Prices
     public void adjustTicketTypes(){
         if (!bookedSeats.isEmpty() || !usedSeats.isEmpty()){
             if (choice >= 1 && choice <= 4){  
@@ -895,8 +895,8 @@ private void adminMenu(){
             System.out.println("=====================================");
             System.out.println("       [ Concert Info Panel ]        ");
             System.out.println("=====================================");
-            System.out.println("1. Enable 'Use Ticket'");
-            System.out.println("2. Disable 'Use Ticket'");
+            System.out.println("1. Enable Use Ticket");
+            System.out.println("2. Disable Use Ticket");
             System.out.println("3. Set Revenue and Tickets Goal");
             System.out.println("4. End/Cancel Concert");
             System.out.println("5. Back to Admin Menu");
