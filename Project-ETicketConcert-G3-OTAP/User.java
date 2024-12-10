@@ -26,6 +26,8 @@ public class User{
     public static ArrayList<Integer> hiddenSeats = new ArrayList<>();
     public static ArrayList<Integer> membersSeats = new ArrayList<>();
 
+    public static ArrayList<Double> actualTicketPrices = new ArrayList<>();
+
 //list of seats
     List<Integer> seatList = null;
 
@@ -71,12 +73,9 @@ public class User{
     double change, discountedPrice, totalCost;
     int numberTickets, choice, index, seat, availableSeats;
 
-    boolean found = false;
-    boolean hasGeneralTickets = false;
-    boolean hasVIPTickets = false;
-    boolean hasHiddenTickets = false;
-    boolean hasMembersTickets = false;
-
+    boolean hasMembersSeats = false;
+    boolean hasHiddenSeats = false;
+    boolean hasVIPSeats = false;
 //this is variables were seperated due to scanner errors
     public void initializeAdminData(){
         hiddenSeatEnd = getAvailableHiddenSeats();
@@ -123,10 +122,8 @@ public class User{
             System.out.println("4. Use Ticket");
             System.out.println("5. Logout");
             System.out.print("Please select an option: ");
-            choice = meh.nextInt();
+        try{choice = Integer.parseInt(meh.nextLine().trim());
             System.out.println("=====================================");
-            meh.nextLine();
-
             switch (choice){
                 case 1:
                     viewSeats();
@@ -152,11 +149,15 @@ public class User{
                     System.out.println("             [ RETURN ]              ");
                     break OUTER;
                 default:
-                    System.out.println("[Invalid selection, Please try again]");
+                    System.out.println("[Invalid input, Please try again]");
                     break;
-            }
+                }
+//weAreGroup3YAY is just place holder since without something inside NumberFormatException it will throw a error
+            }catch (NumberFormatException weAreGroup3YAY){
+            System.out.println("[Error] Invalid input. Please enter a valid number.");
         }
     }
+}
 //======================================================[ "View Seats Section" ]======================================================
 //This is meant to view all booked seats so the user know what seats are booked or not
 public void viewSeats(){
@@ -165,90 +166,54 @@ public void viewSeats(){
     System.out.println("      [ List of Seats by Type ]      ");
     System.out.println("=====================================");
 
-    //this is meant to display General Admission seats that have been booked
-    System.out.println("General Admission Tickets:");  
-    for (int i = 0; i < bookedTicketNumbers.size(); i++){
-        if (generalSeats.contains(bookedSeats.get(i))){
-            System.out.println("[Booked] Ticket Number: " + bookedTicketNumbers.get(i) +
-                    " | Seat Number: " + bookedSeats.get(i));
-            hasGeneralTickets = true;
-    }
-}
-    for (int i = 0; i < usedTicketNumbers.size(); i++){
-        if (generalSeats.contains(usedSeats.get(i))){
-            System.out.println("[Used] Ticket Number: " + usedTicketNumbers.get(i) +
-                    " | Seat Number: " + usedSeats.get(i));
-            hasGeneralTickets = true;
-    }
-}
-    if (!hasGeneralTickets){
-        System.out.println("No General Admission tickets found.");
-    }
-    System.out.println("-------------------------------------");
-
     //this is meant to display Special Guest seats that had been booked
     System.out.println("Special Guest Tickets:");
-    for (int i = 0; i < bookedTicketNumbers.size(); i++){
-    if (hiddenSeats.contains(bookedSeats.get(i))){
-        System.out.println("[Booked] Ticket Number: " + bookedTicketNumbers.get(i) +
-            " | Seat Number: " + bookedSeats.get(i));
-        hasHiddenTickets = true;
+    System.out.printf("Seat Range: %d-%d%n", admin.getHiddenSeatStart(), admin.getHiddenSeatEnd());
+    System.out.print("Seats: ");
+    for (int seat : hiddenSeats){
+        if (bookedSeats.contains(seat) || usedSeats.contains(seat)){
+            System.out.print("[" + seat + "] ");
+            hasHiddenSeats = true;
     }
 }
-    for (int i = 0; i < usedTicketNumbers.size(); i++){
-        if (hiddenSeats.contains(usedSeats.get(i))){
-        System.out.println("[Used] Ticket Number: " + usedTicketNumbers.get(i) +
-            " | Seat Number: " + usedSeats.get(i));
-        hasHiddenTickets = true;
-    }
+    if (!hasHiddenSeats){
+        System.out.print("No seats Booked");
 }
-if (!hasHiddenTickets){
-    System.out.println("No Special Guest tickets found.");
-}
+    System.out.println();
     System.out.println("-------------------------------------");
 
     //this is meant to display VIP seats that had been booked
     System.out.println("VIP Tickets:");
-    for (int i = 0; i < bookedTicketNumbers.size(); i++){
-        if (vipSeats.contains(bookedSeats.get(i))){
-        System.out.println("[Booked] Ticket Number: " + bookedTicketNumbers.get(i) +
-            " | Seat Number: " + bookedSeats.get(i));
-        hasVIPTickets = true;
+    System.out.printf("Seat Range: %d-%d%n", admin.getVIPSeatStart(), admin.getVIPSeatEnd());
+    System.out.print("Seats: ");
+    for (int seat : vipSeats){
+        if (bookedSeats.contains(seat) || usedSeats.contains(seat)){
+            System.out.print("[" + seat + "] ");
+            hasVIPSeats = true;
     }
 }
-    for (int i = 0; i < usedTicketNumbers.size(); i++){
-        if (vipSeats.contains(usedSeats.get(i))){
-        System.out.println("[Used] Ticket Number: " + usedTicketNumbers.get(i) +
-            " | Seat Number: " + usedSeats.get(i));
-        hasVIPTickets = true;
-    }
+    if (!hasVIPSeats){
+        System.out.print("No seats");
 }
-    if (!hasVIPTickets){
-        System.out.println("No VIP tickets found.");
-}
+    System.out.println();
     System.out.println("-------------------------------------");
 
     // this is meant to display Members-Only seats that had been booked
     System.out.println("Members-Only Tickets:");
-    for (int i = 0; i < bookedTicketNumbers.size(); i++){
-        if (membersSeats.contains(bookedSeats.get(i))){
-        System.out.println("[Booked] Ticket Number: " + bookedTicketNumbers.get(i) +
-            " | Seat Number: " + bookedSeats.get(i));
-        hasMembersTickets = true;
+    System.out.printf("Seat Range: %d-%d%n", admin.getMembersSeatStart(), admin.getMembersSeatEnd());
+    System.out.print("Seats: ");
+    for (int seat : membersSeats){
+        if (bookedSeats.contains(seat) || usedSeats.contains(seat)){
+            System.out.print("[" + seat + "] ");
+            hasMembersSeats = true;
     }
 }
-    for (int i = 0; i < usedTicketNumbers.size(); i++){
-        if (membersSeats.contains(usedSeats.get(i))){
-        System.out.println("[Used] Ticket Number: " + usedTicketNumbers.get(i) +
-            " | Seat Number: " + usedSeats.get(i));
-        hasMembersTickets = true;
-    }
+    if (!hasMembersSeats){
+        System.out.print("No seats Booked");
 }
-    if (!hasMembersTickets){
-        System.out.println("No Members-Only tickets found.");
-}
+    System.out.println();
     System.out.println("-------------------------------------");
-
+    
     System.out.println("");
     System.out.print("Press any key to return to the User Menu:");
     meh.nextLine();
@@ -423,7 +388,7 @@ public void bookTicket(){
             if (bookedSeats.contains(seatNumber)){
                 System.out.println("Seat " + seatNumber + " is already booked. Try another.");
             }else if ((choice == 2 && (seatNumber < admin.getHiddenSeatStart() || seatNumber > admin.getHiddenSeatEnd())) ||
-                       (choice == 3 && (seatNumber < admin.getVIPSeatStart() || seatNumber > admin.getVIPSeatEnd())) ||
+                        (choice == 3 && (seatNumber < admin.getVIPSeatStart() || seatNumber > admin.getVIPSeatEnd())) ||
                        (choice == 4 && (seatNumber < admin.getMembersSeatStart() || seatNumber > admin.getMembersSeatEnd()))){
                 System.out.println("Invalid seat number. Try again.");
             }else{
@@ -434,9 +399,11 @@ public void bookTicket(){
 /*this meant to make a ticket id it used to be numbers but due to security risk we turned to both alphabet and numeric 
 but the issue is changing the ticketNumber to ticketID which will be annoying to do that is why we left it as it is.*/   
         ticketNumber = ticketPrefix + "-" + UUID.randomUUID().toString().substring(0, 16);
+//this adds data to the array 
         bookedSeats.add(seatNumber);
         bookedTicketNumbers.add(ticketNumber);
         ticketOwners.add(userName);
+        actualTicketPrices.add(totalCost / numberTickets);
 
         if (seatList != null){
             seatList.add(seatNumber);

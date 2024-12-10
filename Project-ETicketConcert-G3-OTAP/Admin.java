@@ -21,7 +21,9 @@ public class Admin{
     private static final ArrayList<String> usedTicketOwners = User.usedTicketOwners;
     private static final ArrayList<String> ticketOwners = User.ticketOwners;
     private static final ArrayList<Integer> bookedSeats = User.bookedSeats;
-    private static final ArrayList<Integer> usedSeats = User.usedSeats; 
+    private static final ArrayList<Integer> usedSeats = User.usedSeats;
+
+    private static final ArrayList<Double> actualTicketPrices = User.actualTicketPrices;
 
     //this are the multiple variables required by the system
     private String password = "BESTOTAP"; 
@@ -117,10 +119,9 @@ private void adminMenu(){
         System.out.println("9. Change Admin Password");
         System.out.println("10. Logout");
         System.out.print("Please select an option: ");
-        choice = meh.nextInt();
+    try{choice = Integer.parseInt(meh.nextLine().trim());
         System.out.println("=====================================");
-        meh.nextLine(); 
-
+ 
     switch (choice){
         case 1:
 		    checkConcert();       
@@ -153,8 +154,12 @@ private void adminMenu(){
             System.out.println("[Logging out]");
             break OUTER;
         default:
-            System.out.println("[Invalid selection, Please try again]");
+            System.out.println("[Invalid input, Please try again]");
             break;
+    }
+        //weAreGroup3YAY is just place holder since without something inside NumberFormatException it will throw a error
+        }catch (NumberFormatException weAreGroup3YAY){
+            System.out.println("[Invalid input, Please try again]");
         }
     }
 }
@@ -380,7 +385,7 @@ private void adminMenu(){
             }else if (choice == 8){
                 return;
             }else{
-                System.out.println("[Invalid selection, Please try again]");
+                System.out.println("[Invalid input, Please try again]");
                 continue;
             }
             switch (choice){
@@ -426,7 +431,7 @@ private void adminMenu(){
                     break;
     
                 default:
-                    System.out.println("[Invalid selection, Please try again]");
+                    System.out.println("[Invalid input, Please try again]");
             }
     
             remainingSeats = maximumSeats - (getAvailableVIPSeats() + getAvailableHiddenSeats());
@@ -460,7 +465,7 @@ private void adminMenu(){
             System.out.println("6. Clear all used tickets");
             System.out.println("7. Back to Admin Menu");
             System.out.print("Please select an option: ");
-            choice = meh.nextInt();
+        try{choice = Integer.parseInt(meh.nextLine().trim());
             System.out.println("=====================================");
 
             switch (choice){
@@ -483,13 +488,17 @@ private void adminMenu(){
                     clearAllUsedTickets();
                     break;
                 case 7:
+                    System.out.println("[Returning to Admin MENU]");
                     break OUTER;
                 default:
-                    System.out.println("[Invalid selection, Please try again]");
+                    System.out.println("[Invalid input, Please try again]");
                     break;
             }
+        }catch (NumberFormatException weAreGroup3YAY){
+            System.out.println("[Error] Invalid input. Please enter a valid number.");
         }
     }
+}
 //======================================================[ "Show All Ticket Section" ]====================================================== 
     private void viewAllTicketsLabeled(){
         System.out.println("=====================================");
@@ -514,10 +523,13 @@ private void adminMenu(){
             }else{
                 for (int i = 0; i < usedTicketNumbers.size(); i++){
                     System.out.println(usedTicketNumbers.get(i) + " | " + usedSeats.get(i) + " | " + usedTicketOwners.get(i));
-                }
             }
         }
     }
+        System.out.println("");
+        System.out.print("Press any key to return to the (Submenu) Menu: ");
+        meh.nextLine(); 
+}
 //======================================================[ "Show All Booked Ticket Section" ]====================================================== 
     private void viewAllBookedTickets(){
         if (bookedTicketNumbers.isEmpty()){
@@ -530,6 +542,9 @@ private void adminMenu(){
                 System.out.println(bookedTicketNumbers.get(i) + " | " + bookedSeats.get(i) + " | " + ticketOwners.get(i));
             }
         }
+        System.out.println("");
+        System.out.print("Press any key to return to the (Submenu) Menu: ");
+        meh.nextLine(); 
     }
 //======================================================[ "Show All Used Ticket Section" ]====================================================== 
     private void viewAllUsedTickets(){
@@ -544,6 +559,9 @@ private void adminMenu(){
                 System.out.println(usedTicketNumbers.get(i) + " | " + usedSeats.get(i) + " | " + usedTicketOwners.get(i));
             }
         }
+        System.out.println("");
+        System.out.print("Press any key to return to the (Submenu) Menu: ");
+        meh.nextLine(); 
     }
 //======================================================[ "Delete Secific Ticket Section" ]====================================================== 
     private void deleteSpecificTicket(){
@@ -554,93 +572,119 @@ private void adminMenu(){
     
         if (bookedSeats.contains(seatNumber)){
             index = bookedSeats.indexOf(seatNumber);
-    
-            ticketNumber = bookedTicketNumbers.get(index);
-            ticketType = ticketNumber.split("-")[0];
-    
-            switch (ticketType){
+            double pricePaid = actualTicketPrices.get(index); 
+        
+            ticketNumber = bookedTicketNumbers.get(index); 
+      
+            switch (ticketNumber.split("-")[0]){
                 case "VIP":
-                    ticketPrice = getTicketPriceVIP();
                     setAvailableVIPSeats(getAvailableVIPSeats() + 1);
                     break;
                 case "GEN":
-                    ticketPrice = getTicketPriceGeneral();
                     setAvailableGeneralSeats(getAvailableGeneralSeats() + 1);
                     break;
                 case "MEM":
-                    ticketPrice = getTicketPriceMembers();
                     setAvailableMembersSeats(getAvailableMembersSeats() + 1);
                     break;
                 case "HID":
-                    ticketPrice = 0;
                     setAvailableHiddenSeats(getAvailableHiddenSeats() + 1);
                     break;
             }
-    
-            totalRevenue -= ticketPrice;
+        
+            // Adjust revenue
+            totalRevenue -= pricePaid;
+            if (totalRevenue < 0){
+                System.out.println("[Warning] Total revenue cannot be negative. Resetting to zero.");
+                totalRevenue = 0.0;
+            }
+        
             totalTicketsSold--;
-    
+        
+// Removes the booked ticket details and price from the list
             bookedTicketNumbers.remove(index);
             bookedSeats.remove(index);
             ticketOwners.remove(index);
-    
+            actualTicketPrices.remove(index); 
+        
             recalculateSeatRanges();
-    
-            System.out.println("Ticket with seat number " + seatNumber + " has been deleted from booked tickets.");
-        }else if (usedSeats.contains(seatNumber)){
+        
+            
+            System.out.printf("Booked ticket deleted: Ticket Number: %s, Seat: %d, Price Paid: $%.2f%n", 
+                ticketNumber, seatNumber, pricePaid);
+
+        } else if (usedSeats.contains(seatNumber)){
             index = usedSeats.indexOf(seatNumber);
+        
+            ticketNumber = usedTicketNumbers.get(index); 
+        
+// Removes the used ticket details and price from the list
             usedTicketNumbers.remove(index);
             usedSeats.remove(index);
             usedTicketOwners.remove(index);
-    
-            System.out.println("Ticket with seat number " + seatNumber + " has been deleted from used tickets.");
+        
+            recalculateSeatRanges();
+        
+            System.out.printf("Used ticket deleted: Ticket Number: %s, Seat: %d%n", 
+                ticketNumber, seatNumber);
+        
         }else{
             System.out.println("Ticket with seat number " + seatNumber + " not found.");
         }
+        System.out.println("");
+        System.out.print("Press any key to return to the (Submenu) Menu: ");
+        meh.nextLine(); 
     }
 //======================================================[ "Delete All Booked Tickets Section" ]====================================================== 
     private void clearAllBookedTickets(){
         System.out.println("Are you sure you want to clear all booked tickets? (1 for Yes / Any number for No)");
         confirmation = meh.nextInt();
         meh.nextLine();
-    
-        if (confirmation == 1){
-            for (int i = 0; i < bookedTicketNumbers.size(); i++){
-                ticketNumber = bookedTicketNumbers.get(i);
-                ticketType = ticketNumber.split("-")[0];
-    
-                switch (ticketType){
-                    case "VIP":
-                        revenueToSubtract += getTicketPriceVIP();
-                        setAvailableVIPSeats(getAvailableVIPSeats() + 1);
-                        break;
-                    case "GEN":
-                        revenueToSubtract += getTicketPriceGeneral();
-                        setAvailableGeneralSeats(getAvailableGeneralSeats() + 1);
-                        break;
-                    case "MEM":
-                        revenueToSubtract += getTicketPriceMembers();
-                        setAvailableMembersSeats(getAvailableMembersSeats() + 1);
-                        break;
-                    case "HID":
-                        setAvailableHiddenSeats(getAvailableHiddenSeats() + 1);
-                        break;
-                }
-            }
-    
-            totalRevenue -= revenueToSubtract;
-            totalTicketsSold -= bookedTicketNumbers.size();
-    
-            bookedTicketNumbers.clear();
-            bookedSeats.clear();
-            ticketOwners.clear();
-    
-            recalculateSeatRanges();
-    
-            System.out.println("All booked tickets have been cleared.");
+//this part just update the seats and reverts the revenue back
+if (confirmation == 1){
+    for (int i = 0; i < bookedTicketNumbers.size(); i++){
+        ticketNumber = bookedTicketNumbers.get(i);
+        ticketType = ticketNumber.split("-")[0];
+        double pricePaid = actualTicketPrices.get(i); 
+
+        switch (ticketType){
+            case "VIP":
+                setAvailableVIPSeats(getAvailableVIPSeats() + 1);
+                break;
+            case "GEN":
+                setAvailableGeneralSeats(getAvailableGeneralSeats() + 1);
+                break;
+            case "MEM":
+                setAvailableMembersSeats(getAvailableMembersSeats() + 1);
+                break;
+            case "HID":
+                setAvailableHiddenSeats(getAvailableHiddenSeats() + 1);
+                break;
+        }
+        revenueToSubtract += pricePaid; 
+    }
+
+    totalRevenue -= revenueToSubtract;
+    if (totalRevenue < 0){
+        System.out.println("[Warning] Total revenue cannot be negative. Resetting to zero.");
+        totalRevenue = 0.0;
+    }
+
+    totalTicketsSold -= bookedTicketNumbers.size();
+
+
+    bookedTicketNumbers.clear();
+    bookedSeats.clear();
+    ticketOwners.clear();
+    actualTicketPrices.clear(); 
+    recalculateSeatRanges();
+
+    System.out.println("All booked tickets have been cleared.");
         }else{
             System.out.println("Action canceled.");
         }
+        System.out.println("");
+        System.out.print("Press any key to return to the (Submenu) Menu: ");
+        meh.nextLine(); 
     }
 //======================================================[ "Delete All Used Tickets Section" ]======================================================     
     private void clearAllUsedTickets(){
@@ -667,6 +711,9 @@ private void adminMenu(){
         }else{
             System.out.println("Action canceled.");
         }
+        System.out.println("");
+        System.out.print("Press any key to return to the (Submenu) Menu: ");
+        meh.nextLine(); 
     }
 //======================================================[ "Manage Discounts (SubMenu) Section" ]======================================================
     private void adjustDiscountsAndLimits(){
@@ -744,11 +791,11 @@ private void adminMenu(){
                 break;
     
                 case 5:
-                    System.out.println("Returning to Admin Menu.");
+                    System.out.println("[ Returning to Admin Menu ]");
                     return;
     
                 default:
-                    System.out.println("Invalid selection. Please try again.");
+                    System.out.println("[Invalid input, Please try again]");
             }
         }
     }
@@ -774,7 +821,7 @@ private void adminMenu(){
             System.out.println("2. Disable 'Use Ticket'");
             System.out.println("3. Set Revenue and Tickets Goal");
             System.out.println("4. End/Cancel Concert");
-            System.out.println("5. Logout");
+            System.out.println("5. Back to Admin Menu");
             System.out.print("Enter your choice: ");
             choice = meh.nextInt();
             System.out.println("=====================================");
@@ -794,10 +841,10 @@ private void adminMenu(){
                     endConcert();
                     break;
                 case 5:
-                    System.out.println("Logging out.");
+                    System.out.println("[ Returning to Admin Menu ]");
                     return;
                 default:
-                    System.out.println("Invalid choice.");
+                    System.out.println("[Invalid input, Please try again]");
             }
         }
     }
@@ -844,9 +891,10 @@ private void adminMenu(){
                     }
                     break;
                 case 4:
+                    System.out.println("[ Returning to Admin Menu ]");
                     return; 
                 default:
-                    System.out.println("Invalid choice. Try again.");
+                    System.out.println("[Invalid input, Please try again]");
             }
         }
     }
@@ -932,7 +980,7 @@ public static void setGroupRequirement(int requirement){
 
 public void setMaximumSeats(int seats){
     maximumSeats = seats;
-    user.setMaximumSeats(seats); 
+    User.setMaximumSeats(seats); 
     recalculateMembersSeats();
 }
 
@@ -1116,19 +1164,8 @@ public void recalculateMembersSeats(){
         System.out.println("[Error] VIP and Hidden seats exceed maximum capacity!");
     }
 }
-
-    public void validateSeatRanges(){
-        if (availableHidden + availableVIP > maximumSeats){
-            System.out.println("[Error] Total Hidden and VIP seats exceed maximum capacity!");
-        }
-        if (vipStart > maximumSeats){
-            System.out.println("[Error] VIP seat range exceeds maximum capacity!");
-        }else{
-            System.out.println("Seat ranges validated successfully.");
-        }
-    }
     
-    public int getNextAvailableSeatAfter(int lastUsedSeat){
+public int getNextAvailableSeatAfter(int lastUsedSeat){
         nextSeat = lastUsedSeat + 1;
         return nextSeat;
     }

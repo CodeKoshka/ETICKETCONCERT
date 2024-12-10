@@ -1,7 +1,7 @@
 import java.util.*;
 //Main part of the program itself this part is meant to be the main interface and the bridge between admin.java and user.java
-public class ETicketBooker {
-    public static void main(String[] args) {
+public class ETicketBooker{
+    public static void main(String[] args){
         Scanner meh = new Scanner(System.in);
         int userChoice;
 
@@ -15,7 +15,7 @@ public class ETicketBooker {
 
 //the login interface of admin.java and user.java
         OUTER:
-        while (true) {
+        while (true){
             System.out.println("");
             System.out.println("=====================================");
             System.out.println("     [ ETicket Booking System ]      ");
@@ -24,11 +24,10 @@ public class ETicketBooker {
             System.out.println("2. User Login");
             System.out.println("3. Exit");
             System.out.print("Please select an option: ");
-            userChoice = meh.nextInt();
+        try{userChoice = Integer.parseInt(meh.nextLine().trim());         
             System.out.println("=====================================");
-            meh.nextLine();
 
-            switch (userChoice) {
+            switch (userChoice){
                 case 1:
                     admin.login();  
                     break;
@@ -41,10 +40,15 @@ public class ETicketBooker {
                     System.out.println("         [ PROGRAM SHUTDOWN ]        ");
                     break OUTER;
                 default:
-                    System.out.println(" [ Invalid option Please try again ] ");
+                    System.out.println(" [Invalid input, Please try again] ");
                     break;
+            }
+//weAreGroup3YAY is just place holder since without something inside NumberFormatException it will throw a error
+                }catch (NumberFormatException weAreGroup3YAY){
+                    System.out.println("  [Invalid input, Please try again]  ");
             }
         }
     }
 }
 
+/*Extra Info this was made in vscode with the help of a Cheatsheet and https://www.w3schools.com/java/java_encapsulation.asp*/
