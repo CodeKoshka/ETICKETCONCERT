@@ -2,6 +2,6 @@
 Para sa Defence Baby
 Sana di ma-gisa ng panel
 
-# new version (experimental)
+# new version
 
-designing and comments left then this will no longer be experimental.
+NO Longer Experemental this is now the full version
