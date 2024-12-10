@@ -26,7 +26,7 @@ public class Admin{
     private static final ArrayList<Double> actualTicketPrices = User.actualTicketPrices;
 
     //this are the multiple variables required by the system
-    private String password = "BESTOTAP"; 
+    private String password = "BSCSA1RULES"; 
     private String concertName = "ERE By: Juan Karlos Labajo"; 
     private String concertDate = "12/25/2024"; 
     private String concertTime = "07:00 PM"; 
@@ -69,9 +69,9 @@ public class Admin{
     int hiddenEnd = hiddenSeatLimit; 
     int vipStart = hiddenEnd + 1;    
 
-    int nextSeat, remainingSeats, seatNumber, confirmation, choice, month, day, year, hour, minute, periodChoice, newSeats, index, newEarlyBirdLimit, discountChoice, newGroupRequirement;
+    int nextSeat, remainingSeats, seatNumber, confirmation, choice, month, day, year, hour, minute, newSeats, index, newEarlyBirdLimit, newGroupRequirement;
     String artistName, updateConcert, enteredPassword, period, currentPassword, newPassword, confirmPassword, ticketNumber, ticketType, newCode, removeCode;
-    double newEarlyBirdDiscount, newGroupDiscount;
+    double newEarlyBirdDiscount, newGroupDiscount, pricePaid;
     double revenueToSubtract = 0;
     double ticketPrice = 0;
     double newPrice = 0; 
@@ -79,6 +79,7 @@ public class Admin{
     private boolean useTicketEnabled = false; 
     boolean valid = false;
 //======================================================[ "Admin Login Section" ]======================================================
+//this is meant to be for operators only thats why we addded a password system for it
     public void login(){
         System.out.print("Enter admin password: ");
         enteredPassword = meh.nextLine().trim();
@@ -95,8 +96,8 @@ public class Admin{
     }
 }
 //=======================================================[ "Admin Menu Section" ]=======================================================
+//the main inteface of the admin menu with submenus because the options will be so long if we didnt do that
 private void adminMenu(){
-    OUTER:
     while (true){
         System.out.println("");
         System.out.println("=====================================");
@@ -151,19 +152,21 @@ private void adminMenu(){
 		    changePassword();
             break;
         case 10:
-            System.out.println("[Logging out]");
-            break OUTER;
+            System.out.println("[ Thank You For Choosing Our System ]");
+            System.out.println("      [ LOGGING OUT GOODBYE ]        ");
+            return;
         default:
             System.out.println("[Invalid input, Please try again]");
             break;
     }
-        //weAreGroup3YAY is just place holder since without something inside NumberFormatException it will throw a error
+//weAreGroup3YAY is just place holder since without something inside NumberFormatException it will throw a error
         }catch (NumberFormatException weAreGroup3YAY){
             System.out.println("[Invalid input, Please try again]");
         }
     }
 }
 //======================================================[ "Change Concert Name Section" ]======================================================
+//this is meant to change the artist and the name of the concert itself 
     private void changeConcertName(){
         System.out.println("");
         System.out.println("=====================================");
@@ -184,6 +187,7 @@ private void adminMenu(){
         meh.nextLine(); 
     }
 //======================================================[ "Change Concert Date Section" ]======================================================
+//this is meant to change the date of the concert
     private void changeConcertDate(){
         System.out.println("");
         System.out.println("=====================================");
@@ -216,7 +220,7 @@ private void adminMenu(){
         meh.nextLine(); 
         meh.nextLine();
     }
-//this are rules implemented to make sure the date is right
+//this are rules implemented to make sure the date is right the formula itself was taken from the internet
     private boolean validateDate(int month, int day, int year){
         if (month < 1 || month > 12){
             System.out.println("Month must be within the range of 1 to 12.");
@@ -241,11 +245,12 @@ private void adminMenu(){
             return true;
         }
     }
-//this is meant to check if the year is a leap year
+//this is a rule that is meant to check if the year is a leap year the formula was taken from the internet
     private static boolean LeapYear(int year){
         return (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
     }
 //======================================================[ "Change Concert Time Section" ]======================================================
+//this is meant to change the time of the concert 
     private void changeConcertTime(){
         while (true){
             System.out.println("");
@@ -266,18 +271,21 @@ private void adminMenu(){
                 continue; 
             }
             System.out.print("1. For AM 2. For PM: ");
-            periodChoice = meh.nextInt();
+            choice = meh.nextInt();
             meh.nextLine(); 
     
-            if (periodChoice == 1){
-                period = "AM";
-            }else if (periodChoice == 2){
-                period = "PM";
-            }else{
-                System.out.println("Invalid choice for AM/PM. Please enter 1 for AM or 2 for PM.");
-                continue; 
+            switch (choice){
+                case 1:
+                    period = "AM";
+                    break;
+                case 2:
+                    period = "PM";
+                    break; 
+                default:
+                    System.out.println("Invalid choice for AM/PM. Please enter 1 for AM or 2 for PM.");
+                    continue;
             }
-    
+//this is a rule to make the format of the clock is right
             if (minute == 0){
                 concertTime = hour + ":00 " + period;
             }else if (minute < 10){
@@ -285,7 +293,7 @@ private void adminMenu(){
             }else{
                 concertTime = hour + ":" + minute + " " + period;
             }
-    
+
             user.updateConcertTime(concertTime);
             System.out.println("Concert time updated to: " + concertTime);
 
@@ -296,11 +304,12 @@ private void adminMenu(){
         }
     }
 //======================================================[ "Change Password Section" ]======================================================
+//this is meant to change the password if need
     private void changePassword(){
         System.out.println("=====================================");
         System.out.print("Enter current password: ");
         currentPassword = meh.nextLine();
-
+//this is a rule that was implemented to make sure that the one changing the password was the admin itself
         if (!currentPassword.equals(password)){
             System.out.println("Incorrect current password. ACCESS DENIED!!!");
             return;
@@ -324,6 +333,7 @@ private void adminMenu(){
         meh.nextLine();
     }
 //======================================================[ "Manage Seats And Prices (SubMenu) Section" ]======================================================
+//submenu interface of checkConcert
     public void adjustTicketTypes(){
         if (!bookedSeats.isEmpty() || !usedSeats.isEmpty()){
             if (choice >= 1 && choice <= 4){  
@@ -356,102 +366,135 @@ private void adminMenu(){
             System.out.println("8. Back to Admin Menu");
             System.out.println("=====================================");
             System.out.print("Enter your choice: ");
-            choice = meh.nextInt();
-    
-            if (choice >= 1 && choice <= 3){
-                System.out.print("Enter new seat value: ");
-                newSeats = meh.nextInt();
-            }else if (choice == 4){
-                System.out.print("Enter new maximum seat limit: ");
-                newSeats = meh.nextInt();
-            }else if (choice >= 5 && choice <= 7){
-                System.out.print("Enter new ticket price: ");
-                newPrice = meh.nextDouble();
-                switch (choice){
-                    case 5:
-                        setTicketPriceVIP(newPrice);
-                        System.out.println("VIP ticket price updated.");
-                        break;
-                    case 6:
-                        setTicketPriceMembers(newPrice);
-                        System.out.println("Members-Only ticket price updated.");
-                        break;
-                    case 7:
-                        setTicketPriceGeneral(newPrice);
-                        System.out.println("General Admission ticket price updated.");
-                        break;
-                }
-                continue;
-            }else if (choice == 8){
-                return;
-            }else{
-                System.out.println("[Invalid input, Please try again]");
-                continue;
-            }
-            switch (choice){
-                case 1:
-                    if (newSeats + getAvailableHiddenSeats() <= maximumSeats){
-                        setAvailableVIPSeats(newSeats);
-                        recalculateSeatRanges();
-                        System.out.println("VIP seats updated.");
-                    }else{
-                        System.out.println("Total exceeds the maximum seats limit!");
-                        setAvailableVIPSeats(maximumSeats - getAvailableHiddenSeats());
-                        recalculateSeatRanges();
-                        System.out.println("VIP seats adjusted to fit within capacity.");
-                    }
-                    break;
-                case 2:
-                    if (newSeats + getAvailableVIPSeats() <= maximumSeats){
-                        setAvailableHiddenSeats(newSeats);
-                        recalculateHiddenSeatRange();
-                        recalculateSeatRanges();
-                        System.out.println("Hidden seats updated.");
-                    }else{
-                        System.out.println("Total exceeds the maximum seats limit!");
-                        setAvailableHiddenSeats(maximumSeats - getAvailableVIPSeats());
-                        recalculateHiddenSeatRange();
-                        recalculateSeatRanges();
-                        System.out.println("Hidden seats adjusted to fit within capacity.");
-                    }
-                    break;
-                case 3:
-                    setAvailableGeneralSeats(newSeats);
-                    System.out.println("General Admission limit updated.");
-                    break;
-    
-                case 4:
-                    if (newSeats >= 1000){
-                        setMaximumSeats(newSeats);
-                        recalculateSeatRanges(); 
-                        System.out.println("Maximum seat limit updated to: " + newSeats);
-                    }else{
-                        System.out.println("Maximum seat limit must be at least 1000.");
-                    }
-                    break;
-    
-                default:
-                    System.out.println("[Invalid input, Please try again]");
-            }
-    
-            remainingSeats = maximumSeats - (getAvailableVIPSeats() + getAvailableHiddenSeats());
-    
-            if (remainingSeats >= 0){
+        try{choice = Integer.parseInt(meh.nextLine().trim());
+            System.out.println("=====================================");
 
-                if (remainingSeats > 0){
-                    setAvailableMembersSeats(remainingSeats);
-                    setMembersSeatStart(getMembersSeatEnd() + 1); 
-                    setMembersSeatEnd(getMembersSeatStart() + remainingSeats - 1);
-                }
-                System.out.println("Members-Only seats recalculated: " + remainingSeats);
-            }else{
-                System.out.println("[Error]: VIP and Hidden seats exceed maximum capacity!");
-            }
+    switch (choice){
+        case 1:
+            adjustVIPSeats();
+            break;
+        case 2:
+            adjustHiddenSeats();
+            break;
+        case 3:
+            adjustGeneralSeats();
+            break;
+        case 4:
+            adjustMaximumSeats();
+            break;
+        case 5:
+            adjustTicketPrice("VIP");
+            break;
+        case 6:
+            adjustTicketPrice("Members-Only");
+            break;
+        case 7:
+            adjustTicketPrice("General Admission");
+            break;
+        case 8:
+            System.out.println("[ Thank You For Choosing Our System ]");
+            return;
+        default:
+            System.out.println("[ Invalid input, Please try again ]");
+            break;
+        }
+    recalculateRemainingSeats();
+//weAreGroup3YAY is just place holder since without something inside NumberFormatException it will throw a error
+        }catch (NumberFormatException weAreGroup3YAY){
+            System.out.println("[ Invalid input, Please try again ]");
         }
     }
-//======================================================[ "Ticket Control (SubMenu) Section" ]======================================================  
-    private void viewAllTickets(){
-        OUTER:
+}
+//======================================================[adjustVIPSeats part of Ticket seat and price(SubMenu) Section" ]======================================================
+//this is meant to adjust the number of vip seats if needed
+    private void adjustVIPSeats(){
+    System.out.print("Enter new seat value: ");
+    newSeats = meh.nextInt();
+
+    if (newSeats + getAvailableHiddenSeats() <= maximumSeats){
+        setAvailableVIPSeats(newSeats);
+        recalculateSeatRanges();
+        System.out.println("VIP seats updated.");
+    }else{
+        System.out.println("Total exceeds the maximum seats limit! Adjusting to fit capacity.");
+        setAvailableVIPSeats(maximumSeats - getAvailableHiddenSeats());
+        recalculateSeatRanges();
+    }
+    System.out.println("");
+    System.out.print("Press any key to return to the (Submenu) Menu: ");
+    meh.nextLine(); 
+}
+//======================================================[adjustHiddenSeats part of Ticket seat and price(SubMenu) Section" ]======================================================
+//this is meant to adjust the special guest seats (hidden and special guest are the same) 
+    private void adjustHiddenSeats(){
+    System.out.print("Enter new seat value: ");
+    newSeats = meh.nextInt();
+
+    if (newSeats + getAvailableVIPSeats() <= maximumSeats){
+        setAvailableHiddenSeats(newSeats);
+        recalculateHiddenSeatRange();
+        recalculateSeatRanges();
+        System.out.println("Hidden seats updated.");
+    }else{
+        System.out.println("Total exceeds the maximum seats limit! Adjusting to fit capacity.");
+        setAvailableHiddenSeats(maximumSeats - getAvailableVIPSeats());
+        recalculateHiddenSeatRange();
+        recalculateSeatRanges();
+    }
+    System.out.println("");
+    System.out.print("Press any key to return to the (Submenu) Menu: ");
+    meh.nextLine(); 
+}
+//======================================================[ "adjustGeneralSeats part of Ticket seat and price(SubMenu) Section" ]======================================================
+//this is meant to adjust the available tickets the general admission can purchase since they are first come first serve
+    private void adjustGeneralSeats(){
+    System.out.print("Enter new seat value: ");
+    newSeats = meh.nextInt();
+
+    setAvailableGeneralSeats(newSeats);
+    System.out.println("General Admission limit updated.");
+}
+//======================================================[ "adjustMaximumSeats part of Ticket seat and price(SubMenu) Section" ]======================================================
+//added this because we dont know what stadium or venue is the concert is going to be on 
+//their is no adjust ticket since its meant to full up the seats that vip and special guest left behind 
+    private void adjustMaximumSeats(){
+    System.out.print("Enter new maximum seat limit: ");
+    newSeats = meh.nextInt();
+
+    if (newSeats >= 1000){
+        setMaximumSeats(newSeats);
+        recalculateSeatRanges();
+        System.out.println("Maximum seat limit updated to: " + newSeats);
+    }else{
+        System.out.println("Maximum seat limit must be at least 1000.");
+    }
+    System.out.println("");
+    System.out.print("Press any key to return to the (Submenu) Menu: ");
+    meh.nextLine(); 
+}
+//======================================================[ "adjustTicketprice part of Ticket seat and price(SubMenu) Section" ]======================================================
+//this is meant to adjust the prices of the different type of seats
+//hidden doesnt have a option to be change a price because they dont need a price to begin with
+    private void adjustTicketPrice(String ticketType){
+    System.out.print("Enter new ticket price: ");
+    newPrice = meh.nextDouble();
+    if ("VIP".equals(ticketType)){
+        setTicketPriceVIP(newPrice);
+        System.out.println("VIP ticket price updated.");
+    }else if ("Members-Only".equals(ticketType)){
+        setTicketPriceMembers(newPrice);
+        System.out.println("Members-Only ticket price updated.");
+    }else if ("General Admission".equals(ticketType)){
+        setTicketPriceGeneral(newPrice);
+        System.out.println("General Admission ticket price updated.");
+    }
+    System.out.println("");
+    System.out.print("Press any key to return to the (Submenu) Menu: ");
+    meh.nextLine(); 
+}
+//======================================================[ "Ticket Control (SubMenu) Section" ]======================================================
+//submenu interface of Ticket Control 
+    private void viewAllTickets(){       
         while (true){
             System.out.println("");
             System.out.println("=====================================");
@@ -489,17 +532,19 @@ private void adminMenu(){
                     break;
                 case 7:
                     System.out.println("[Returning to Admin MENU]");
-                    break OUTER;
+                    return;
                 default:
-                    System.out.println("[Invalid input, Please try again]");
+                    System.out.println("[Invalid input, Please try again ]");
                     break;
             }
+//weAreGroup3YAY is just place holder since without something inside NumberFormatException it will throw a error
         }catch (NumberFormatException weAreGroup3YAY){
-            System.out.println("[Error] Invalid input. Please enter a valid number.");
+            System.out.println("[ Invalid input, Please try again ]");
         }
     }
 }
-//======================================================[ "Show All Ticket Section" ]====================================================== 
+//======================================================[ "Show All Ticket part of Ticket Control (SubMenu) Section" ]====================================================== 
+//this is to shows all of the tickets their seat numbers and who owns them
     private void viewAllTicketsLabeled(){
         System.out.println("=====================================");
         System.out.println("           [ All Tickets ]           ");
@@ -512,15 +557,17 @@ private void adminMenu(){
             if (bookedTicketNumbers.isEmpty()){
                 System.out.println("No booked tickets.");
             }else{
+//what this does is loops until all of the booked tickets are shown
                 for (int i = 0; i < bookedTicketNumbers.size(); i++){
                     System.out.println(bookedTicketNumbers.get(i) + " | " + bookedSeats.get(i) + " | " + ticketOwners.get(i));
                 }
             }
-    
+  
             System.out.println("Used Tickets:");
             if (usedTicketNumbers.isEmpty()){
                 System.out.println("No used tickets.");
             }else{
+//what this does is loops until all of the used tickets are shown
                 for (int i = 0; i < usedTicketNumbers.size(); i++){
                     System.out.println(usedTicketNumbers.get(i) + " | " + usedSeats.get(i) + " | " + usedTicketOwners.get(i));
             }
@@ -530,14 +577,16 @@ private void adminMenu(){
         System.out.print("Press any key to return to the (Submenu) Menu: ");
         meh.nextLine(); 
 }
-//======================================================[ "Show All Booked Ticket Section" ]====================================================== 
+//======================================================[ "Show All Booked Ticket part of Ticket Control (SubMenu) Section" ]====================================================== 
+//this is to shows all of the booked tickets their seat numbers and who owns them
     private void viewAllBookedTickets(){
+        System.out.println("=====================================");
+        System.out.println("          [ Booked Tickets ]         ");
+        System.out.println("=====================================");
         if (bookedTicketNumbers.isEmpty()){
             System.out.println("No booked tickets available.");
         }else{
-            System.out.println("=====================================");
-            System.out.println("          [ Booked Tickets ]         ");
-            System.out.println("=====================================");
+//what this does is loops until all of the booked tickets are shown
             for (int i = 0; i < bookedTicketNumbers.size(); i++){
                 System.out.println(bookedTicketNumbers.get(i) + " | " + bookedSeats.get(i) + " | " + ticketOwners.get(i));
             }
@@ -546,7 +595,8 @@ private void adminMenu(){
         System.out.print("Press any key to return to the (Submenu) Menu: ");
         meh.nextLine(); 
     }
-//======================================================[ "Show All Used Ticket Section" ]====================================================== 
+//======================================================[ "Show All Used Ticket part of Ticket Control (SubMenu) Section" ]======================================================
+//this is to shows all of the used tickets their seat numbers and who owns them
     private void viewAllUsedTickets(){
         System.out.println("=====================================");
         System.out.println("        [ Used Tickets ]            ");
@@ -555,6 +605,7 @@ private void adminMenu(){
         if (usedTicketNumbers.isEmpty()){
             System.out.println("No used tickets.");
         }else{
+//what this does is loops until all of the used tickets are shown
             for (int i = 0; i < usedTicketNumbers.size(); i++){
                 System.out.println(usedTicketNumbers.get(i) + " | " + usedSeats.get(i) + " | " + usedTicketOwners.get(i));
             }
@@ -563,7 +614,7 @@ private void adminMenu(){
         System.out.print("Press any key to return to the (Submenu) Menu: ");
         meh.nextLine(); 
     }
-//======================================================[ "Delete Secific Ticket Section" ]====================================================== 
+//======================================================[ "Delete Secific Ticket part of Ticket Control (SubMenu) Section" ]====================================================== 
     private void deleteSpecificTicket(){
         System.out.print("Enter the seat number to delete: ");
         meh.nextLine();
@@ -572,10 +623,10 @@ private void adminMenu(){
     
         if (bookedSeats.contains(seatNumber)){
             index = bookedSeats.indexOf(seatNumber);
-            double pricePaid = actualTicketPrices.get(index); 
+            pricePaid = actualTicketPrices.get(index); 
         
             ticketNumber = bookedTicketNumbers.get(index); 
-      
+//this is meant to update the seats if a ticket is remove 
             switch (ticketNumber.split("-")[0]){
                 case "VIP":
                     setAvailableVIPSeats(getAvailableVIPSeats() + 1);
@@ -590,16 +641,13 @@ private void adminMenu(){
                     setAvailableHiddenSeats(getAvailableHiddenSeats() + 1);
                     break;
             }
-        
-            // Adjust revenue
+//this is just meant to make the revenue in checkconcert menu dont go negative
             totalRevenue -= pricePaid;
             if (totalRevenue < 0){
                 System.out.println("[Warning] Total revenue cannot be negative. Resetting to zero.");
                 totalRevenue = 0.0;
-            }
-        
-            totalTicketsSold--;
-        
+            }      
+            totalTicketsSold--;      
 // Removes the booked ticket details and price from the list
             bookedTicketNumbers.remove(index);
             bookedSeats.remove(index);
@@ -607,12 +655,11 @@ private void adminMenu(){
             actualTicketPrices.remove(index); 
         
             recalculateSeatRanges();
-        
-            
+                   
             System.out.printf("Booked ticket deleted: Ticket Number: %s, Seat: %d, Price Paid: $%.2f%n", 
                 ticketNumber, seatNumber, pricePaid);
 
-        } else if (usedSeats.contains(seatNumber)){
+        }else if (usedSeats.contains(seatNumber)){
             index = usedSeats.indexOf(seatNumber);
         
             ticketNumber = usedTicketNumbers.get(index); 
@@ -621,7 +668,6 @@ private void adminMenu(){
             usedTicketNumbers.remove(index);
             usedSeats.remove(index);
             usedTicketOwners.remove(index);
-        
             recalculateSeatRanges();
         
             System.out.printf("Used ticket deleted: Ticket Number: %s, Seat: %d%n", 
@@ -639,13 +685,13 @@ private void adminMenu(){
         System.out.println("Are you sure you want to clear all booked tickets? (1 for Yes / Any number for No)");
         confirmation = meh.nextInt();
         meh.nextLine();
-//this part just update the seats and reverts the revenue back
-if (confirmation == 1){
-    for (int i = 0; i < bookedTicketNumbers.size(); i++){
-        ticketNumber = bookedTicketNumbers.get(i);
-        ticketType = ticketNumber.split("-")[0];
-        double pricePaid = actualTicketPrices.get(i); 
-
+//this is just meant so the booked seat can be used again  and updates the seats and reverts the revenue back
+    if (confirmation == 1){
+        for (int i = 0; i < bookedTicketNumbers.size(); i++){
+            ticketNumber = bookedTicketNumbers.get(i);
+            ticketType = ticketNumber.split("-")[0];
+            pricePaid = actualTicketPrices.get(i); 
+//this is meant to update the seats if a ticket is remove 
         switch (ticketType){
             case "VIP":
                 setAvailableVIPSeats(getAvailableVIPSeats() + 1);
@@ -662,15 +708,14 @@ if (confirmation == 1){
         }
         revenueToSubtract += pricePaid; 
     }
-
+//this is just meant to make the revenue in checkconcert menu dont go negative
     totalRevenue -= revenueToSubtract;
     if (totalRevenue < 0){
         System.out.println("[Warning] Total revenue cannot be negative. Resetting to zero.");
         totalRevenue = 0.0;
     }
-
+//this handles the clearing of date connected to the booked ticket
     totalTicketsSold -= bookedTicketNumbers.size();
-
 
     bookedTicketNumbers.clear();
     bookedSeats.clear();
@@ -691,7 +736,7 @@ if (confirmation == 1){
         System.out.println("Are you sure you want to clear all used tickets? (1 for Yes / Any number for No)");
         confirmation = meh.nextInt();
         meh.nextLine();
-    
+//this is just meant so the seat that was assign in the usedticket can be used again   
         if (confirmation == 1){
             for (int i = 0; i < usedSeats.size(); i++){
                 seatNumber = usedSeats.get(i);
@@ -700,11 +745,10 @@ if (confirmation == 1){
                     bookedSeats.add(seatNumber); 
                 }
             }
-    
+//this handles the clearing of date connected to the used ticket   
             usedTicketNumbers.clear();
             usedSeats.clear();
             usedTicketOwners.clear();
-    
             recalculateSeatRanges();
     
             System.out.println("All used tickets have been cleared, and their seats have been made available.");
@@ -716,6 +760,7 @@ if (confirmation == 1){
         meh.nextLine(); 
     }
 //======================================================[ "Manage Discounts (SubMenu) Section" ]======================================================
+//submenu interface of Manage Discounts
     private void adjustDiscountsAndLimits(){
         while (true){
             System.out.println("");
@@ -735,71 +780,104 @@ if (confirmation == 1){
             System.out.println("4. Adjust Group Discount Ticket Requirement");
             System.out.println("5. Back to Admin Menu");
             System.out.print("Please select an option: ");
-            discountChoice = meh.nextInt();
-            meh.nextLine(); 
-    
-            switch (discountChoice){
-                case 1:
-                System.out.print("Enter new Early Bird Discount (0.0 to 1.0): ");
-                newEarlyBirdDiscount = meh.nextDouble();
-                meh.nextLine();
-                if (newEarlyBirdDiscount >= 0.0 && newEarlyBirdDiscount <= 1.0){
-                    User.setEarlyBirdDiscount(newEarlyBirdDiscount);
-                    System.out.println("Early Bird Discount updated to: " + (newEarlyBirdDiscount * 100) + "%");
-                }else{
-                    System.out.println("Invalid value. Please enter a value between 0.0 and 1.0.");
-                }
-                break;
-    
-                case 2:
-                    System.out.print("Enter new Early Bird Ticket Limit: ");
-                    newEarlyBirdLimit = meh.nextInt();
-                    meh.nextLine(); 
-    
-                    if (newEarlyBirdLimit >= 0){
-                        User.setEarlyBirdLimit(newEarlyBirdLimit);
-                        System.out.println("Early Bird Ticket Limit updated to: " + newEarlyBirdLimit);
-                    }else{
-                        System.out.println("Invalid value. Limit must be a positive number.");
-                    }
-                    break;
-    
-                case 3:
-                    System.out.print("Enter new Group Discount (0.0 to 1.0): ");
-                    newGroupDiscount = meh.nextDouble();
-                    meh.nextLine(); 
-    
-                    if (newGroupDiscount >= 0.0 && newGroupDiscount <= 1.0){
-                        User.setGroupDiscount(newGroupDiscount);
-                        System.out.println("Group Discount updated to: " + (newGroupDiscount * 100) + "%");
-                    }else{
-                        System.out.println("Invalid value. Please enter a value between 0.0 and 1.0.");
-                    }
-                    break;
-    
-                case 4:
-                System.out.print("Enter new Group Discount Ticket Requirement: ");
-                newGroupRequirement = meh.nextInt();
-                meh.nextLine();
+        try{choice = Integer.parseInt(meh.nextLine().trim());
+            System.out.println("=====================================");
 
-                if (newGroupRequirement >= 1){
-                    User.setGroupRequirement(newGroupRequirement);
-                    System.out.println("Group Discount Ticket Requirement updated to: " + newGroupRequirement);
-                }else{
-                    System.out.println("Invalid value. Requirement must be at least 1.");
-                }
-                break;
-    
+            switch (choice){
+                case 1:
+                    adjustEarlyBirdDiscount();
+                    break;
+                case 2:
+                    adjustEarlyBirdTicketLimit();
+                    break;
+                case 3:
+                    adjustGroupDiscount();
+                    break;
+                case 4:
+                    adjustGroupRequirement();
+                    break;
                 case 5:
                     System.out.println("[ Returning to Admin Menu ]");
                     return;
-    
                 default:
-                    System.out.println("[Invalid input, Please try again]");
+                    System.out.println("[ Invalid input, Please try again ] ");
             }
+//weAreGroup3YAY is just place holder since without something inside NumberFormatException it will throw a error
+        }catch (NumberFormatException weAreGroup3YAY){
+            System.out.println("[ Invalid input, Please try again ]");
         }
     }
+}
+//======================================================[adjustEarlyBirdDiscount part of Manage Discounts (SubMenu) Section" ]======================================================
+ //this is meant to adjust the group discount of the group discount feature
+    private void adjustEarlyBirdDiscount(){
+    System.out.print("Enter new Early Bird Discount (0.0 to 1.0): ");
+    newEarlyBirdDiscount = meh.nextDouble();
+    meh.nextLine();
+//rule implemented to make sure theres no issues with curtain adjustments                
+        if (newEarlyBirdDiscount >= 0.0 && newEarlyBirdDiscount <= 1.0){
+            User.setEarlyBirdDiscount(newEarlyBirdDiscount);
+            System.out.println("Early Bird Discount updated to: " + (newEarlyBirdDiscount * 100) + "%");
+    }else{
+            System.out.println("Invalid value. Please enter a value between 0.0 and 1.0.");
+    }
+    System.out.println("");
+    System.out.print("Press any key to return to the (Submenu) Menu: ");
+    meh.nextLine(); 
+}
+//======================================================[adjustEarlyBirdTicketLimit part of Manage Discounts (SubMenu) Section" ]======================================================
+ //this is meant to adjust the group discount of the group discount feature         
+    private void adjustEarlyBirdTicketLimit(){
+    System.out.print("Enter new Early Bird Ticket Limit: ");
+    newEarlyBirdLimit = meh.nextInt();
+    meh.nextLine();
+//rule implemented to make sure theres no issues with curtain adjustments               
+        if (newEarlyBirdLimit >= 0){
+            User.setEarlyBirdLimit(newEarlyBirdLimit);
+            System.out.println("Early Bird Ticket Limit updated to: " + newEarlyBirdLimit);
+    }else{
+            System.out.println("Invalid value. Limit must be a positive number.");
+    }
+    System.out.println("");
+    System.out.print("Press any key to return to the (Submenu) Menu: ");
+    meh.nextLine(); 
+}
+//======================================================[AdjustGroupDiscount part of Manage Discounts (SubMenu) Section" ]======================================================
+ //this is meant to adjust the group discount of the group discount feature
+    private void adjustGroupDiscount(){
+    System.out.print("Enter new Group Discount (0.0 to 1.0): ");
+    newGroupDiscount = meh.nextDouble();
+    meh.nextLine();
+//rule implemented to make sure theres no issues with curtain adjustments                
+        if (newGroupDiscount >= 0.0 && newGroupDiscount <= 1.0){
+            User.setGroupDiscount(newGroupDiscount);
+            System.out.println("Group Discount updated to: " + (newGroupDiscount * 100) + "%");
+    }else{
+            System.out.println("Invalid value. Please enter a value between 0.0 and 1.0.");
+    }
+    System.out.println("");
+    System.out.print("Press any key to return to the (Submenu) Menu: ");
+    meh.nextLine(); 
+}
+ //======================================================[ "adjustGroupRequirement part of Manage Discounts (SubMenu) Section" ]======================================================
+ //this is meant to adjust the group requirements of the group discount  feature       
+    private void adjustGroupRequirement(){
+    System.out.print("Enter new Group Discount Ticket Requirement: ");
+    newGroupRequirement = meh.nextInt();
+    meh.nextLine();
+//rule implemented to make sure theres no issues with curtain adjustments         
+        if (newGroupRequirement >= 1){
+            User.setGroupRequirement(newGroupRequirement);
+            System.out.println("Group Discount Ticket Requirement updated to: " + newGroupRequirement);
+    }else{
+            System.out.println("Invalid value. Requirement must be at least 1.");
+    }
+    System.out.println("");
+    System.out.print("Press any key to return to the (Submenu) Menu: ");
+    meh.nextLine(); 
+}
 //======================================================[ "Concert Status Menu Section" ]======================================================
+//submenu interface of checkConcert
     private void checkConcert(){
         while (true){
             System.out.println("");
@@ -823,9 +901,8 @@ if (confirmation == 1){
             System.out.println("4. End/Cancel Concert");
             System.out.println("5. Back to Admin Menu");
             System.out.print("Enter your choice: ");
-            choice = meh.nextInt();
+        try{choice = Integer.parseInt(meh.nextLine().trim());
             System.out.println("=====================================");
-            meh.nextLine();
     
             switch (choice){
                 case 1:
@@ -844,11 +921,66 @@ if (confirmation == 1){
                     System.out.println("[ Returning to Admin Menu ]");
                     return;
                 default:
-                    System.out.println("[Invalid input, Please try again]");
+                    System.out.println("[ Invalid input, Please try again ]");
             }
+//weAreGroup3YAY is just place holder since without something inside NumberFormatException it will throw a error
+        }catch (NumberFormatException weAreGroup3YAY){
+        System.out.println("[ Invalid input, Please try again ]");
         }
     }
-//======================================================[ "Manage SpecialGuest Codes (SubMenu) Section" ]======================================================
+}
+//======================================================[ "End Concert part of checkconcert (SubMenu) Section" ]======================================================
+//this is just meant to reset everything by ending the concert after all we dont want to one by one clear everything
+private void endConcert(){
+    System.out.println("Are you sure you want to end the concert? All data will be reset. (1 for Yes / Any number for No)");
+    confirmation = meh.nextInt();
+    meh.nextLine();
+
+    if (confirmation == 1){
+        bookedTicketNumbers.clear();
+        bookedSeats.clear();
+        ticketOwners.clear();
+        usedTicketNumbers.clear();
+        usedSeats.clear();
+        usedTicketOwners.clear();
+
+        totalRevenue = 0.0;
+        totalTicketsSold = 0;
+
+        revenueGoal = 0.0;
+        ticketsGoal = 0;
+
+        System.out.println("Concert has ended, and all data has been reset.");
+    }else{
+        System.out.println("Action canceled. Returning to menu.");
+    }
+    System.out.println("");
+    System.out.print("Press any key to return to the (Submenu) Menu: ");
+    meh.nextLine(); 
+}
+//======================================================[ "set Goals part of checkconcert (SubMenu) Section" ]======================================================
+//this just changes the goals of the operator and see if they need to start the concert or cancel it
+    public void setGoals(){
+        System.out.print("Enter revenue goal: ");
+        revenueGoal = meh.nextDouble();
+        System.out.print("Enter tickets goal: ");
+        ticketsGoal = meh.nextInt();
+        System.out.println("Goals updated.");
+}
+//======================================================[ "Check if User Ticket is available part of checkconcert (SubMenu) Section" ]======================================================
+//this is just meant to check if the use ticket option in User.java is available
+    public void enableUseTicket(){
+        useTicketEnabled = true;
+        System.out.println("'Use Ticket' option has been enabled.");
+}
+
+    public void disableUseTicket(){
+        useTicketEnabled = false;
+        System.out.println("'Use Ticket' option has been disabled.");
+}
+
+//======================================================[ "manageSpecialGuestCodes (SubMenu) Section" ]======================================================
+//submenu interface of manageSpecialGuestCodes
     private void manageSpecialGuestCodes(){
         while (true){
             System.out.println("");
@@ -860,122 +992,79 @@ if (confirmation == 1){
             System.out.println("3. Remove Special Guest Code");
             System.out.println("4. Back to Admin Menu");
             System.out.print("Enter your choice: ");
-            choice = meh.nextInt();
+        try{choice = Integer.parseInt(meh.nextLine().trim());
             System.out.println("=====================================");
             meh.nextLine(); 
     
-            switch (choice){
-                case 1:
-                    System.out.println("Current Special Guest Codes:");
-                    for (String code : specialGuestCodes){
-                        System.out.println("- " + code);
-                    }
-                    break;
-                case 2:
-                    System.out.print("Enter new Special Guest Code: ");
-                    newCode = meh.nextLine().trim();
-                    if (!specialGuestCodes.contains(newCode)){
-                        specialGuestCodes.add(newCode);
-                        System.out.println("Special Guest Code added.");
-                    }else{
-                        System.out.println("Code already exists.");
-                    }
-                    break;
-                case 3:
-                    System.out.print("Enter Special Guest Code to remove: ");
-                    removeCode = meh.nextLine().trim();
-                    if (specialGuestCodes.remove(removeCode)){
-                        System.out.println("Special Guest Code removed.");
-                    }else{
-                        System.out.println("Code not found.");
-                    }
-                    break;
-                case 4:
-                    System.out.println("[ Returning to Admin Menu ]");
-                    return; 
-                default:
-                    System.out.println("[Invalid input, Please try again]");
-            }
+                switch (choice){
+                    case 1:
+                        displaySpecialGuestCodes();
+                        break;
+                    case 2:
+                        addSpecialGuestCode();
+                        break;
+                    case 3:
+                        removeSpecialGuestCode();
+                        break;
+                    case 4:
+                        System.out.println("[ Returning to Admin Menu ]");
+                        return;
+                    default:
+                        System.out.println("[ Invalid input, Please try again ]");
+                }
+//weAreGroup3YAY is just place holder since without something inside NumberFormatException it will throw a error
+        }catch (NumberFormatException weAreGroup3YAY){
+        System.out.println("[ Invalid input, Please try again ]");
         }
     }
-//======================================================[ "End Concert Section" ]======================================================   
-    private void endConcert(){
-        System.out.println("Are you sure you want to end the concert? All data will be reset. (1 for Yes / Any number for No)");
-        confirmation = meh.nextInt();
-        meh.nextLine();
-    
-        if (confirmation == 1){
-    
-            bookedTicketNumbers.clear();
-            bookedSeats.clear();
-            ticketOwners.clear();
-            usedTicketNumbers.clear();
-            usedSeats.clear();
-            usedTicketOwners.clear();
-    
-            totalRevenue = 0.0;
-            totalTicketsSold = 0;
-    
-            revenueGoal = 0.0;
-            ticketsGoal = 0;
-    
-            System.out.println("Concert has ended, and all data has been reset.");
+}
+//======================================================[ "display SpecialGuest Codes part of manageSpecialGuestCodes (SubMenu) Section" ]======================================================   
+//this is just to display special codes if the operator needs it   
+    private void displaySpecialGuestCodes(){
+        System.out.println("Current Special Guest Codes:");
+        for (String code : specialGuestCodes){
+        System.out.println("- " + code);
+    }
+    System.out.println("");
+    System.out.print("Press any key to return to the (Submenu) Menu: ");
+    meh.nextLine(); 
+}
+//======================================================[ "Add SpecialGuest Codes part manageSpecialGuestCodes of (SubMenu) Section" ]====================================================== 
+//this is just adds special codes if the operator nothing special
+    private void addSpecialGuestCode(){
+        System.out.print("Enter new Special Guest Code: ");
+        newCode = meh.nextLine().trim();
+
+        if (!specialGuestCodes.contains(newCode)){
+            specialGuestCodes.add(newCode);
+            System.out.println("Special Guest Code added.");
         }else{
-            System.out.println("Action canceled. Returning to menu.");
+            System.out.println("Code already exists.");
         }
+        System.out.println("");
+        System.out.print("Press any key to return to the (Submenu) Menu: ");
+        meh.nextLine(); 
     }
-    
-        public void setGoals(){
-            System.out.print("Enter revenue goal: ");
-            revenueGoal = meh.nextDouble();
-            System.out.print("Enter tickets goal: ");
-            ticketsGoal = meh.nextInt();
-            System.out.println("Goals updated.");
+//======================================================[ "Remove specialGuest Codes part manageSpecialGuestCodes of (SubMenu) Section" ]======================================================    
+//this just removes a specialguest code nothing special   
+    private void removeSpecialGuestCode(){
+        System.out.print("Enter Special Guest Code to remove: ");
+        removeCode = meh.nextLine().trim();
+
+        if (specialGuestCodes.remove(removeCode)){
+            System.out.println("Special Guest Code removed.");
+        }else{
+            System.out.println("Code not found.");
+        }
+        System.out.println("");
+        System.out.print("Press any key to return to the (Submenu) Menu: ");
+        meh.nextLine(); 
     }
-
-    public static void updateAdminTicketList(int seat, String ticketNumber, String ticketType){
-        if (ticketType.equals("booked")){
-        if (!bookedSeats.contains(seat)) bookedSeats.add(seat);
-        if (!bookedTicketNumbers.contains(ticketNumber)) bookedTicketNumbers.add(ticketNumber);
-        
-        }else if (ticketType.equals("used")){
-        if (!usedSeats.contains(seat)) usedSeats.add(seat);
-        if (!usedTicketNumbers.contains(ticketNumber)) usedTicketNumbers.add(ticketNumber);
-    }
-}
-//======================================================[ "Getter and Setter Section" ]======================================================
-/*this is parts that are required for both user.java and admin.java 
-  this is all of this parts that updates both admin.java and user.java if anything gets added by the system or remove
-*/
-public void enableUseTicket(){
-    useTicketEnabled = true;
-    System.out.println("'Use Ticket' option has been enabled.");
-}
-
-public void disableUseTicket(){
-    useTicketEnabled = false;
-    System.out.println("'Use Ticket' option has been disabled.");
-}
-
-public void updateRevenueAndTickets(double revenue, int tickets){
-    totalRevenue += revenue;
-    totalTicketsSold += tickets;
-}
-
-public static void setEarlyBirdDiscount(double discount){
-    earlyBirdDiscount = discount;
-}
-
-public static void setEarlyBirdLimit(int limit){
-    earlyBirdLimit = limit;
-}
-
-public static void setGroupDiscount(double discount){
-    groupDiscount = discount;
-}
-
-public static void setGroupRequirement(int requirement){
-    groupRequirement = requirement;
+//======================================================[ "Handle Seats Section" ]====================================================== 
+//this is meant to handle and update seats
+public int getNextAvailableSeatAfter(int lastUsedSeat){
+    nextSeat = lastUsedSeat + 1;
+    return nextSeat;
 }
 
 public void setMaximumSeats(int seats){
@@ -1002,6 +1091,62 @@ public void setAvailableMembersSeats(int newSeats){
     membersSeatStart = vipSeatEnd + 1;
     membersSeatEnd = membersSeatStart + availableMembers - 1;
 }
+private void recalculateRemainingSeats(){
+    remainingSeats = maximumSeats - (getAvailableVIPSeats() + getAvailableHiddenSeats());
+    if (remainingSeats >= 0){
+        setAvailableMembersSeats(remainingSeats);
+        setMembersSeatStart(getMembersSeatEnd() + 1); 
+        setMembersSeatEnd(getMembersSeatStart() + remainingSeats - 1);
+        System.out.println("Members-Only seats recalculated: " + remainingSeats);
+    }else{
+        System.out.println("[Error] VIP and Hidden seats exceed maximum capacity!");
+    }
+}
+    public void recalculateSeatRanges(){
+    setVIPSeatStart(getHiddenSeatEnd() + 1);
+    setVIPSeatEnd(getVIPSeatStart() + getAvailableVIPSeats() - 1);
+
+    setMembersSeatStart(getVIPSeatEnd() + 1);
+    setMembersSeatEnd(getMaximumSeats());
+
+    setGeneralSeatStart(getMaximumSeats() + 1);
+    setGeneralSeatEnd(getGeneralSeatStart() + getAvailableGeneralSeats() - 1);
+}
+
+    public void recalculateMembersSeats(){
+    remainingSeats = maximumSeats - (availableVIP + availableHidden);
+    if (remainingSeats >= 0){
+        availableMembers = remainingSeats;
+        user.setAvailableMembersSeats(availableMembers); 
+    }else{
+        System.out.println("[Error] VIP and Hidden seats exceed maximum capacity!");
+    }
+}
+//======================================================[ "Getter and Setter Section" ]======================================================
+/*this is parts that are required for both user.java and admin.java 
+  this is all of this parts that updates both admin.java and user.java if anything gets added by the system or remove
+*/
+
+public void updateRevenueAndTickets(double revenue, int tickets){
+    totalRevenue += revenue;
+    totalTicketsSold += tickets;
+}
+
+public static void setEarlyBirdDiscount(double discount){
+    earlyBirdDiscount = discount;
+}
+
+public static void setEarlyBirdLimit(int limit){
+    earlyBirdLimit = limit;
+}
+
+public static void setGroupDiscount(double discount){
+    groupDiscount = discount;
+}
+
+public static void setGroupRequirement(int requirement){
+    groupRequirement = requirement;
+}
 
 public void setAvailableGeneralSeats(int seats){
     availableGeneral = seats;
@@ -1022,6 +1167,64 @@ public void setTicketPriceGeneral(double price){
 
 public void setHiddenSeatLimit(int limit){
     hiddenSeatLimit = limit;
+}
+
+
+public void setHiddenSeatEnd(int end){
+    hiddenSeatEnd = end;
+}
+
+public void setVIPSeatEnd(int end){
+    vipSeatEnd = end;
+}
+
+public void setMembersSeatEnd(int end){
+    membersSeatEnd = end;
+}
+
+
+public void setHiddenSeatStart(int start){
+    hiddenSeatStart = start;
+}
+
+public void setVIPSeatStart(int start){
+    vipSeatStart = start;
+}
+
+public void setMembersSeatStart(int start){
+    membersSeatStart = start;
+}
+
+public void recalculateHiddenSeatRange(){
+    hiddenSeatEnd = availableHidden; 
+}
+
+public void setGeneralSeatStart(int start){
+    generalSeatStart = start;
+}
+
+public void setGeneralSeatEnd(int end){
+    generalSeatEnd = end;
+}
+
+public void GeneralSeatEnd(){
+    generalSeatEnd++;
+}
+
+public int getNextAvailableSeatAfterHidden(){
+    return getNextAvailableSeatAfter(hiddenSeatEnd);
+}
+
+public int getNextAvailableSeatAfterVIP(){
+    return getNextAvailableSeatAfter(vipSeatEnd);
+}
+
+public int getGeneralSeatStart(){
+    return generalSeatStart;
+}
+
+public int getGeneralSeatEnd(){
+    return generalSeatEnd;
 }
 
 public int getAvailableVIPSeats(){
@@ -1087,86 +1290,4 @@ public int getMembersSeatStart(){
 public int getMembersSeatEnd(){
     return maximumSeats;
 }
-
-public void setHiddenSeatEnd(int end){
-    hiddenSeatEnd = end;
-}
-
-public void setVIPSeatEnd(int end){
-    vipSeatEnd = end;
-}
-
-public void setMembersSeatEnd(int end){
-    membersSeatEnd = end;
-}
-
-
-public void setHiddenSeatStart(int start){
-    hiddenSeatStart = start;
-}
-
-public void setVIPSeatStart(int start){
-    vipSeatStart = start;
-}
-
-public void setMembersSeatStart(int start){
-    membersSeatStart = start;
-}
-
-public void recalculateHiddenSeatRange(){
-    hiddenSeatEnd = availableHidden; 
-}
-
-public int getNextAvailableSeatAfterHidden(){
-    return getNextAvailableSeatAfter(hiddenSeatEnd);
-}
-
-public int getNextAvailableSeatAfterVIP(){
-    return getNextAvailableSeatAfter(vipSeatEnd);
-}
-
-public int getGeneralSeatStart(){
-    return generalSeatStart;
-}
-
-public void setGeneralSeatStart(int start){
-    generalSeatStart = start;
-}
-
-public int getGeneralSeatEnd(){
-    return generalSeatEnd;
-}
-
-public void setGeneralSeatEnd(int end){
-    generalSeatEnd = end;
-}
-public void GeneralSeatEnd(){
-    generalSeatEnd++;
-}
-
-public void recalculateSeatRanges(){
-    setVIPSeatStart(getHiddenSeatEnd() + 1);
-    setVIPSeatEnd(getVIPSeatStart() + getAvailableVIPSeats() - 1);
-
-    setMembersSeatStart(getVIPSeatEnd() + 1);
-    setMembersSeatEnd(getMaximumSeats());
-
-    setGeneralSeatStart(getMaximumSeats() + 1);
-    setGeneralSeatEnd(getGeneralSeatStart() + getAvailableGeneralSeats() - 1);
-}
-
-public void recalculateMembersSeats(){
-    remainingSeats = maximumSeats - (availableVIP + availableHidden);
-    if (remainingSeats >= 0){
-        availableMembers = remainingSeats;
-        user.setAvailableMembersSeats(availableMembers); 
-    }else{
-        System.out.println("[Error] VIP and Hidden seats exceed maximum capacity!");
-    }
-}
-    
-public int getNextAvailableSeatAfter(int lastUsedSeat){
-        nextSeat = lastUsedSeat + 1;
-        return nextSeat;
-    }
 }

@@ -88,7 +88,6 @@ public class User{
 //======================================================[ "User Menu Section" ]======================================================
 //this is the main interface of the userMenu
     public void userMenu(){
-        OUTER:
         while (true){
             System.out.println("");
             System.out.println("=====================================");
@@ -145,16 +144,16 @@ public class User{
                     }
                     break;
                 case 5:
-                    System.out.println(" [ Thanks For Choosing Our System ]  ");
-                    System.out.println("             [ RETURN ]              ");
-                    break OUTER;
+                    System.out.println("[ Thank You For Choosing Our System ]");
+                    System.out.println("      [ LOGGING OUT GOODBYE ]        ");
+                    return;
                 default:
                     System.out.println("[Invalid input, Please try again]");
                     break;
                 }
 //weAreGroup3YAY is just place holder since without something inside NumberFormatException it will throw a error
             }catch (NumberFormatException weAreGroup3YAY){
-            System.out.println("[Error] Invalid input. Please enter a valid number.");
+            System.out.println("[Invalid input, Please try again]");
         }
     }
 }
@@ -290,15 +289,21 @@ public void bookTicket(){
                 availableSeats = admin.getAvailableGeneralSeats();
                 ticketPrefix = "GEN";
                 seatList = generalSeats;
+                if (availableSeats <= 0){
+                    System.out.println("General Admission is fully booked. Please choose another ticket type.");
+                    continue; 
+                }
                 break;
-
             case 2:
 /*special Guest is special since there meant for special guest, personel and giveaways 
   that is why it requires a code instead of the normal purchase process*/
                 availableSeats = admin.getAvailableHiddenSeats();
                 ticketPrefix = "HID";
                 seatList = hiddenSeats;
-
+                if (availableSeats <= 0){
+                    System.out.println("Special Guest tickets are fully booked. Please choose another ticket type.");
+                    continue;
+                }
                 System.out.print("Enter Special Guest Code: ");
                 guestCode = meh.nextLine().trim();
                 if (!Admin.specialGuestCodes.contains(guestCode)){
@@ -306,19 +311,25 @@ public void bookTicket(){
                     return;
                 }
                 break;
-
             case 3:
                 ticketPrice = admin.getTicketPriceVIP();
                 availableSeats = admin.getAvailableVIPSeats();
                 ticketPrefix = "VIP";
                 seatList = vipSeats;
+                if (availableSeats <= 0){
+                    System.out.println("VIP tickets are fully booked. Please choose another ticket type.");
+                    continue;
+                }
                 break;
-
             case 4:
                 ticketPrice = admin.getTicketPriceMembers();
                 availableSeats = admin.getAvailableMembersSeats();
                 ticketPrefix = "MEM";
                 seatList = membersSeats;
+                if (availableSeats <= 0){
+                    System.out.println("Members-Only tickets are fully booked. Please choose another ticket type.");
+                    continue;
+                }
                 break;
 
             default:
@@ -397,7 +408,8 @@ public void bookTicket(){
     }
     while (true);
 /*this meant to make a ticket id it used to be numbers but due to security risk we turned to both alphabet and numeric 
-but the issue is changing the ticketNumber to ticketID which will be annoying to do that is why we left it as it is.*/   
+but the issue is changing the ticketNumber to ticketID which will be annoying to do that is why we left it as it is.*/
+//it is seat to 16 characters to make sure the security ticket is secure as possible
         ticketNumber = ticketPrefix + "-" + UUID.randomUUID().toString().substring(0, 16);
 //this adds data to the array 
         bookedSeats.add(seatNumber);
